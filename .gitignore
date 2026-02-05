@@ -1,0 +1,41 @@
+# OS files
+.DS_Store
+Thumbs.db
+._*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files (DO NOT commit temp files - save to docs/system/outputs/ instead)
+temp-*.md
+tmp-*.md
+scratch-*.md
+draft-*.md
+temp.*
+tmp.*
+*.tmp
+*.bak
+
+# Local workspace
+.workspace/
+local/
+scratch/
+
+# Build artifacts
+node_modules/
+dist/
+build/
+*.pyc
+__pycache__/
+
+# Secrets (NEVER commit)
+.env
+.env.*
+*-secrets.md
+*-credentials.md
+*.key
+*.pem
