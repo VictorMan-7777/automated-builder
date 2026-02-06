@@ -199,6 +199,8 @@ prompts/
     └── gatekeeper-checklist.md  # Gatekeeper agent system prompt
 ```
 
+System prompts should follow the canonical prompt template: [docs/system/prompt-template.md](prompt-template.md)
+
 ---
 
 ### Long Outputs / Summaries
