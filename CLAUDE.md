@@ -11,6 +11,7 @@ This document defines conventions, workflows, and standards for the automated-bu
 - **All lowercase**: File and directory names must be lowercase.
 - **Hyphen-separated**: Use hyphens to separate words (e.g., `my-task-file.md`).
 - **No underscores or spaces**: Avoid `_` and spaces in all names.
+  - **Exception**: System outputs (`docs/system/outputs/`) use double underscores (`__`) as separators in the canonical format: `YYYY-MM-DD__NN__<context>__<description>.md`
 
 ---
 

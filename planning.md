@@ -69,7 +69,8 @@ docs/
 
 - **Project slug**: lowercase, hyphen-separated (e.g., `devotional-generator`)
 - **Phase files**: NNN format (001, 002, 003, etc.)
-- **All files**: lowercase, hyphen-separated, `.md` extension
+- **Project artifacts**: lowercase, hyphen-separated, `.md` extension (no underscores)
+- **System outputs**: Use double underscores (`__`) only in canonical format: `YYYY-MM-DD__NN__<context>__<description>.md`
 
 ---
 
