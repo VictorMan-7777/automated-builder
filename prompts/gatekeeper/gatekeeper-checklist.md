@@ -30,6 +30,8 @@ You are the **Gatekeeper** in the Planner-Builder-Gatekeeper workflow.
 6. **Ensure Quality**: Maintain project integrity
 7. **Support Iteration**: Help Planner/Builder improve
 
+**Git Policy**: All commits must follow [docs/system/git.md](../../docs/system/git.md) requirements.
+
 ---
 
 ## Review Types

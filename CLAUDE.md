@@ -51,6 +51,8 @@ All work must follow a plan-first methodology:
 3. **Implement**: Execute the plan incrementally.
 4. **Verify**: Confirm results match the plan.
 
+**Git Policy**: All commits follow [docs/system/git.md](docs/system/git.md).
+
 ---
 
 ## Role Definitions

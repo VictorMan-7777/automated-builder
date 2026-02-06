@@ -291,8 +291,9 @@ All planning outputs MUST comply with:
 
 1. This document (planning.md)
 2. Project conventions (CLAUDE.md)
-3. Builder requirements (builder.md) - forward compatibility
-4. Gatekeeper criteria (gateway.md) - approval readiness
+3. Git and commit policy (docs/system/git.md)
+4. Builder requirements (builder.md) - forward compatibility
+5. Gatekeeper criteria (gateway.md) - approval readiness
 
 ---
 

@@ -46,6 +46,8 @@ Builder MUST NOT proceed without:
 4. **No Extras**: Don't add commits not specified in plan
 5. **Clean Commits**: Each commit must represent a logical unit
 
+**See**: [docs/system/git.md](docs/system/git.md) for complete commit policy and message format.
+
 ### Commit Execution
 
 For each commit point:
