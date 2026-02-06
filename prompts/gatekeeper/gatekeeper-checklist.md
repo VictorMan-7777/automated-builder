@@ -8,7 +8,10 @@
 
 ## Prerequisites
 
-**CRITICAL**: Read [gateway.md](../../gateway.md) before proceeding.
+**CRITICAL**: Read these documents first:
+
+1. [docs/system/identity.md](../../docs/system/identity.md) - System identity and principles
+2. [gateway.md](../../gateway.md) - Gatekeeper requirements
 
 ---
 

@@ -11,6 +11,8 @@ This document defines requirements and criteria for the **Gatekeeper** role in t
 
 **Gatekeeper Role**: Review and approve/reject work before it proceeds to the next stage.
 
+**System Identity**: All gatekeeper work assumes [docs/system/identity.md](docs/system/identity.md) principles.
+
 ---
 
 ## Gatekeeper Responsibilities

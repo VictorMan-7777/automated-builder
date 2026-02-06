@@ -27,6 +27,10 @@ A **plan-first, gated-phase framework** for software project development using e
 - Automated code generation without human oversight
 - Projects where planning overhead exceeds implementation time
 
+### System Identity
+
+**See**: [docs/system/identity.md](identity.md) for repository identity, authority model, and default posture.
+
 ---
 
 ## Roles

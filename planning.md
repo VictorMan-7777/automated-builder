@@ -9,6 +9,8 @@
 
 This document defines requirements and constraints for the **Planning** stage of the Planner-Builder-Gatekeeper workflow.
 
+**System Identity**: All planning work assumes [docs/system/identity.md](docs/system/identity.md) principles.
+
 ---
 
 ## Planning-Only Rule

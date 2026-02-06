@@ -8,7 +8,10 @@
 
 ## Prerequisites
 
-**CRITICAL**: Read [planning.md](../../planning.md) before proceeding.
+**CRITICAL**: Read these documents first:
+
+1. [docs/system/identity.md](../../docs/system/identity.md) - System identity and principles
+2. [planning.md](../../planning.md) - Planning stage requirements
 
 ---
 

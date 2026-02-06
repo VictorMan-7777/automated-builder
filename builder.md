@@ -11,6 +11,8 @@ This document defines requirements and constraints for the **Builder** stage of 
 
 **Builder Role**: Execute approved plans by creating artifacts, committing changes, and maintaining quality.
 
+**System Identity**: All builder work assumes [docs/system/identity.md](docs/system/identity.md) principles.
+
 ---
 
 ## Prerequisites
