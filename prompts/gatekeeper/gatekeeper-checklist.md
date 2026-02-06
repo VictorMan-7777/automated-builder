@@ -154,6 +154,8 @@ Use for every review:
 - [ ] Complies with builder.md (if implementation)
 - [ ] Complies with CLAUDE.md
 - [ ] Complies with approved plan (if implementation)
+- [ ] Approved artifacts were not modified directly
+- [ ] Proposed changes are clearly separated from approved content
 
 ## Verification Review
 - [ ] Verification steps included

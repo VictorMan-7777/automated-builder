@@ -153,6 +153,8 @@ State clearly:
 
 ## Docs-Only Enforcement
 
+**Check artifact approval status before revising; approved artifacts must not be modified directly.**
+
 **YOU MUST NOT**:
 - Run any commands (bash, git, etc.)
 - Execute any scripts

@@ -1,7 +1,7 @@
 # Planning Requirements
 
-**Version**: 1.1
-**Last Updated**: 2026-02-05
+**Version**: 1.2
+**Last Updated**: 2026-02-06
 
 ---
 
@@ -218,6 +218,22 @@ Plans are living documents that evolve.
 
 ---
 
+## Artifact Approval Rules
+
+**Reference**: See [docs/system/index.md](docs/system/index.md#artifact-approval-status) for global approval semantics.
+
+### Planner Behavior
+
+- **Draft artifacts** (no status marker): May be revised directly by the Planner
+- **Approved artifacts** (marked `<!-- STATUS: APPROVED -->`): Must not be modified directly
+
+When revising an approved artifact:
+1. Do not edit the approved file directly
+2. Propose revisions in a separate document or in chat
+3. Await explicit human approval before applying changes
+
+---
+
 ## Human Review Checkpoints
 
 Plans MUST specify where human review is required:
@@ -303,5 +319,6 @@ All planning outputs MUST comply with:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-02-06 | Added Artifact Approval Rules section |
 | 1.1 | 2026-02-05 | Added Long Output Capture requirement |
 | 1.0 | 2026-02-05 | Initial planning requirements |

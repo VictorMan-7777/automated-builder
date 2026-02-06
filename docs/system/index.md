@@ -144,6 +144,23 @@ A **plan-first, gated-phase framework** for software project development using e
 
 ---
 
+## Artifact Approval Status
+
+Artifacts in this system have one of two statuses:
+
+**Draft** (default):
+- No explicit status marker
+- May be revised directly by the Planner
+
+**Approved**:
+- Explicitly marked with: `<!-- STATUS: APPROVED -->`
+- Must not be modified directly
+- Changes require a proposed revision and explicit human approval
+
+This rule applies globally unless a more specific rule exists for a particular artifact type.
+
+---
+
 ## Where Things Live
 
 ### Project Artifacts
