@@ -62,6 +62,19 @@ This mode is appropriate when:
 
 ---
 
+## Cross-Mode Permissions
+
+### Output Writes
+
+Writing **new** files to `docs/system/outputs/` is permitted in all access modes.
+
+This permission does not allow:
+- modifying or overwriting existing output files
+- reading output files as inputs
+- writing to any other directory beyond mode permissions
+
+---
+
 ## Authority Boundary
 
 Access mode behavior is enforced by the session authority header.

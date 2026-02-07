@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"workbench.colorTheme": "Monokai Dimmed"
+		"workbench.colorTheme": "Monokai Dimmed",
+		"claudeCode.initialPermissionMode": "acceptEdits"
 	}
 }

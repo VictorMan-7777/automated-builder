@@ -59,6 +59,16 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
      from a narrower mode, or declared intentionally at session start
      with full awareness of its scope.
 
+   CROSS-MODE PROVISION: OUTPUT WRITES
+
+   In all access modes, the session may write NEW files to the outputs
+   directory (docs/system/outputs/).
+
+   This provision does not allow:
+   - modifying or overwriting existing output files
+   - reading output files as inputs
+   - writing to any other location beyond mode permissions
+
 3. AUTHORITY RULES
 
    3.1  Authority is fixed at session start.
