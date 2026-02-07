@@ -45,6 +45,7 @@ This document is for final human review. It does not imply approval of downstrea
 - "Open-source websites" does not guarantee public domain. Usage terms for each site must be verified (human-only legal concern).
 - The data model must support structured attribution fields compatible with Turabian format (author, title, publication, date, etc.), not just a free-text attribution string.
 - Classical evangelical authors narrows the quote pool. The system should validate that a quote source is provided for each day.
+- **Audit note (2026-02-07):** The personal-use output (Jan 2026) demonstrated that without an enforced whitelist, the AI selects authors outside the intended scope — including copyrighted, non-evangelical, and unverified sources. The Q1 decision requires operationalization through an author whitelist and quote catalog, not just a policy statement.
 
 **Affected Artifacts:**
 
@@ -53,6 +54,9 @@ This document is for final human review. It does not imply approval of downstrea
 - Phase 004 — validation must check quote presence and attribution completeness
 - PRD Assumption #1 — revise from "User-provided or placeholder text" to reflect this decision
 - `projects/inactive-projects` — referenced as source for website list (must be verified, not modified)
+- New artifact required: `author-whitelist.csv` (human-verified)
+- New artifact required: `quote-catalog.csv` (pre-verified quotes with Turabian metadata)
+- Phase 004 validation must enforce whitelist and catalog compliance
 
 **Status:** APPROVED (Human)
 
@@ -508,6 +512,8 @@ These concepts expand project scope beyond the original PRD assumptions and will
 | Open-source website availability | Q1 | Quote sources may become unavailable | Verify source list; consider pre-caching quote catalog |
 | Scripture retrieval failures | Q2 | Network or API issues block generation | Graceful error handling; clear failure messages |
 | Scope expansion | Q2, Q3, Q4 | Three Out of Scope items moved into scope | Phase plans and roadmap must be updated to accommodate |
+| Unverified quotes in output | Q1 | Fabricated or misattributed quotes undermine credibility | Quote Catalog with mandatory source verification; export gate on verification_status |
+| Copyright violation from post-1928 authors | Q1 | Legal liability, KDP account risk | Author whitelist with PD status; publish-ready restricted to PD-confirmed quotes |
 
 ---
 

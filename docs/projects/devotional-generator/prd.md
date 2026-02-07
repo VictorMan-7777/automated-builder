@@ -200,6 +200,9 @@ output_mode: "publish-ready"
 - System tracks approval status (pending | approved) per reflection
 - No PDF export permitted for unapproved content
 
+**FR-1.4**: Quote Verification Gate
+- No publish-ready export permitted unless all quotes have `verification_status = human_approved` and `public_domain = true`
+
 ### FR-2: Template System
 
 **FR-2.1**: Weekly template
@@ -283,6 +286,7 @@ output_mode: "publish-ready"
 | D003 | 6x9 inch trim | Most common KDP devotional size |
 | D004 | PDF as primary output | KDP requires PDF for print |
 | D005 | NASB as default version | Respected literal translation; web-retrieved |
+| D006 | Quote sourcing governed by human-approved author whitelist with public domain verification. AI may not select quotes from memory or uncataloged sources. | Q1 audit (2026-02-07): mitigates copyright, theological drift, and fabrication risks |
 
 ---
 
@@ -292,7 +296,7 @@ All open questions were resolved in Planner Iteration 3. See `docs/system/output
 
 | # | Question | Decision | Source |
 |---|----------|----------|--------|
-| Q1 | Source for inspirational quotes | Classical evangelical authors from identified open-source websites; Turabian attribution required | Iteration 3 |
+| Q1 | Source for inspirational quotes | Classical evangelical authors from a **human-approved author whitelist**, sourced from **websites hosting public domain works**. Quotes restricted to **verified public domain editions** for publish-ready output. Turabian attribution required. All quotes require **source-level verification** before export. | Iteration 3 |
 | Q2 | Scripture auto-fetched or user-provided? | NASB, retrieved from the web | Iteration 3 |
 | Q3 | AI-generated or template reflections? | AI-generated with expanded references; human approval required before export | Iteration 3 |
 | Q4 | How many weeks per book? | Variable by day count; publish-ready requires >= 12 days; personal use exempt | Iteration 3 |
@@ -312,7 +316,7 @@ All open questions were resolved in Planner Iteration 3. See `docs/system/output
 
 Resolved per Planner Iteration 3 (Q1–Q13):
 
-1. **Quotes**: Classical evangelical authors from identified open-source websites; Turabian attribution required
+1. **Quotes**: Classical evangelical authors from identified open-source websites; Turabian attribution required. Governed by author whitelist (human-verified); publish-ready output restricted to copyright-cleared, source-verified quotes only.
 2. **Scripture**: NASB, web-retrieved
 3. **Reflections**: AI-generated with expanded references; human approval required before export
 4. **Weeks per book**: Variable day count; publish-ready output requires >= 12 days; personal use mode relaxes this
@@ -373,6 +377,7 @@ Explicitly not included:
 2. **KDP compliance** - Must meet Amazon specifications
 3. **MVP focus** - Minimal viable structure first
 4. **Docs-only stage** - No code in current phase
+5. **Quote sourcing** - Quotes must be selected exclusively from the verified Quote Catalog. AI-generated or AI-recalled quotes are prohibited.
 
 ---
 
