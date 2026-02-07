@@ -5,514 +5,296 @@
 - **Phase**: 002
 - **Name**: Template System
 - **Status**: Not Started
-- **Estimated Duration**: 2-3 hours
 - **Dependencies**: Phase 001 complete
 
-## Overview
+## Objective
 
-Phase 002 builds the core template engine for the Devotional Generator. This includes defining the JSON template schema, implementing template parsing and validation, creating variable substitution logic, and developing sample templates.
+Create templates for weekly and daily devotional structure with clear placeholders for content.
 
-## Objectives
+---
 
-1. Define JSON template schema
-2. Implement template parser
-3. Build template validation system
-4. Create variable substitution engine
-5. Develop sample templates
-6. Write comprehensive tests
+## Scope
+
+### In Scope
+
+- Weekly template (container structure)
+- Daily template (5-element layout with Turabian quote attribution, day focus/sub-theme)
+- Front matter templates: title page, copyright page, Introduction, conditional TOC
+- Placeholder system for content (draft/preview and approved states)
+- Template rendering engine
+- Font specification for bundled open-source fonts
+- Header/footer template (page numbers only)
+- Page break rules (each day starts on a new page)
+
+### Out of Scope
+
+- PDF generation (Phase 003)
+- Content creation/population (AI generation pipeline — Phase 003 or new phase)
+- Validation logic (Phase 004)
+
+---
 
 ## Commit Points
 
-### CP3: Template Schema and Basic Parser
+### CP3: Weekly Template Structure
 
-**Goal**: Define template structure and implement basic parsing
+**Goal**: Define the weekly container template
 
-#### Tasks
+**Deliverables**:
+- `templates/weekly-template.json` - Weekly structure definition
+- Template includes: title, theme, days placeholder
 
-1. Create `src/templates/schema.json`:
-   - Define template structure (metadata, sections, variables)
-   - Specify required fields
-   - Define section types (scripture, reflection, prayer, action)
-   - Define variable placeholder format
+**Weekly Template Structure**:
+```
+Weekly Devotional Template
+==========================
+Title: {{title}}
+Theme: {{topic}}
+Days: {{num_days}}
 
-2. Create `src/templates/template.py`:
-   - `Template` class to represent a template
-   - `load_template()` function to read JSON file
-   - `parse_template()` function to convert JSON to Template object
-   - Basic error handling
+---
 
-3. Create example template `examples/basic-template.json`:
-   - Simple template with all section types
-   - Include sample variables
-   - Include metadata (name, version, description)
+{{#each days}}
+  [Day {{day_number}} content here]
+{{/each}}
 
-4. Create `tests/test_templates/test_parser.py`:
-   - Test template loading
-   - Test JSON parsing
-   - Test error handling for malformed JSON
-
-#### Template Schema Structure
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "required": ["metadata", "sections"],
-  "properties": {
-    "metadata": {
-      "type": "object",
-      "required": ["name", "version"],
-      "properties": {
-        "name": {"type": "string"},
-        "version": {"type": "string"},
-        "description": {"type": "string"},
-        "author": {"type": "string"},
-        "created": {"type": "string", "format": "date"}
-      }
-    },
-    "sections": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["type", "content"],
-        "properties": {
-          "type": {"enum": ["scripture", "reflection", "prayer", "action"]},
-          "title": {"type": "string"},
-          "content": {"type": "string"},
-          "variables": {
-            "type": "array",
-            "items": {"type": "string"}
-          }
-        }
-      }
-    },
-    "variables": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "type": {"enum": ["string", "scripture", "theme", "prayer"]},
-          "required": {"type": "boolean"},
-          "default": {"type": "string"},
-          "description": {"type": "string"}
-        }
-      }
-    }
-  }
-}
+---
+Generated: {{generation_date}}
 ```
 
-#### Verification Steps
+**Template Variables**:
+| Variable | Source | Description |
+|----------|--------|-------------|
+| `{{title}}` | Input or auto-generated | Book/section title |
+| `{{topic}}` | Input (required) | Week's theme |
+| `{{num_days}}` | Input (default: 6) | Number of days |
+| `{{days}}` | Generated | Array of daily content |
+| `{{generation_date}}` | System | When generated |
 
-- [ ] Template schema file exists and is valid JSON Schema
-- [ ] Template class correctly represents template structure
-- [ ] Template loading function reads JSON files
-- [ ] Example template validates against schema
-- [ ] Parser tests run and pass
-- [ ] Error handling works for invalid JSON
+**Files to Stage**:
+- `templates/weekly-template.json`
+- `templates/weekly-template.md` (Markdown version)
 
-#### Acceptance Criteria
+**Commit Command**:
+```bash
+git add templates/weekly-template.*
+git commit -m "feat(devotional-generator): add weekly template structure (CP3)"
+```
 
-- Template schema defines all required fields
-- Template class has properties for metadata and sections
-- Loading function returns Template object
-- Example template is complete and valid
-- At least 5 parser tests passing
-- Error messages are clear and actionable
+**Verification**:
+- [ ] Template loads without errors
+- [ ] All placeholders documented
+- [ ] Template renders with sample data
 
-#### Rollback Procedure
+**Rollback**:
+```bash
+git reset --soft HEAD~1
+rm templates/weekly-template.*
+```
 
-**Risk Level**: Low
-
-If issues occur:
-1. Revert to CP2: `git checkout CP2`
-2. Review schema design
-3. Simplify if too complex
-4. Re-implement with lessons learned
-
-**Recovery**:
-- Schema issues: Review JSON Schema specification, use validator
-- Parser issues: Test with simple JSON first, add complexity gradually
-
----
-
-### CP4: Template Validation System
-
-**Goal**: Implement comprehensive template validation
-
-#### Tasks
-
-1. Create `src/validators/template_validator.py`:
-   - `TemplateValidator` class
-   - `validate_schema()` - JSON Schema validation
-   - `validate_sections()` - Section structure validation
-   - `validate_variables()` - Variable consistency checking
-   - `validate_references()` - Ensure all variable references exist
-   - `generate_validation_report()` - Detailed error reporting
-
-2. Enhance `src/templates/template.py`:
-   - Add `validate()` method to Template class
-   - Integrate with TemplateValidator
-   - Store validation results
-
-3. Create `tests/test_validators/test_template_validator.py`:
-   - Test schema validation
-   - Test section validation
-   - Test variable validation
-   - Test validation reporting
-   - Test invalid templates (negative tests)
-
-4. Create invalid example templates for testing:
-   - `examples/invalid-missing-required.json`
-   - `examples/invalid-bad-section-type.json`
-   - `examples/invalid-undefined-variable.json`
-
-#### Validation Rules
-
-1. **Schema Validation**:
-   - Template conforms to schema.json
-   - All required fields present
-   - Field types correct
-
-2. **Section Validation**:
-   - At least one section present
-   - Section types are valid
-   - Content is non-empty
-
-3. **Variable Validation**:
-   - All referenced variables defined
-   - Variable names are unique
-   - Required variables have no default
-   - Variable types are valid
-
-4. **Reference Validation**:
-   - All `{{variable}}` references in content have definitions
-   - No circular references
-   - Variables used in correct section types
-
-#### Verification Steps
-
-- [ ] TemplateValidator class implemented
-- [ ] All validation methods work correctly
-- [ ] Validation report is detailed and clear
-- [ ] Valid templates pass validation
-- [ ] Invalid templates fail with specific errors
-- [ ] At least 10 validation tests passing
-
-#### Acceptance Criteria
-
-- Schema validation catches JSON Schema violations
-- Section validation identifies structural issues
-- Variable validation finds undefined references
-- Validation report lists all errors with line numbers
-- At least 10 passing tests including negative cases
-- Error messages guide users to fix issues
-
-#### Rollback Procedure
-
-**Risk Level**: Low
-
-If issues occur:
-1. Revert to CP3: `git checkout CP3`
-2. Review validation requirements
-3. Prioritize critical validations
-4. Implement in stages if complex
-
-**Recovery**:
-- Validation too strict: Add configuration for validation levels
-- Performance issues: Optimize validation order, cache results
+**Execution Attribution**:
+| Field | Value |
+|-------|-------|
+| Executor | AI: Claude Code |
+| Verifier | Human: Barbara |
+| Risk | L (Low) |
+| AI Mitigation | Provide: diff summary, files touched, template render test |
 
 ---
 
-### CP5: Variable Substitution and Sample Templates
+### CP4: Daily Template with 5 Elements
 
-**Goal**: Implement variable substitution and create production-ready templates
+**Goal**: Define the daily devotional template with all 5 elements
 
-#### Tasks
+**Deliverables**:
+- `templates/daily-template.json` - Daily structure definition
+- `templates/daily-template.md` - Markdown rendering template
 
-1. Create `src/generators/substitution.py`:
-   - `VariableSubstitution` class
-   - `substitute()` - Replace `{{variable}}` with values
-   - `validate_required()` - Check required variables provided
-   - `apply_defaults()` - Use default values when appropriate
-   - Support for nested variables (optional)
+**Daily Template Structure**:
+```
+## Day {{day_number}}: {{day_name}}
 
-2. Create `src/generators/template_engine.py`:
-   - `TemplateEngine` class
-   - `load_template()` - Load and validate template
-   - `render()` - Generate output with substitution
-   - `preview()` - Generate without saving
+{{#if day_focus}}
+### Focus: {{day_focus}}
+{{/if}}
 
-3. Create sample templates:
-   - `src/templates/daily-devotional.json` - Standard daily format
-   - `src/templates/themed-reflection.json` - Theme-focused format
-   - `src/templates/prayer-guide.json` - Prayer-focused format
+### Inspirational Quote
 
-4. Create `tests/test_generators/test_substitution.py`:
-   - Test basic substitution
-   - Test required variable checking
-   - Test default value application
-   - Test error handling for missing variables
-
-5. Create `tests/test_generators/test_template_engine.py`:
-   - Test full template rendering
-   - Test with all sample templates
-   - Test preview mode
-   - Test error propagation
-
-6. Create `examples/sample-render.py`:
-   - Demonstration script
-   - Load template
-   - Provide sample variables
-   - Render and display output
-
-#### Variable Substitution Format
-
-- **Simple**: `{{variable_name}}`
-- **With default**: `{{variable_name|default_value}}`
-- **Conditional**: `{{?variable_name}}content{{/variable_name}}` (optional)
-
-#### Verification Steps
-
-- [ ] Variable substitution works correctly
-- [ ] Required variables enforced
-- [ ] Default values applied appropriately
-- [ ] Template engine renders templates
-- [ ] All sample templates valid
-- [ ] Preview mode works without saving
-- [ ] Sample render script executes successfully
-- [ ] At least 15 tests passing
-
-#### Acceptance Criteria
-
-- Variable substitution replaces all placeholders
-- Required variables throw error if missing
-- Default values work when variable not provided
-- Template engine generates complete output
-- At least 3 sample templates provided
-- Sample render script demonstrates full workflow
-- At least 15 passing tests
-- Documentation explains substitution syntax
-
-#### Rollback Procedure
-
-**Risk Level**: Medium
-
-If issues occur:
-1. Revert to CP4: `git checkout CP4`
-2. Review substitution approach
-3. Consider simpler substitution syntax
-4. Re-implement incrementally
-
-**Recovery**:
-- Substitution errors: Test with simple cases first, add features gradually
-- Template complexity: Start with one template type, expand after validation
-- Performance issues: Profile and optimize hot paths
+> "{{quote.text}}"
+> — {{quote.attribution_formatted}}
 
 ---
 
-## Phase Acceptance Criteria
+### Scripture
 
-All of the following must be true to consider Phase 002 complete:
+**{{scripture.reference}}** ({{scripture.version}})
 
-### Schema and Structure
-- [x] Template schema defined and valid
-- [x] Schema covers all template requirements
-- [x] Example templates validate against schema
+> {{scripture.text}}
 
-### Parsing
-- [x] Template parser loads JSON files
-- [x] Parser creates Template objects correctly
-- [x] Error handling for malformed templates
+---
 
-### Validation
-- [x] Template validator checks schema compliance
-- [x] Validator checks section structure
-- [x] Validator checks variable consistency
-- [x] Validation reports are detailed and actionable
+### Reflection {{#if reflection.approval_status}}[{{reflection.approval_status}}]{{/if}}
 
-### Substitution
-- [x] Variable substitution works correctly
-- [x] Required variables enforced
-- [x] Default values applied
-- [x] Template engine renders complete output
+{{reflection.content}}
 
-### Templates
-- [x] At least 3 sample templates provided
-- [x] All sample templates valid
-- [x] Templates cover different use cases
+{{#if reflection.expanded_references}}
+**Further Reading**: {{#each reflection.expanded_references}}{{this}}; {{/each}}
+{{/if}}
 
-### Testing
-- [x] At least 30 tests passing (15 per commit point average)
-- [x] Tests cover positive and negative cases
-- [x] Test fixtures for common scenarios
+---
 
-### Documentation
-- [x] Template schema documented
-- [x] Substitution syntax documented
-- [x] Sample render script demonstrates usage
+### Action Steps
+
+{{#each action_steps.items}}
+{{@index}}. {{this}}
+{{/each}}
+
+---
+
+### Prayer
+
+{{prayer.content}}
+
+---
+```
+
+**5 Daily Elements**:
+
+| # | Element | Placeholder | Required |
+|---|---------|-------------|----------|
+| 1 | Quote | `{{quote.text}}`, `{{quote.attribution_formatted}}` (Turabian format) | Yes |
+| 2 | Scripture | `{{scripture.reference}}`, `{{scripture.text}}` (NASB, web-retrieved) | Yes |
+| 3 | Reflection | `{{reflection.content}}`, `{{reflection.approval_status}}`, `{{reflection.expanded_references}}` | Yes |
+| 4 | Action Steps | `{{action_steps.items}}` | Yes |
+| 5 | Prayer | `{{prayer.content}}` | Yes |
+
+**Additional Daily Fields**:
+
+| Field | Placeholder | Required |
+|-------|-------------|----------|
+| Day Focus | `{{day_focus}}` | Optional (defaults to weekly topic) |
+
+**Files to Stage**:
+- `templates/daily-template.json`
+- `templates/daily-template.md`
+- `examples/sample-day-rendered.md`
+
+**Commit Command**:
+```bash
+git add templates/daily-template.* examples/sample-day-rendered.md
+git commit -m "feat(devotional-generator): add daily template with 5 elements (CP4)"
+```
+
+**Verification**:
+- [ ] Template has all 5 elements
+- [ ] Elements in correct order
+- [ ] Placeholders render with sample data
+- [ ] Output is well-formatted
+
+**Rollback**:
+```bash
+git reset --soft HEAD~1
+rm templates/daily-template.* examples/sample-day-rendered.md
+```
+
+**Execution Attribution**:
+| Field | Value |
+|-------|-------|
+| Executor | AI: Claude Code |
+| Verifier | Human: Barbara |
+| Risk | L (Low) |
+| AI Mitigation | Provide: diff summary, sample rendered output |
+
+---
+
+## Acceptance Criteria
+
+### Phase Complete When:
+
+- [ ] Weekly template contains theme and days placeholder
+- [ ] Daily template has all 5 elements in order (with Turabian attribution, approval status, expanded references)
+- [ ] Daily template renders `day_focus` when present
+- [ ] Front matter templates: title page, copyright page, Introduction render correctly
+- [ ] Conditional TOC template renders when enabled
+- [ ] Introduction includes Sunday worship guidance when Day 7 is present
+- [ ] All placeholders are clearly marked
+- [ ] Templates render correctly with sample data
+- [ ] Markdown output is clean and readable
+- [ ] Font specification documented for bundled open-source fonts
+- [ ] Page break rules enforce new page per day
+
+---
 
 ## Gatekeeper Checklist
 
+**Executor**: AI: Claude Code
+**Verifier**: Human: Barbara
+
 ### Human Review Required
 
-- [ ] Template schema meets flexibility requirements
-- [ ] Sample templates are realistic and useful
-- [ ] Substitution syntax is intuitive
-- [ ] Documentation is clear for template authors
+- [ ] Template structure matches daily devotional format
+- [ ] Element order is correct (quote, scripture, reflection, action, prayer)
+- [ ] Formatting is visually appealing
 
-### AI Review Recommended
+### Verification Reference
 
-- [ ] Template validation logic is comprehensive
-- [ ] Variable substitution handles edge cases
-- [ ] Error messages are helpful and specific
-- [ ] Test coverage is adequate
+See `docs/system/ai.md` for AI executor output requirements.
 
-### Review Questions
+### Verification Steps
 
-1. Can template authors easily create new templates?
-2. Does the schema support anticipated future needs?
-3. Are validation errors helpful for debugging?
-4. Is the substitution syntax simple enough?
-5. Do sample templates demonstrate best practices?
-
-## Common Issues and Solutions
-
-### Issue 1: Template Schema Too Restrictive
-
-**Symptom**: Valid use cases rejected by schema
-
-**Solution**:
-- Review schema requirements vs. optional fields
-- Add flexibility with `additionalProperties`
-- Consider schema versioning for future changes
-
-### Issue 2: Variable Substitution Errors
-
-**Symptom**: Variables not replaced or incorrectly replaced
-
-**Solution**:
-1. Verify variable name format (case-sensitive)
-2. Check for typos in template vs. variable definitions
-3. Use regex to find all `{{...}}` patterns
-4. Test with simple examples first
-
-### Issue 3: Validation Too Slow
-
-**Symptom**: Template validation takes too long
-
-**Solution**:
-1. Cache validation results
-2. Validate only changed sections
-3. Move complex validation to async process
-4. Profile to identify bottlenecks
-
-### Issue 4: Template Complexity
-
-**Symptom**: Templates becoming too complex to manage
-
-**Solution**:
-- Consider template inheritance/composition
-- Break complex templates into reusable parts
-- Add template helpers or macros
-- Simplify schema if over-engineered
-
-## Testing Strategy
-
-### Unit Tests (Phase 002)
-
-- Template parsing
-- Schema validation
-- Section validation
-- Variable validation
-- Variable substitution
-- Default value application
-
-### Integration Tests (Phase 002)
-
-- End-to-end template loading and rendering
-- Multiple templates with same engine
-- Error propagation through layers
-
-### Manual Tests (Phase 002)
-
-- [ ] Load each sample template
-- [ ] Render with sample variables
-- [ ] Intentionally provide invalid input
-- [ ] Verify error messages are helpful
-- [ ] Test with edge cases (empty values, special characters)
-
-## Success Metrics
-
-- [ ] Template loading time: < 100ms
-- [ ] Validation time: < 500ms
-- [ ] Substitution time: < 100ms
-- [ ] 100% of valid templates pass validation
-- [ ] 100% of invalid test templates fail validation
-- [ ] At least 30 passing tests
-
-## Dependencies and Prerequisites
-
-### Phase Dependencies
-- Phase 001 complete (CP2)
-- Configuration system working
-- Test framework operational
-
-### Technical Dependencies
-- jsonschema library for validation
-- Python regex for variable substitution
-- JSON parsing capabilities
-
-### Knowledge Requirements
-- JSON Schema specification
-- Template engine concepts
-- Regular expressions
-
-## Next Steps
-
-After Phase 002 completion:
-
-1. Commit all changes: `git commit -m "Complete Phase 002: Template System"`
-2. Tag the commit: `git tag CP5`
-3. Update iteration log with Phase 002 results
-4. Begin Phase 003: Content Library
-
-## Notes and Observations
-
-### Design Decisions
-
-**Decision**: JSON Schema for validation
-- **Rationale**: Standard, well-supported, declarative
-- **Alternative**: Custom validation logic
-- **Trade-off**: Dependency but better maintainability
-
-**Decision**: Simple `{{variable}}` syntax
-- **Rationale**: Familiar, easy to parse, minimal escaping issues
-- **Alternative**: Jinja2 templates (more powerful but complex)
-- **Trade-off**: Simplicity vs. advanced features
-
-**Decision**: Three sample templates
-- **Rationale**: Cover different use cases, demonstrate flexibility
-- **Alternative**: Single "canonical" template
-- **Trade-off**: More to maintain but better examples
-
-### Potential Improvements
-
-- Template inheritance/composition system
-- Template preview with live variable editing
-- Template library/repository
-- Visual template editor (future)
-
-### Related Documentation
-
-- [Project Index](../index.md)
-- [PRD](../prd.md)
-- [Roadmap](../roadmap.md)
-- [Iteration Log](../iteration-log.md)
-- [Phase 001](./001-project-scaffold.md)
+1. Render weekly template with sample inputs
+2. Render daily template with sample day
+3. Verify all 5 elements appear in output
+4. Check placeholder markers are replaced
 
 ---
 
-**Phase Status**: Not Started
-**Previous Phase**: [001-project-scaffold.md](./001-project-scaffold.md)
-**Next Phase**: [003-content-library.md](./003-content-library.md)
+## Template Rendering Notes
+
+### Placeholder Syntax Options
+
+| Option | Example | Pros | Cons |
+|--------|---------|------|------|
+| Mustache | `{{variable}}` | Simple, widely known | Limited logic |
+| Jinja2 | `{{ variable }}` | Powerful, Python-native | More complex |
+| Custom | `[[variable]]` | Full control | Non-standard |
+
+**Decision**: Use Mustache/Handlebars-style `{{variable}}` for simplicity.
+
+### Content Markers
+
+For unfilled placeholders, use clear markers:
+- `[QUOTE TEXT HERE]`
+- `[SCRIPTURE REFERENCE]`
+- `[REFLECTION CONTENT - 200-400 WORDS]`
+- `[ACTION STEP 1]`
+- `[PRAYER TEXT]`
+
+---
+
+## Notes
+
+### Resolved Questions Affecting This Phase
+
+| Question | Decision | Impact on Phase 002 |
+|----------|----------|---------------------|
+| Q1 | Turabian attribution | Quote rendering must format attribution in Turabian style |
+| Q5 | Progressive sub-themes | Render `day_focus` sub-theme per day |
+| Q6 | Day 7 = Sunday worship | Introduction template must include Sunday worship instructions when Day 7 present |
+| Q7 | Title, Copyright, Introduction mandatory; conditional TOC | Front matter templates: title page, copyright page, Introduction, conditional TOC |
+| Q11 | Day starts on new page | Page break rules: each day starts on a new page |
+| Q12 | Bundled open-source fonts | Font specification in templates (specific font choices deferred to implementation) |
+| Q13 | Page numbers only | Header/footer template: page numbers only; Roman/no numbers for front matter |
+
+### Design Decisions
+
+- Templates are separate from content (templates provide structure only)
+- Templates must support both draft/preview (pending approval) and approved states
+- Support both JSON (data) and Markdown (display) formats
+- Front matter page numbering: Roman numerals or suppressed; content pages: Arabic numerals
+- First page of each day/section may suppress page numbers per publishing convention
+
+---
+
+**Previous Phase**: [001-data-model-inputs.md](./001-data-model-inputs.md)
+**Next Phase**: [003-kdp-pdf-export.md](./003-kdp-pdf-export.md)

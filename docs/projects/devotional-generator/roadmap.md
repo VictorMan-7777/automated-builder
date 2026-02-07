@@ -3,13 +3,17 @@
 ## Document Information
 
 - **Project**: Devotional Generator
-- **Version**: 1.0
-- **Date**: 2026-02-05
-- **Status**: Planning
+- **Version**: 3.0
+- **Date**: 2026-02-07
+- **Status**: Planning (Open Questions Resolved)
 
 ## Overview
 
-This roadmap defines the five-phase implementation plan for the Devotional Generator project. Each phase builds incrementally toward a complete system, with clear commit points, acceptance criteria, and rollback procedures.
+This roadmap defines the four-phase implementation plan for producing KDP-ready devotional PDFs. Each phase builds incrementally toward a complete production pipeline, with clear commit points, acceptance criteria, and rollback procedures.
+
+**Target**: Generate a 6x9 inch KDP-compliant PDF containing themed devotional content (variable day count; 6-day default with optional Day 7 Sunday worship integration). Supports personal use and publish-ready output modes.
+
+---
 
 ## Roadmap Principles
 
@@ -28,331 +32,341 @@ This roadmap defines the five-phase implementation plan for the Devotional Gener
 ### MVP Focus
 
 - Implement minimum viable features first
-- Add complexity only when needed
-- Avoid premature optimization
+- KDP compliance is non-negotiable
+- Defer complexity until core pipeline works
+
+---
 
 ## Phase Overview
 
-| Phase | Name | Duration | Commit Points | Description |
-|-------|------|----------|---------------|-------------|
-| 001 | Project Scaffold | 1-2 hours | CP1-CP2 | Initial structure and configuration |
-| 002 | Template System | 2-3 hours | CP3-CP5 | Core template engine and validation |
-| 003 | Content Library | 2-3 hours | CP6-CP7 | Structured content management |
-| 004 | Validation & Preview | 1-2 hours | CP8-CP9 | Quality assurance system |
-| 005 | Export & Distribution | 2-3 hours | CP10-CP11 | Multi-format output handlers |
+| Phase | Name | Commit Points | Description |
+|-------|------|---------------|-------------|
+| 001 | Data Model & Inputs | CP1-CP2 | Input schema, weekly/daily data structures |
+| 002 | Template System | CP3-CP4 | Weekly container, 5-element daily template |
+| 003 | KDP PDF Export | CP5-CP7 | 6x9 layout, margins, fonts, PDF generation |
+| 004 | Validation & Preview | CP8-CP9 | Pre-export checks, KDP compliance validation |
 
-**Total Estimated Duration**: 8-13 hours
+**Total Commit Points**: 9
+
+---
 
 ## Phase Details
 
-### Phase 001: Project Scaffold
+### Phase 001: Data Model & Inputs
 
-**Goal**: Establish project structure, configuration, and foundation
+**Goal**: Define input parameters and data structures for devotionals
 
 **Deliverables**:
-- Directory structure
-- Configuration files
-- Testing framework
-- Basic documentation
+- Input schema (num_days, topic, title, scripture_version, output_mode, author_name)
+- Weekly data model (variable day count, introduction content, conditional TOC)
+- Daily data model (5-element structure with Turabian attribution, NASB scripture, approval status, day_focus)
+- Configuration system
 
 **Commit Points**:
-- **CP1**: Directory structure and dependencies
-- **CP2**: Configuration files and test framework
+- **CP1**: Input schema and configuration
+- **CP2**: Weekly and daily data models
+
+**Key Decisions**:
+- num_days defaults to 6 (Monday-Saturday); Day 7 = Sunday worship integration
+- topic is required, title is auto-generated if not provided
+- Daily structure: quote (Turabian attribution), scripture (NASB default, web-retrieved), reflection (AI-generated, approval tracking), action_steps, prayer
+- output_mode: personal vs publish-ready
+- day_focus: optional progressive sub-theme per day
 
 **Dependencies**: None
 
-**Risk Level**: Low
-
-**See**: [phases/001-project-scaffold.md](./phases/001-project-scaffold.md)
+**See**: [phases/001-data-model-inputs.md](./phases/001-data-model-inputs.md)
 
 ---
 
 ### Phase 002: Template System
 
-**Goal**: Build core template engine with validation
+**Goal**: Create templates for weekly and daily devotional structure
 
 **Deliverables**:
-- JSON template schema
-- Template parser and validator
-- Variable substitution engine
-- Sample templates
+- Weekly template (title, theme, days container)
+- Daily template (5 elements with Turabian quote attribution, day focus, approval status)
+- Front matter templates (title page, copyright page, Introduction, conditional TOC)
+- Template rendering engine
+- Placeholder system for content (draft/preview and approved states)
+- Font specification for bundled open-source fonts
+- Page break and numbering rules
 
 **Commit Points**:
-- **CP3**: Template schema and basic parser
-- **CP4**: Template validation system
-- **CP5**: Variable substitution and sample templates
+- **CP3**: Weekly template structure
+- **CP4**: Daily template with 5 elements
+
+**Key Decisions**:
+- Templates define structure, not content
+- Templates support draft/preview (pending approval) and approved states
+- Front matter: title, copyright, Introduction (mandatory); TOC (conditional)
+- Introduction includes Sunday worship guidance when Day 7 present
+- Page numbers: Roman/suppressed for front matter, Arabic for content
 
 **Dependencies**: Phase 001 complete
-
-**Risk Level**: Medium (template flexibility vs. simplicity)
 
 **See**: [phases/002-template-system.md](./phases/002-template-system.md)
 
 ---
 
-### Phase 003: Content Library
+### Phase 003: KDP PDF Export
 
-**Goal**: Create structured content storage and retrieval
+**Goal**: Generate KDP-compliant 6x9 inch PDF with full front matter
 
 **Deliverables**:
-- Content directory structure
-- Scripture, theme, prayer, and reflection content
-- Content metadata and organization
-- Content validation
+- Page layout system (6x9 with margins)
+- PDF generation engine
+- Bundled open-source font embedding
+- Page numbering (Roman for front matter, Arabic for content)
+- Front matter generation (title, copyright, Introduction, conditional TOC)
+- Scripture web retrieval (NASB) — or designated as new phase
+- AI content generation pipeline — or designated as new phase
+- Conditional KDP validation based on output mode
 
 **Commit Points**:
-- **CP6**: Content structure and sample data
-- **CP7**: Content validation and retrieval
+- **CP5**: Page layout and margins (6x9, KDP specs)
+- **CP6**: PDF generation with bundled fonts
+- **CP7**: Front matter and page numbers
+
+**KDP Specifications**:
+- Trim: 6 x 9 inches
+- Inside margin (gutter): 0.5 inches
+- Outside margin: 0.25 inches
+- Top/bottom margins: 0.5 inches
+- Embedded fonts required
+- PDF/X-1a or embedded fonts
 
 **Dependencies**: Phase 002 complete
 
-**Risk Level**: Low
-
-**See**: [phases/003-content-library.md](./phases/003-content-library.md)
+**See**: [phases/003-kdp-pdf-export.md](./phases/003-kdp-pdf-export.md)
 
 ---
 
 ### Phase 004: Validation & Preview
 
-**Goal**: Implement quality assurance and preview capability
+**Goal**: Ensure output quality and KDP compliance before final export
 
 **Deliverables**:
-- Pre-generation validation
-- Post-generation validation
-- Preview functionality
+- Pre-export validation (structure completeness, Turabian attribution, approval status)
+- Output-mode-aware validation (publish-ready vs personal)
+- KDP compliance checker (margins, fonts, dimensions, page count)
+- Scripture retrieval validation (fetched text matches reference)
+- Front matter validation (completeness, Sunday guidance when Day 7 present)
+- Preview capability (view before export)
 - Validation reporting
 
 **Commit Points**:
-- **CP8**: Pre-generation validation
-- **CP9**: Post-generation validation and preview
+- **CP8**: Structure validation (all elements present, approval enforcement)
+- **CP9**: KDP compliance validation and preview
+
+**Validation Checks**:
+- All 5 daily elements populated (including Turabian attribution fields)
+- Reflection approval_status = approved (error for publish-ready, warning for personal)
+- Scripture retrieval success
+- Front matter completeness
+- All days present for num_days
+- Page dimensions correct
+- Margins meet KDP minimums
+- Bundled fonts embedded correctly
+- Page count >= 24 for publish-ready (warning)
 
 **Dependencies**: Phase 003 complete
-
-**Risk Level**: Low
 
 **See**: [phases/004-validation-preview.md](./phases/004-validation-preview.md)
 
 ---
 
-### Phase 005: Export & Distribution
+## Commit Point Summary
 
-**Goal**: Build multi-format export system
-
-**Deliverables**:
-- Markdown exporter
-- HTML exporter
-- PDF exporter
-- JSON exporter
-- Batch export capability
-
-**Commit Points**:
-- **CP10**: Markdown and HTML exporters
-- **CP11**: PDF and JSON exporters with batch support
-
-**Dependencies**: Phase 004 complete
-
-**Risk Level**: Medium (PDF generation complexity)
-
-**See**: [phases/005-export-distribution.md](./phases/005-export-distribution.md)
+| ID | Phase | Description | Files |
+|----|-------|-------------|-------|
+| CP1 | 001 | Input schema and configuration | config/, schema/ |
+| CP2 | 001 | Weekly and daily data models | models/ |
+| CP3 | 002 | Weekly template structure | templates/ |
+| CP4 | 002 | Daily template with 5 elements | templates/ |
+| CP5 | 003 | Page layout (6x9, margins) | layout/ |
+| CP6 | 003 | PDF generation with fonts | export/ |
+| CP7 | 003 | Title page and page numbers | export/ |
+| CP8 | 004 | Structure validation | validators/ |
+| CP9 | 004 | KDP compliance and preview | validators/, preview/ |
 
 ---
 
-## Commit Point Summary
-
-| ID | Phase | Description | Rollback Risk |
-|----|-------|-------------|---------------|
-| CP1 | 001 | Directory structure and dependencies | Minimal |
-| CP2 | 001 | Configuration and test framework | Low |
-| CP3 | 002 | Template schema and parser | Low |
-| CP4 | 002 | Template validation | Low |
-| CP5 | 002 | Variable substitution | Medium |
-| CP6 | 003 | Content structure and data | Low |
-| CP7 | 003 | Content validation | Low |
-| CP8 | 004 | Pre-generation validation | Low |
-| CP9 | 004 | Post-generation validation | Low |
-| CP10 | 005 | Markdown and HTML export | Low |
-| CP11 | 005 | PDF and JSON export | Medium |
-
 ## Critical Path
 
-The following sequence represents the critical path through the project:
+The following sequence represents the critical path:
 
-1. **CP1** → Establish foundation
-2. **CP3** → Enable template definition
-3. **CP5** → Enable content substitution
-4. **CP6** → Provide content to substitute
-5. **CP10** → Generate usable output
+```
+CP1 (Input Schema)
+ └──> CP2 (Data Models)
+       └──> CP3 (Weekly Template)
+             └──> CP4 (Daily Template)
+                   └──> CP5 (Page Layout)
+                         └──> CP6 (PDF Generation)
+                               └──> CP7 (Title/Pages)
+                                     └──> CP8 (Validation)
+                                           └──> CP9 (KDP Check)
+```
 
-Phases 004 (Validation) and portions of 005 (PDF/JSON) enhance but are not blocking for basic functionality.
+All phases are sequential; each depends on the previous.
 
-## Gatekeeper Reviews
+---
 
-### Required Human Reviews
+## Execution & Verification
 
-- **After CP2**: Confirm directory structure and configuration align with needs
-- **After CP5**: Verify template system meets flexibility requirements
-- **After CP7**: Validate content library organization and quality
-- **After CP11**: Final review before production use
+Per `docs/system/ai.md`, every commit point has an assigned Executor and Verifier.
 
-### Recommended AI Reviews
+### Commit Point Attribution
 
-- **After CP4**: Template validation logic correctness
-- **After CP9**: Validation system comprehensiveness
-- **After CP11**: Export format quality and consistency
+| CP | Phase | Executor | Verifier | Risk | Mitigation |
+|----|-------|----------|----------|------|------------|
+| CP1 | 001 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP2 | 001 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP3 | 002 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP4 | 002 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP5 | 003 | AI: Claude Code | Human: Barbara | M | Verify KDP margin specs exactly |
+| CP6 | 003 | AI: Claude Code | Human: Barbara | M | Verify font embedding manually |
+| CP7 | 003 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP8 | 004 | AI: Claude Code | Human: Barbara | L | Standard diff review |
+| CP9 | 004 | AI: Claude Code | Human: Barbara | M | Test KDP upload before approval |
+
+### Risk Legend
+
+- **L (Low)**: Standard human review sufficient
+- **M (Medium)**: Additional verification step required (noted in Mitigation)
+- **H (High)**: Professional reviewer or elevated process (none currently)
+
+### High-Risk Triggers (per ai.md)
+
+None of the current CPs touch:
+- Auth / permissions
+- Database schema or migrations
+- Financial / billing logic
+
+**Note**: CP6 and CP9 require elevated attention due to external system dependencies (PDF tooling, KDP platform).
+
+### Human-Only Checkpoints
+
+Per ai.md and identity.md, the following are human-only:
+- Answering open questions (Q1-Q13)
+- CP approval decisions
+- KDP account operations
+
+---
 
 ## Success Metrics by Phase
 
 ### Phase 001
-- [ ] Directory structure matches specification
-- [ ] Dependencies install without errors
-- [ ] Test framework executes successfully
+- [ ] Input schema accepts num_days and topic
+- [ ] Weekly model contains days array
+- [ ] Daily model has all 5 elements
 
 ### Phase 002
-- [ ] Templates validate against schema
-- [ ] Variable substitution works correctly
-- [ ] Sample templates generate valid output
+- [ ] Weekly template renders with theme
+- [ ] Daily template shows all 5 elements
+- [ ] Placeholders clearly marked
 
 ### Phase 003
-- [ ] Content stored in structured format
-- [ ] Content retrieval functions correctly
-- [ ] Sample content validates successfully
+- [ ] PDF is 6x9 inches
+- [ ] Margins meet KDP specs
+- [ ] Fonts embedded correctly
+- [ ] Page numbers present
 
 ### Phase 004
-- [ ] Validation catches common errors
-- [ ] Preview displays formatted output
-- [ ] Validation report is clear and actionable
+- [ ] Validation catches missing elements
+- [ ] KDP checker flags margin violations
+- [ ] Preview shows formatted output
 
-### Phase 005
-- [ ] All export formats generate successfully
-- [ ] Formats maintain content consistency
-- [ ] Batch export completes without errors
+---
+
+## Dependencies
+
+### Technical Dependencies
+
+| Dependency | Purpose | Phase |
+|------------|---------|-------|
+| PDF library (WeasyPrint or ReportLab) | PDF generation | 003 |
+| JSON Schema | Input validation | 001 |
+| Jinja2 or similar | Template rendering | 002 |
+| Bible API or web source | NASB scripture retrieval (Q2) | 003 |
+| Claude API or AI model | Reflection generation (Q3) | 003 |
+| Bundled open-source fonts | Font embedding (Q12) | 003 |
+
+### System Dependencies (for PDF)
+
+- WeasyPrint requires: Cairo, Pango
+- ReportLab: No system dependencies
+
+---
+
+## Resolved Questions Affecting Roadmap
+
+All 13 open questions (Q1–Q13) were resolved in Planner Iteration 3. Key impacts:
+
+| Decision | Impact on Roadmap |
+|----------|-------------------|
+| Q1: Turabian attribution | Phase 001 schema, Phase 002 rendering, Phase 004 validation |
+| Q2: NASB web retrieval | Phase 003 scope expanded (scripture retrieval); new dependency |
+| Q3: AI-generated reflections | Phase 003 scope expanded (AI pipeline); Phase 004 approval enforcement |
+| Q4: Variable day count, dual output modes | All phases: output_mode parameter, conditional validation |
+| Q6: Day 7 Sunday worship | Phase 001 model, Phase 002 Introduction template, Phase 004 validation |
+| Q7: Full front matter | Phase 003 CP7 expanded: title, copyright, Introduction, conditional TOC |
+| Q12: Bundled open-source fonts | Phase 003 CP6: font bundling replaces system fonts |
+
+See `docs/system/outputs/2026-02-07__02__planner__open-questions-q1-q13-final.md` for full decisions.
+
+---
 
 ## Risk Management
 
 ### High-Priority Risks
 
-1. **Template Complexity**
-   - **Mitigation**: Start simple, iterate based on needs
-   - **Monitoring**: Review template usage patterns
+1. **PDF Generation Complexity**
+   - **Mitigation**: Test WeasyPrint early; have ReportLab as fallback
+   - **Trigger**: CP6 exceeds time budget
 
-2. **PDF Generation**
-   - **Mitigation**: Use established library, defer if needed
-   - **Monitoring**: Test early with sample content
+2. **KDP Rejection**
+   - **Mitigation**: Build validation into CP9; test upload early
+   - **Trigger**: PDF fails KDP preview
 
-3. **Content Organization**
-   - **Mitigation**: Define clear structure from start
-   - **Monitoring**: Review as library grows
+3. **Font Embedding Issues**
+   - **Mitigation**: Use bundled open-source fonts; test embedding
+   - **Trigger**: Fonts not displaying correctly
 
-### Risk Triggers
+4. **NASB Copyright Restrictions** (Q2)
+   - **Mitigation**: Human-only legal review required before publication; track Lockman Foundation quotation limits
+   - **Trigger**: Published output exceeds NASB usage limits
 
-- Template validation fails on sample templates → Simplify schema
-- PDF generation exceeds time budget → Defer to future version
-- Content retrieval becomes slow → Add indexing/caching
+5. **AI Theological Accuracy** (Q3)
+   - **Mitigation**: Mandatory human approval gate; no export without approval
+   - **Trigger**: AI-generated reflection contains theological errors
 
-## Timeline and Milestones
+6. **Scripture Retrieval Failures** (Q2)
+   - **Mitigation**: Graceful error handling; clear failure messages; validation catches missing text
+   - **Trigger**: Network or API issues block generation
 
-### Week 1: Foundation and Core
-
-- **Days 1-2**: Phase 001 (Scaffold)
-- **Days 3-4**: Phase 002 (Templates)
-- **Day 5**: Review and adjustment
-
-### Week 2: Content and Quality
-
-- **Days 1-2**: Phase 003 (Content Library)
-- **Day 3**: Phase 004 (Validation)
-- **Days 4-5**: Phase 005 (Export)
-
-### Week 3: Testing and Documentation
-
-- **Days 1-2**: Integration testing
-- **Days 3-4**: Documentation completion
-- **Day 5**: Final review and handoff
-
-**Note**: Timeline assumes part-time work (2-3 hours/day). Adjust for full-time implementation.
-
-## Dependencies and Blockers
-
-### External Dependencies
-
-- Python 3.11+ environment
-- PDF generation library (WeasyPrint or ReportLab)
-- JSON Schema validation library
-
-### Potential Blockers
-
-- Environment setup issues
-- Library compatibility problems
-- Unclear content requirements
-- PDF generation technical challenges
-
-### Blocker Resolution
-
-- Maintain fallback options for PDF generation
-- Document workarounds for common issues
-- Escalate blocking decisions to human review
-
-## Post-Launch Plan
-
-### Immediate Post-Launch (Week 4)
-
-- Monitor generation success rate
-- Collect user feedback
-- Address critical bugs
-- Optimize performance bottlenecks
-
-### Short-Term Enhancements (Months 2-3)
-
-- Additional template types
-- Enhanced content library
-- Improved error messages
-- Performance optimizations
-
-### Long-Term Roadmap (Months 4-6)
-
-- Web-based interface
-- Database backend
-- Advanced content selection algorithms
-- Analytics and reporting
-
-## Appendix
-
-### Phase Dependencies Diagram
-
-```
-Phase 001 (Scaffold)
-    ↓
-Phase 002 (Templates)
-    ↓
-Phase 003 (Content Library)
-    ↓
-Phase 004 (Validation) ─────→ Phase 005 (Export)
-                              (partial dependency)
-```
-
-### Commit Point Flow
-
-```
-CP1 → CP2 → CP3 → CP4 → CP5 → CP6 → CP7 → CP8 → CP9 → CP10 → CP11
-│                    │              │              │               │
-Scaffold          Templates     Content      Validation        Export
-```
-
-### Decision Log
-
-| Date | Decision | Rationale | Impact |
-|------|----------|-----------|--------|
-| 2026-02-05 | 5-phase structure | Balanced incremental delivery | All phases |
-| 2026-02-05 | JSON templates | Standard, validatable format | Phase 002 |
-| 2026-02-05 | Local file storage | Simplicity for v1.0 | Phase 003 |
-| 2026-02-05 | Multiple export formats | Meet diverse distribution needs | Phase 005 |
-
-### Revision History
-
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2026-02-05 | Automated Builder | Initial roadmap |
+7. **Quote Source Availability** (Q1)
+   - **Mitigation**: Verify source list in `projects/inactive-projects`; consider pre-caching quote catalog
+   - **Trigger**: Open-source websites become unavailable
 
 ---
 
-**Next Steps**: Begin Phase 001 implementation per [phases/001-project-scaffold.md](./phases/001-project-scaffold.md)
+## Post-MVP Enhancements
+
+After core pipeline works:
+
+- Ebook export (EPUB/MOBI)
+- Cover design integration
+- Content library (pre-cataloged quotes from identified websites)
+- Bowker ISBN integration (deferred until profitable)
+- Multi-language support
+
+---
+
+## Revision History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 3.0 | 2026-02-07 | Claude Code | Applied Iteration 3 decisions: updated deliverables, dependencies, risks, post-MVP list |
+| 2.0 | 2026-02-06 | Planner | Major revision: 4-phase KDP-focused roadmap |
+| 1.0 | 2026-02-05 | Automated Builder | Initial 5-phase roadmap |

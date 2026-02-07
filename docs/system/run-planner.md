@@ -350,6 +350,30 @@ Full details: docs/system/outputs/2026-02-06__01__planner__initial-planning-comp
 
 ---
 
+## Output Immutability
+
+Planner outputs are **append-only artifacts**.
+
+### Rules
+
+- A planner iteration MUST NOT overwrite an existing output file.
+- If the specified output filename already exists, the planner MUST increment the sequence number (`__NN__`) and write a new file.
+- The sequence number (`NN`) is **monotonic across the repository**, not scoped to a single date.
+
+### When This Applies
+
+- Re-running the same iteration
+- Correcting a flawed prompt
+- Repeating an iteration on the same day
+
+### Determining the Next Sequence Number
+
+Scan all existing files in `docs/system/outputs/` and use the next available number, regardless of date.
+
+**Example**: If the highest existing sequence number is `03` (from any date), the next output MUST use `04`.
+
+---
+
 ## Planner Run Checklist
 
 Use this checklist to confirm a Planner run is complete:

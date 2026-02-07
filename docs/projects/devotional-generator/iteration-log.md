@@ -3,300 +3,268 @@
 ## Document Information
 
 - **Project**: Devotional Generator
-- **Version**: 1.0
+- **Version**: 3.0
 - **Started**: 2026-02-05
-- **Last Updated**: 2026-02-05
+- **Last Updated**: 2026-02-07
 
 ## Purpose
 
-This log tracks implementation progress, decisions, issues, and learnings throughout the Devotional Generator project. It serves as a historical record and reference for future work.
-
----
-
-## Iteration Template
-
-```markdown
-## Iteration N: [Title]
-
-**Date**: YYYY-MM-DD
-**Phase**: [001-005]
-**Commit Point**: [CP#]
-**Duration**: [Time spent]
-**Status**: [Planning/In Progress/Completed/Blocked]
-
-### Objectives
-- [ ] Objective 1
-- [ ] Objective 2
-
-### Work Completed
-- Item 1
-- Item 2
-
-### Decisions Made
-- **Decision**: Description
-  - **Rationale**: Why this decision
-  - **Impact**: What it affects
-
-### Issues Encountered
-- **Issue**: Description
-  - **Resolution**: How resolved or status
-  - **Prevention**: How to avoid in future
-
-### Tests Added/Modified
-- Test 1
-- Test 2
-
-### Documentation Updated
-- Doc 1
-- Doc 2
-
-### Next Steps
-- [ ] Next action 1
-- [ ] Next action 2
-
-### Acceptance Criteria Met
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-### Notes
-Any additional observations, learnings, or context.
-```
+This log tracks planning iterations, decisions, and changes throughout the Devotional Generator project. It serves as a historical record and reference for future work.
 
 ---
 
 ## Iterations
 
-### Iteration 0: Project Planning
+### Iteration 3: Documentation Update (Q1–Q13 Applied)
 
-**Date**: 2026-02-05
+**Date**: 2026-02-07
 **Phase**: Planning
-**Commit Point**: N/A
-**Duration**: 2 hours
 **Status**: Completed
 
 #### Objectives
-- [x] Define project scope and requirements
-- [x] Create PRD document
-- [x] Design five-phase roadmap
-- [x] Establish documentation structure
 
-#### Work Completed
-- Created comprehensive PRD with functional and non-functional requirements
-- Designed five-phase implementation plan with 11 commit points
-- Established documentation structure in docs/projects/devotional-generator/
-- Created index, PRD, roadmap, and iteration-log templates
+- [x] Apply all approved Iteration 3 decisions to project documentation
+- [x] Update PRD: assumptions, decisions, FRs, inputs, out of scope, KDP table
+- [x] Update all four phase plans (001–004) with resolved question impacts
+- [x] Update roadmap: deliverables, dependencies, risks, post-MVP list
+- [x] Update project index: status, key specs, resolved questions
+- [x] Update iteration log with Iteration 2 and 3 entries
 
-#### Decisions Made
-- **Decision**: Five-phase implementation structure
-  - **Rationale**: Balances incremental delivery with logical grouping of related features
-  - **Impact**: All phases and commit points
+#### Changes Made
 
-- **Decision**: JSON format for templates and content
-  - **Rationale**: Standard format with built-in validation capabilities
-  - **Impact**: Phase 002 (Templates) and Phase 003 (Content Library)
+**PRD (v2.0 → v3.0)**:
+- Resolved all 13 open questions (Q1–Q13) — replaced Open Questions section with Resolved Questions table
+- Updated 6 of 10 assumptions (#1, #2, #3, #4, #5, #9)
+- Updated decisions D001 (Day 7 worship integration) and D005 (NASB default)
+- Updated FR-1.3 (AI content generation with approval) and FR-3.3 (mandatory front matter)
+- Updated System Inputs: `scripture_version` default to NASB, added `output_mode` parameter
+- Updated Out of Scope: removed 3 items now in scope, clarified ISBN approach
+- Added 24-page minimum to KDP Requirements table
 
-- **Decision**: Python 3.11+ as implementation language
-  - **Rationale**: Rich ecosystem for file handling, templating, and PDF generation
-  - **Impact**: Phase 001 (Scaffold) and all subsequent phases
+**Phase 001 (updated)**:
+- Input schema: added `output_mode`, `author_name`; changed `scripture_version` default to NASB
+- Daily model: Turabian attribution fields, `day_focus`, `is_worship_day`, `approval_status`, `expanded_references`
+- Weekly model: `introduction_content`, `include_toc`, `output_mode`
 
-- **Decision**: Local file storage for v1.0
-  - **Rationale**: Simplicity; avoid database complexity in initial version
-  - **Impact**: Phase 003 (Content Library)
+**Phase 002 (updated)**:
+- Scope expanded: front matter templates, font specification, page break/numbering rules
+- Daily template: Turabian attribution rendering, day_focus, approval status display
+- Notes: resolved questions table replacing open questions
 
-- **Decision**: Four export formats (MD, HTML, PDF, JSON)
-  - **Rationale**: Covers primary distribution channels (web, print, data)
-  - **Impact**: Phase 005 (Export)
+**Phase 003 (updated)**:
+- Scope expanded: scripture web retrieval, AI pipeline, conditional KDP validation, bundled fonts
+- CP7 renamed to "Front Matter and Page Numbers" with expanded deliverables
+- Updated font strategy, acceptance criteria, risks
 
-#### Issues Encountered
-None (planning phase)
+**Phase 004 (updated)**:
+- Scope expanded: Turabian validation, approval enforcement, output-mode-aware rules, scripture retrieval validation, front matter validation
+- Added 7 new validation rules (V012–V018) and 1 new KDP rule (K008)
+- Validation rules split by output mode
 
-#### Tests Added/Modified
-None yet
+**Roadmap (v2.0 → v3.0)**:
+- Updated all phase deliverables and key decisions
+- Added 3 new technical dependencies (Bible API, Claude API, bundled fonts)
+- Added 4 new risks (NASB copyright, AI theological accuracy, scripture retrieval, quote source availability)
+- Updated post-MVP list (removed items now in scope)
+- Replaced open questions section with resolved questions
 
-#### Documentation Updated
-- Created index.md
-- Created prd.md
-- Created roadmap.md
-- Created iteration-log.md
+**Index (v2.0 → v3.0)**:
+- Status updated to "Planning Complete (Iteration 3)"
+- Key specifications updated (inputs table, weekly structure)
+- Open Questions Summary replaced with Resolved Questions Summary
+
+#### Source Artifact
+
+`docs/system/outputs/2026-02-07__02__planner__open-questions-q1-q13-final.md`
+
+---
+
+### Iteration 2: Open Questions Q1–Q13
+
+**Date**: 2026-02-07
+**Phase**: Planning
+**Status**: Completed (Approved by Human)
+
+#### Objectives
+
+- [x] Produce Planner Iteration 3 artifact addressing all 13 open questions
+- [x] Record human-provided decisions for each question
+- [x] Identify tradeoffs, risks, and affected artifacts per decision
+- [x] Produce final artifact for human review
+
+#### Summary
+
+All 13 open questions from PRD v2.0 were addressed. Human (Barbara) provided authoritative decisions for each question. Two artifacts were produced:
+
+1. `docs/system/outputs/2026-02-07__01__planner__open-questions-q1-q13.md` — Initial draft with AI-proposed decisions
+2. `docs/system/outputs/2026-02-07__02__planner__open-questions-q1-q13-final.md` — Final version with human-provided decisions replacing AI proposals
+
+#### Key Decisions (Human)
+
+| # | Decision |
+|---|----------|
+| Q1 | Classical evangelical authors from open-source websites; Turabian attribution |
+| Q2 | NASB, retrieved from the web |
+| Q3 | AI-generated with expanded references; human approval required |
+| Q4 | Variable day count; published >= 12 days; personal use exempt |
+| Q5 | Progressive (days build on weekly theme) |
+| Q6 | Day 7 integrates with Sunday worship; guidance in Introduction |
+| Q7 | Title, Copyright, Introduction; TOC for larger books |
+| Q8 | PDF only |
+| Q9 | Black & white |
+| Q10 | Amazon-provided ISBN; Amazon barcode; Bowker deferred |
+| Q11 | Each day starts on new page, may span |
+| Q12 | Bundled open-source fonts |
+| Q13 | Page numbers only |
+
+#### Scope Changes
+
+Three PRD Out of Scope items moved into scope:
+- AI-generated devotional content (Q3)
+- Scripture API integration (Q2)
+- Multi-week compilation (Q4, partially)
 
 #### Next Steps
-- [ ] Create phase-specific documentation (001-005)
-- [ ] Begin Phase 001 implementation
-- [ ] Set up Python environment
 
-#### Acceptance Criteria Met
-- [x] PRD defines clear requirements
-- [x] Roadmap outlines implementation phases
-- [x] Documentation structure established
-- [x] Commit points defined with rollback procedures
+- [x] Apply decisions to all project documentation (Iteration 3)
 
-#### Notes
-- Consider WeasyPrint vs ReportLab for PDF generation (evaluate in Phase 005)
-- Template flexibility vs simplicity is a key design tension to monitor
-- Content library organization will be critical as it grows
+---
+
+### Iteration 1: Requirements Alignment
+
+**Date**: 2026-02-06
+**Phase**: Planning
+**Status**: Completed
+
+#### Objectives
+
+- [x] Align PRD with user requirements
+- [x] Add missing content element (Inspirational Quote)
+- [x] Define weekly structure (6 days, Monday-Saturday)
+- [x] Add configurable inputs (num_days, topic)
+- [x] Add KDP-specific requirements (6x9, margins)
+- [x] Surface open questions explicitly
+- [x] Revise roadmap to 4-phase KDP-focused pipeline
+
+#### Changes Made
+
+**PRD (v1.0 → v2.0)**:
+- Added "Inspirational Quote" as first daily element (5 elements total)
+- Defined weekly structure: 6 days (Monday-Saturday), one theme
+- Added input parameters: num_days (default 6), topic (required)
+- Added KDP specifications: 6x9 trim, margins, font requirements
+- Added Open Questions section with 13 questions
+- Added Assumptions section
+- Revised Out of Scope list
+
+**Roadmap (v1.0 → v2.0)**:
+- Reduced from 5 phases to 4 phases (MVP focus)
+- Reduced from 11 commit points to 9
+- Renamed phases for KDP-specific pipeline:
+  - Phase 001: Data Model & Inputs
+  - Phase 002: Template System
+  - Phase 003: KDP PDF Export
+  - Phase 004: Validation & Preview
+- Removed generic content library phase (deferred)
+- Added KDP-specific deliverables in Phase 003
+
+**Index (v1.0 → v2.0)**:
+- Updated to reflect new 4-phase structure
+- Added Key Specifications section
+- Added Open Questions summary
+
+#### Decisions Made
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| D006 | 5-element daily structure | User requirement: quote, scripture, reflection, action, prayer |
+| D007 | 4-phase roadmap | MVP focus; content library deferred |
+| D008 | Surface open questions | Per user constraint: don't guess, surface questions |
+| D009 | KDP compliance as non-negotiable | Target output is KDP-ready PDF |
+
+#### Open Questions Identified
+
+13 open questions documented in PRD covering:
+- Content sources (quotes, scripture, reflections)
+- Structure decisions (weeks per book, day themes)
+- KDP specifics (front matter, ebook, color)
+- Design choices (page breaks, fonts, headers)
+
+#### Rollback
+
+If this iteration is rejected:
+- Revert to v1.0 of PRD, roadmap, index
+- `git checkout HEAD~1 -- docs/projects/devotional-generator/`
+
+#### Next Steps
+
+- [ ] Human review of revised planning artifacts
+- [ ] Gatekeeper review for plan approval
+- [ ] Answer open questions before implementation
+- [ ] Create detailed phase plans (001-004)
+
+---
+
+### Iteration 0: Initial Planning
+
+**Date**: 2026-02-05
+**Phase**: Planning
+**Status**: Superseded by Iteration 1
+
+#### Summary
+
+Initial planning created a generic devotional generator with:
+- 5 phases, 11 commit points
+- Focus on template system and content library
+- Multi-format export (MD, HTML, PDF, JSON)
+- No weekly structure
+- Missing: inspirational quote element
+- Missing: KDP-specific requirements
+
+#### Outcome
+
+Requirements did not match user needs. Superseded by Iteration 1.
 
 ---
 
 ## Decision Log
 
-Significant decisions with project-wide impact:
-
-| ID | Date | Decision | Rationale | Affected Phases |
-|----|------|----------|-----------|-----------------|
-| D001 | 2026-02-05 | Five-phase structure | Incremental delivery with logical grouping | All |
-| D002 | 2026-02-05 | JSON for templates/content | Standard, validatable format | 002, 003 |
-| D003 | 2026-02-05 | Python 3.11+ | Rich ecosystem for project needs | All |
-| D004 | 2026-02-05 | Local file storage | Simplicity for v1.0 | 003 |
-| D005 | 2026-02-05 | Four export formats | Cover all distribution channels | 005 |
-
----
-
-## Issues and Resolutions
-
-### Open Issues
-
-None currently
-
-### Resolved Issues
-
-None yet
-
-### Known Limitations
-
-- v1.0 will not include database backend
-- v1.0 will not include web interface
-- v1.0 supports English only
-- PDF generation may be deferred if technically complex
+| ID | Date | Decision | Executor | Rationale | Status |
+|----|------|----------|----------|-----------|--------|
+| D001 | 2026-02-05 | Five-phase structure | — | Balanced delivery | Superseded |
+| D002 | 2026-02-05 | JSON for templates | — | Standard format | Active |
+| D003 | 2026-02-05 | Python 3.11+ | — | Rich ecosystem | Active |
+| D004 | 2026-02-05 | Local file storage | — | Simplicity | Active |
+| D005 | 2026-02-05 | Four export formats | — | Cover channels | Superseded |
+| D006 | 2026-02-06 | 5-element daily structure | Human: Barbara | User requirement | Active |
+| D007 | 2026-02-06 | 4-phase roadmap | Human: Barbara | MVP focus | Active |
+| D008 | 2026-02-06 | Surface open questions | Human: Barbara | Don't assume | Completed |
+| D009 | 2026-02-06 | KDP compliance first | Human: Barbara | Target output | Active |
+| D010 | 2026-02-07 | Q1: Turabian attribution for quotes | Human: Barbara | Credibility, structured citations | Active |
+| D011 | 2026-02-07 | Q2: NASB, web-retrieved | Human: Barbara | Literal translation, automation | Active |
+| D012 | 2026-02-07 | Q3: AI-generated reflections, human approval | Human: Barbara | Scale + quality control | Active |
+| D013 | 2026-02-07 | Q4: Variable day count, dual output modes | Human: Barbara | Flexibility for personal + published | Active |
+| D014 | 2026-02-07 | Q5: Progressive sub-themes | Human: Barbara | Richer reading experience | Active |
+| D015 | 2026-02-07 | Q6: Day 7 = Sunday worship integration | Human: Barbara | Natural weekly rhythm | Active |
+| D016 | 2026-02-07 | Q7: Full front matter (title, copyright, intro) | Human: Barbara | Professional, KDP-ready | Active |
+| D017 | 2026-02-07 | Q10: Amazon-provided ISBN; Bowker deferred | Human: Barbara | No upfront cost for MVP | Active |
+| D018 | 2026-02-07 | Q12: Bundled open-source fonts | Human: Barbara | Consistent rendering, reliable embedding | Active |
 
 ---
 
-## Metrics and Progress
+## Version Summary
 
-### Overall Progress
-
-| Phase | Status | Commit Points | Completed | Completion % |
-|-------|--------|---------------|-----------|--------------|
-| 001 | Not Started | CP1-CP2 | 0/2 | 0% |
-| 002 | Not Started | CP3-CP5 | 0/3 | 0% |
-| 003 | Not Started | CP6-CP7 | 0/2 | 0% |
-| 004 | Not Started | CP8-CP9 | 0/2 | 0% |
-| 005 | Not Started | CP10-CP11 | 0/2 | 0% |
-| **Total** | **Planning** | **11** | **0/11** | **0%** |
-
-### Time Tracking
-
-| Phase | Estimated | Actual | Variance | Status |
-|-------|-----------|--------|----------|--------|
-| Planning | 2 hours | 2 hours | 0 | Complete |
-| 001 | 1-2 hours | - | - | Not Started |
-| 002 | 2-3 hours | - | - | Not Started |
-| 003 | 2-3 hours | - | - | Not Started |
-| 004 | 1-2 hours | - | - | Not Started |
-| 005 | 2-3 hours | - | - | Not Started |
-| **Total** | **10-15 hours** | **2 hours** | **-** | **13% Complete** |
-
-### Quality Metrics
-
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Test Coverage | 80%+ | 0% | Not Started |
-| Generation Time | <2 min | - | Not Started |
-| Validation Pass Rate | 95%+ | - | Not Started |
-| Export Formats | 3+ | 0 | Not Started |
+| Version | Date | Major Changes |
+|---------|------|---------------|
+| 3.0 | 2026-02-07 | Iteration 2–3: All Q1–Q13 resolved; docs updated with approved decisions |
+| 2.0 | 2026-02-06 | Iteration 1: KDP focus, 4 phases, 5 daily elements |
+| 1.0 | 2026-02-05 | Iteration 0: Initial generic planning |
 
 ---
 
-## Learnings and Best Practices
+## Related Documents
 
-### Planning Phase Learnings
-
-1. **Detailed Planning Pays Off**: Comprehensive PRD and roadmap provide clear direction
-2. **Commit Points Are Critical**: Incremental checkpoints enable rollback and reduce risk
-3. **Documentation First**: Creating docs before code clarifies thinking and requirements
-4. **MVP Mindset**: Consciously deferring features (database, web UI) keeps scope manageable
-
-### Implementation Learnings
-
-(To be filled as implementation progresses)
-
----
-
-## Risk and Issue Tracking
-
-### Active Risks
-
-| ID | Risk | Impact | Probability | Mitigation | Owner |
-|----|------|--------|-------------|------------|-------|
-| R001 | PDF generation complexity | High | Medium | Use established library; defer if needed | Phase 005 |
-| R002 | Template flexibility vs simplicity | Medium | High | Start simple; iterate based on usage | Phase 002 |
-| R003 | Content library growth | Low | High | Clear organization; early search/filter | Phase 003 |
-
-### Risk Updates
-
-- **2026-02-05**: All risks identified during planning; no updates yet
-
----
-
-## Stakeholder Communication
-
-### Status Updates
-
-- **2026-02-05**: Planning complete; ready to begin Phase 001
-
-### Review Checkpoints
-
-- **Planned**: After CP2 (Phase 001 complete)
-- **Planned**: After CP5 (Phase 002 complete)
-- **Planned**: After CP11 (All phases complete)
-
-### Feedback Received
-
-None yet
-
----
-
-## Reference Links
-
-### Internal Documentation
 - [Project Index](./index.md)
 - [PRD](./prd.md)
 - [Roadmap](./roadmap.md)
-- [Phase 001](./phases/001-project-scaffold.md)
-- [Phase 002](./phases/002-template-system.md)
-- [Phase 003](./phases/003-content-library.md)
-- [Phase 004](./phases/004-validation-preview.md)
-- [Phase 005](./phases/005-export-distribution.md)
-
-### External Resources
-- Automated Builder CLAUDE.md
-- Python Documentation
-- JSON Schema Specification
-- WeasyPrint Documentation
-- ReportLab Documentation
-
----
-
-## Appendix
-
-### Iteration Numbering Convention
-
-- **Iteration 0**: Planning and setup
-- **Iterations 1-N**: Implementation iterations
-- Each iteration may span multiple commits within a phase
-- Commit points (CP1-CP11) are separate from iteration numbers
-
-### Status Definitions
-
-- **Planning**: Defining scope and approach
-- **In Progress**: Active implementation work
-- **Completed**: All objectives met and verified
-- **Blocked**: Cannot proceed due to dependency or issue
-- **Deferred**: Postponed to future iteration or version
-
-### Template Usage
-
-Use the iteration template at the top of this document for each new iteration entry. Update metrics, progress, and status sections as work progresses.
-
----
-
-**Next Update**: After beginning Phase 001 implementation
+- [Phase Plans](./phases/)

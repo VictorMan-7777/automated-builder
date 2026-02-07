@@ -160,6 +160,19 @@ END.
 
 ---
 
+## Standard Instruction Blocks
+
+### Planner Output Behavior
+
+All prompts with `MODE: PLANNER` MUST include this instruction block:
+
+> **OUTPUT RULES:**
+> - Planner outputs are append-only. Overwriting an existing output file is forbidden.
+> - If the target output filename already exists, increment the sequence number (`__NN__`) and write a new file.
+> - Sequence numbering is monotonic across the repository, not scoped by date.
+
+---
+
 ## Related Documentation
 
 - [docs/system/identity.md](identity.md) — System identity and principles

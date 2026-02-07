@@ -2,126 +2,102 @@
 
 ## Overview
 
-The Devotional Generator is an automated system for creating personalized daily devotional content. This project demonstrates a complete workflow from template design to content generation, validation, and distribution.
+The Devotional Generator produces weekly devotional content suitable for self-publishing on Amazon KDP. Each week contains 6 days (Monday-Saturday) of structured devotional content, exported as a KDP-ready 6x9 inch PDF.
 
 ## Project Status
 
 - **Current Phase**: Planning
-- **Last Updated**: 2026-02-05
-- **Status**: Not Started
+- **Last Updated**: 2026-02-07
+- **Status**: Planning Complete (Iteration 3 — Open Questions Resolved)
+- **Version**: 3.0
+
+---
 
 ## Navigation
 
 ### Core Documents
 
-- **[Product Requirements (PRD)](./prd.md)** - Complete requirements specification
-- **[Roadmap](./roadmap.md)** - Five-phase milestone plan with commit points
+- **[Product Requirements (PRD)](./prd.md)** - Requirements, content structure, KDP specs
+- **[Roadmap](./roadmap.md)** - Four-phase milestone plan with 9 commit points
 - **[Iteration Log](./iteration-log.md)** - Progress tracking and decision history
 
 ### Phase Documentation
 
-1. **[Phase 001: Project Scaffold](./phases/001-project-scaffold.md)** - Initial setup and structure
-2. **[Phase 002: Template System](./phases/002-template-system.md)** - Core template engine
-3. **[Phase 003: Content Library](./phases/003-content-library.md)** - Structured content management
+1. **[Phase 001: Data Model & Inputs](./phases/001-data-model-inputs.md)** - Input schema, data structures
+2. **[Phase 002: Template System](./phases/002-template-system.md)** - Weekly/daily templates
+3. **[Phase 003: KDP PDF Export](./phases/003-kdp-pdf-export.md)** - 6x9 PDF generation
 4. **[Phase 004: Validation & Preview](./phases/004-validation-preview.md)** - Quality assurance
-5. **[Phase 005: Export & Distribution](./phases/005-export-distribution.md)** - Multi-format output
-
-## Quick Links
-
-### For Implementers
-
-- Start with [PRD](./prd.md) to understand requirements
-- Review [Phase 001](./phases/001-project-scaffold.md) for initial setup
-- Check [Iteration Log](./iteration-log.md) for current status
-
-### For Reviewers
-
-- Review [Roadmap](./roadmap.md) for milestone overview
-- Check commit point gates in each phase document
-- Verify acceptance criteria completion
-
-### For Stakeholders
-
-- See [PRD](./prd.md) for business value and success metrics
-- Review [Roadmap](./roadmap.md) for timeline and deliverables
-
-## Key Principles
-
-### Plan-First Methodology
-
-All work follows the automated-builder plan-first approach:
-
-1. **Plan** - Define scope and approach
-2. **Review** - Validate before implementation
-3. **Implement** - Execute incrementally
-4. **Verify** - Confirm results
-
-### Quality Gates
-
-Each phase includes:
-
-- **Commit Points** - Incremental checkpoints with rollback capability
-- **Acceptance Criteria** - Clear pass/fail validation
-- **Gatekeeper Checklist** - Human/AI review requirements
-
-### Human Oversight
-
-Human review required at:
-
-- Phase transitions
-- Before merging to main branch
-- When scope changes occur
-- Security or data integrity decisions
-
-## Project Metrics
-
-### Success Criteria
-
-- Generate devotionals in under 2 minutes
-- 95%+ template validation pass rate
-- Support 3+ output formats (Markdown, HTML, PDF)
-- Zero manual intervention for standard generation
-
-### Technical Targets
-
-- Modular, extensible architecture
-- Comprehensive test coverage
-- Clear documentation
-- Rollback capability at all commit points
-
-## Repository Structure
-
-```
-devotional-generator/
-├── src/
-│   ├── templates/           # Template definitions
-│   ├── content/             # Content library
-│   ├── generators/          # Generation engines
-│   ├── validators/          # Quality checks
-│   └── exporters/           # Output formatters
-├── tests/                   # Test suite
-├── config/                  # Configuration files
-├── output/                  # Generated devotionals
-└── docs/                    # Additional documentation
-```
-
-## Getting Started
-
-1. Read the [PRD](./prd.md) for complete context
-2. Review [Phase 001](./phases/001-project-scaffold.md) for setup instructions
-3. Follow commit points sequentially
-4. Verify acceptance criteria at each gate
-
-## Support and Questions
-
-For questions or clarifications:
-
-1. Check the [Iteration Log](./iteration-log.md) for similar issues
-2. Review phase-specific documentation
-3. Consult the automated-builder CLAUDE.md for general guidelines
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2026-02-05
-**Maintained By**: Automated Builder Project
+## Key Specifications
+
+### Content Structure
+
+Each **day** includes 5 elements:
+1. Inspirational Quote
+2. Scripture
+3. Devotional Reflection
+4. Action Steps
+5. Prayer
+
+Each **week** contains:
+- 6 days (Monday-Saturday, default); Day 7 = Sunday worship integration
+- One unified theme with progressive sub-themes per day
+- Days build on each other
+
+### Inputs
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `num_days` | 6 | Days to generate (1-7) |
+| `topic` | Required | Theme for the week |
+| `scripture_version` | NASB | Bible translation (web-retrieved) |
+| `output_mode` | publish-ready | `personal` or `publish-ready` |
+
+### Output
+
+- **Format**: PDF
+- **Trim Size**: 6 x 9 inches
+- **Target**: Amazon KDP print compliance
+
+---
+
+## Quick Links
+
+### For Reviewers
+
+- Start with [PRD](./prd.md) for requirements
+- Check [Open Questions](./prd.md#open-questions) for decisions needed
+- Review [Roadmap](./roadmap.md) for phase structure
+
+### For Gatekeeper
+
+- Verify commit points in [Roadmap](./roadmap.md)
+- Check acceptance criteria in phase plans
+- Review [Iteration Log](./iteration-log.md) for decisions
+
+---
+
+## Resolved Questions Summary
+
+All 13 open questions (Q1–Q13) resolved in Planner Iteration 3. Key decisions:
+
+| # | Decision | Impact |
+|---|----------|--------|
+| Q1 | Classical evangelical authors; Turabian attribution | Quote data model, rendering |
+| Q2 | NASB, web-retrieved | Scripture pipeline, new dependency |
+| Q3 | AI-generated reflections; human approval | Content pipeline, approval workflow |
+| Q4 | Variable day count; dual output modes | Validation rules, page count |
+| Q7 | Title, Copyright, Introduction; conditional TOC | Front matter scope |
+| Q12 | Bundled open-source fonts | Font embedding strategy |
+
+See [Iteration 3 artifact](../../system/outputs/2026-02-07__02__planner__open-questions-q1-q13-final.md) for full decisions.
+
+---
+
+## Document Version
+
+- **Version**: 3.0
+- **Last Updated**: 2026-02-07
+- **Changes**: Applied Iteration 3 decisions (Q1–Q13); all open questions resolved
