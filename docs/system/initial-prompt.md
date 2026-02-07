@@ -61,8 +61,20 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
 
    CROSS-MODE PROVISION: OUTPUT WRITES
 
-   In all access modes, the session may write NEW files to the outputs
-   directory (docs/system/outputs/).
+   In all access modes, the session may write NEW files to the canonical
+   output directory (docs/system/outputs/).
+
+   OUTPUT REQUIREMENT RULE: Any session that produces a reviewable
+   artifact (plan, audit, decision, or governance guidance) MUST write
+   that artifact to docs/system/outputs/, regardless of length.
+   Length is not a factor; the obligation is triggered by artifact type.
+
+   Producing an output artifact is conceptually separate from applying
+   doc changes. A session may do both only when its authority declaration
+   permits both.
+
+   Output filenames are managed by the system iterator and must not be
+   chosen or suggested by the assistant.
 
    This provision does not allow:
    - modifying or overwriting existing output files

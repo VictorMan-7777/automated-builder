@@ -67,6 +67,18 @@ This mode is appropriate when:
 ### Output Writes
 
 Writing **new** files to `docs/system/outputs/` is permitted in all access modes.
+This is the canonical output directory for all reviewable artifacts.
+
+**Output requirement rule.** Any session that produces a reviewable artifact —
+defined as a plan, audit, decision, or governance guidance document — must write
+that artifact to `docs/system/outputs/`, regardless of length. Length is not a
+factor; the obligation is triggered by artifact type, not size.
+
+Producing an output artifact is conceptually separate from applying doc changes.
+A session may do both only when its authority declaration permits both.
+
+Output filenames are managed by the system iterator and must not be chosen or
+suggested by the assistant.
 
 This permission does not allow:
 - modifying or overwriting existing output files
