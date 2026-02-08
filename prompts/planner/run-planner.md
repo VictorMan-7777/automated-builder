@@ -128,18 +128,16 @@ For each commit point, specify:
 - Verification steps (how to confirm success)
 - Rollback instructions (how to undo)
 
-### Step 7: Apply Long Output Rule
+### Step 7: Create Output Artifact (MANDATORY)
 
-When planning is complete:
+When planning is complete, create the output artifact. This is not optional.
 
-**If output is lengthy** (>500 lines or multiple detailed sections):
-1. Save comprehensive output to `docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md`
-2. In chat, provide brief summary + file path
+1. Write the planning output to `docs/system/outputs/` using the system iterator.
+2. In chat, confirm output creation and cite the file path.
 
-**If output is brief**:
-- Provide summary in chat
-- List files created
-- State next steps
+**Output compliance**: This session may not stop or declare completion until
+the output artifact exists. Failure to create the output is a session failure.
+See the Output Compliance Clause in `docs/system/initial-prompt.md`.
 
 ### Step 8: Submit for Review
 
@@ -217,7 +215,8 @@ Before declaring planning complete, verify:
 - [ ] Rollback procedures are documented
 - [ ] Naming conventions followed (lowercase, hyphen-separated)
 - [ ] Docs-only rule maintained (no code, scripts, or execution)
-- [ ] Long output saved to file (if applicable)
+- [ ] Output artifact created in `docs/system/outputs/` (mandatory — not conditional on length)
+- [ ] Output creation confirmed in chat with file path cited
 - [ ] Ready for Gatekeeper review
 
 ---
