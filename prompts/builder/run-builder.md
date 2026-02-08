@@ -271,12 +271,18 @@ When escalating, **always provide**:
 
 Before declaring the session complete, verify all applicable items.
 
+**Output compliance**: This session may not stop or declare completion until
+the output artifact (dry-run report or build report) exists in
+`docs/system/outputs/`. The session must confirm output creation explicitly
+in chat, citing the file path. Failure to do so is a session failure.
+
 ### Dry-Run Mode
 
 - [ ] All 10 pre-build validation checks passed
 - [ ] All commit points simulated and reported
 - [ ] Stub detection assessment completed
 - [ ] Dry-run report written to builder repo `docs/system/outputs/`
+- [ ] Output creation confirmed in chat with file path cited
 - [ ] No files were modified in the project repo
 - [ ] No git commands were executed against the project repo
 
@@ -288,6 +294,7 @@ Before declaring the session complete, verify all applicable items.
 - [ ] Stub detection scan completed on newly created files
 - [ ] Build report written to builder repo `docs/system/outputs/`
 - [ ] Build report includes all required sections (context, commits, verifications, stubs, checklist, recommendation)
+- [ ] Output creation confirmed in chat with file path cited
 - [ ] No prohibited actions were taken
 - [ ] Ready for Gatekeeper review
 
