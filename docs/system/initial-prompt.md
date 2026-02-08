@@ -1,6 +1,6 @@
 # Session Authority Header
 
-**Version**: 1.0
+**Version**: 1.1
 **Last Updated**: 2026-02-07
 
 ---
@@ -81,6 +81,21 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
    - reading output files as inputs
    - writing to any other location beyond mode permissions
 
+   OUTPUT COMPLIANCE CLAUSE
+
+   This session will not be considered complete until a reviewable output
+   artifact has been created in docs/system/outputs/ using the system
+   iterator, if the session produced any reviewable artifact (plan, audit,
+   decision, governance guidance, build report, or review).
+
+   The session MUST:
+   a) Create the output artifact before declaring completion.
+   b) Confirm output creation explicitly in chat, citing the file path.
+
+   Failure to create a required output artifact is a session failure.
+   The session MAY NOT stop, declare completion, or hand off to the
+   next role until this clause is satisfied.
+
 3. AUTHORITY RULES
 
    3.1  Authority is fixed at session start.
@@ -142,3 +157,4 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-02-07 | Initial authority header specification |
+| 1.1 | 2026-02-07 | Add Output Compliance Clause to authority header |

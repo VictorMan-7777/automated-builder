@@ -1,7 +1,7 @@
 # Canonical Prompt Template
 
-**Version**: 1.0
-**Last Updated**: 2026-02-06
+**Version**: 1.1
+**Last Updated**: 2026-02-07
 
 ---
 
@@ -171,6 +171,22 @@ All prompts with `MODE: PLANNER` MUST include this instruction block:
 > - If the target output filename already exists, increment the sequence number (`__NN__`) and write a new file.
 > - Sequence numbering is monotonic across the repository, not scoped by date.
 
+### Output Compliance (All Modes)
+
+All prompts that produce reviewable artifacts (plans, audits, decisions,
+governance guidance, build reports, or reviews) MUST include this instruction
+block:
+
+> **OUTPUT COMPLIANCE:**
+> - This session may not stop or declare completion until a reviewable output
+>   artifact has been created in `docs/system/outputs/` using the system iterator.
+> - The session must confirm output creation explicitly in chat, citing the
+>   file path.
+> - Failure to create the output is a session failure.
+
+This block is required regardless of MODE value. It supplements the Output
+Compliance Clause in the session authority header (`initial-prompt.md`).
+
 ---
 
 ## Related Documentation
@@ -185,3 +201,4 @@ All prompts with `MODE: PLANNER` MUST include this instruction block:
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-02-06 | Initial prompt template |
+| 1.1 | 2026-02-07 | Add Output Compliance standard instruction block |

@@ -70,9 +70,16 @@ Writing **new** files to `docs/system/outputs/` is permitted in all access modes
 This is the canonical output directory for all reviewable artifacts.
 
 **Output requirement rule.** Any session that produces a reviewable artifact —
-defined as a plan, audit, decision, or governance guidance document — must write
-that artifact to `docs/system/outputs/`, regardless of length. Length is not a
-factor; the obligation is triggered by artifact type, not size.
+defined as a plan, audit, decision, governance guidance document, build report,
+or review — must write that artifact to `docs/system/outputs/`, regardless of
+length. Length is not a factor; the obligation is triggered by artifact type,
+not size.
+
+**Output compliance clause.** A qualifying session — one that produced any
+reviewable artifact — may not be considered complete until the output artifact
+exists in `docs/system/outputs/`. The session must confirm output creation
+explicitly in chat before stopping. Failure to do so is a session failure.
+This is enforced by the session authority header (see `initial-prompt.md`).
 
 Producing an output artifact is conceptually separate from applying doc changes.
 A session may do both only when its authority declaration permits both.
