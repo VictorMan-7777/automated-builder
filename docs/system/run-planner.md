@@ -358,7 +358,6 @@ Planner outputs are **append-only artifacts**.
 
 - A planner iteration MUST NOT overwrite an existing output file.
 - If the specified output filename already exists, the planner MUST increment the sequence number (`__NN__`) and write a new file.
-- The sequence number (`NN`) is **monotonic across the repository**, not scoped to a single date.
 
 ### When This Applies
 
@@ -368,9 +367,10 @@ Planner outputs are **append-only artifacts**.
 
 ### Determining the Next Sequence Number
 
-Scan all existing files in `docs/system/outputs/` and use the next available number, regardless of date.
-
-**Example**: If the highest existing sequence number is `03` (from any date), the next output MUST use `04`.
+Use the System Iterator algorithm defined in
+[docs/system/outputs/README.md](outputs/README.md) (see "System Iterator"
+under "Naming Convention"). Do not restate the algorithm here; that document
+is the single source of truth for filename determination.
 
 ---
 
