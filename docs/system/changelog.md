@@ -8,6 +8,27 @@
 
 ## 2026-02-09
 
+### Issue Loop Templates
+
+**Type**: Feature
+**Impact**: Minor
+**Status**: Complete
+
+**Description**:
+Codified the approved loop templates into `docs/system/issues.md`: Proposal
+(commit inventory, produce proposal, no implementation, no commit), Approval
+(same-session human text, scope definition, unlocks commits), and combined
+Deferred / Unapproved + Verification (produce register if applicable, produce
+verification, commit, stop).
+
+**Files Affected**:
+- `docs/system/issues.md` (v1.1 → v1.2)
+- `docs/system/changelog.md` (this entry)
+
+**See**: `docs/system/issues.md`, Loop Templates section
+
+---
+
 ### Issue Resolution Loop
 
 **Type**: Feature

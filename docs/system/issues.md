@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.1
+**Version**: 1.2
 **Last Updated**: 2026-02-09
 
 ---
@@ -118,9 +118,65 @@ without a new inventory.
 
 ---
 
+## Loop Templates
+
+### Proposal
+
+The Proposal step produces a proposal output artifact for a single issue.
+
+**Behavior:**
+
+1. If the inventory artifact is uncommitted, commit it first.
+2. Produce the proposal output artifact.
+3. Do NOT implement any changes.
+4. Do NOT commit the proposal artifact.
+
+The proposal artifact remains uncommitted so the human can review it before
+approval. The approval step determines what happens next.
+
+---
+
+### Approval (Same-Session)
+
+Approval is granted by the human within the same session that produced the
+proposal.
+
+**Approval text:**
+
+```
+Approved to implement Issue-###
+```
+
+The human may optionally append considerations (scope constraints, caveats,
+or conditions).
+
+**Effect of approval:**
+
+- Defines the scope and constraints for the implementation.
+- Commits are allowed only after approval has been granted.
+
+---
+
+### Deferred / Unapproved + Verification
+
+This template runs once at loop end, after all issues have been resolved,
+deferred, or left unapproved.
+
+**Behavior:**
+
+1. If any issues were deferred or unapproved, produce a Deferred / Unapproved
+   register artifact.
+2. Produce a Verification artifact.
+3. Commit both artifacts (or the Verification artifact alone if no issues
+   were deferred or unapproved).
+4. Stop.
+
+---
+
 ## Document History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-02-09 | Add loop templates (proposal, approval, deferred/verification) |
 | 1.1 | 2026-02-09 | Add issue resolution loop and termination rules |
 | 1.0 | 2026-02-09 | Initial issue numbering and severity scheme |
