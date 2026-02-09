@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.2
+**Version**: 1.3
 **Last Updated**: 2026-02-09
 
 ---
@@ -14,6 +14,13 @@ Issue-###
 ```
 
 Where `###` is a zero-padded three-digit number (e.g., `001`, `012`, `100`).
+
+**Exclusivity rule.** The `Issue-###` format is the only permitted issue
+identification scheme. Letter-based identifiers (e.g., "Issue A", "Fix B"),
+unnamed labels, or ad-hoc enumeration (e.g., "the first issue") are not valid
+issue identifiers. This rule applies to all contexts where issues are
+identified, including inventories, diagnostics, proposals, summaries, and
+verification artifacts.
 
 ---
 
@@ -177,6 +184,7 @@ deferred, or left unapproved.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3 | 2026-02-09 | Add exclusivity rule: numeric Issue-### identifiers only, no letter-based identifiers |
 | 1.2 | 2026-02-09 | Add loop templates (proposal, approval, deferred/verification) |
 | 1.1 | 2026-02-09 | Add issue resolution loop and termination rules |
 | 1.0 | 2026-02-09 | Initial issue numbering and severity scheme |
