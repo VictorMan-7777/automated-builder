@@ -104,10 +104,20 @@ Both planner and builder sessions are bound by this specification. Gatekeeper se
 | Baseline capture | Hash or content snapshot of each governance file at session start. |
 
 **Default governance files** (unless overridden by task instructions):
+- `CLAUDE.md`
 - `docs/system/access.md`
+- `docs/system/git.md`
+- `docs/system/identity.md`
+- `docs/system/index.md`
 - `docs/system/initial-prompt.md`
 - `docs/system/prompt-template.md`
+- `docs/implementation/system/checkpoint-taxonomy.md`
 - `prompts/planner/run-planner.md`
+- `prompts/builder/run-builder.md`
+
+**Inclusion criterion:** A file belongs in this list if it defines rules,
+constraints, contracts, or authority boundaries that sessions operate *under*
+rather than *on*.
 
 **Pass condition:** All governance files identified, declared read-only, baselines captured.
 **Fail condition:** Governance file missing, unreadable, or cannot be baselined → HARD stop.
