@@ -418,6 +418,26 @@ Both planner and builder sessions follow the same checkpoint sequence. Differenc
 | CP-8 COMMIT-PREPARE | Docs-only commit. | Phase execution commit(s). |
 | CP-9 POSTCHECK | Same. | Same. |
 
+### 5.1 Operator Delegation for Planner Sessions
+
+The planner role is constrained to docs-only operation and must not execute
+terminal commands (see `prompts/planner/planner-base.md` and
+`prompts/planner/run-planner.md`). This constraint remains in force under the
+checkpoint taxonomy.
+
+For planner sessions, checkpoints that require terminal commands — CP-1
+(PRECHECK), CP-8 (COMMIT-PREPARE), and CP-9 (POSTCHECK) — are performed by
+the **session operator** (human), not by the planner agent. The planner agent
+records the operator-provided results as checkpoint evidence.
+
+This does not reduce checkpoint coverage. Every checkpoint is still evaluated
+and must still pass. The verification criteria, pass/fail conditions, and
+evidence requirements for each checkpoint are unchanged — only the performer
+differs.
+
+For builder sessions, the builder agent performs all checkpoints directly.
+No delegation applies.
+
 ---
 
 ## 6. Compatibility Notes
