@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.0
+**Version**: 1.1
 **Last Updated**: 2026-02-09
 
 ---
@@ -79,8 +79,48 @@ Date — Description — Inventory file — Issue-###(C|H)?
 
 ---
 
+## Issue Resolution Loop
+
+Issues are resolved through a repeating loop per issue:
+
+```
+Inventory
+→ Proposal
+→ Approval
+→ Change
+→ Summary
+→ repeat per Issue
+→ Deferred / Unapproved + Verification
+→ STOP
+```
+
+### Termination Conditions
+
+The loop continues until one of the following is true:
+
+1. The inventory is fully resolved (every issue has a completed summary), OR
+2. Human intervention explicitly indicates all required issues are resolved.
+
+### End-of-Loop Artifacts
+
+At loop end, both of the following apply:
+
+1. **Deferred / Unapproved register.** If any issues were deferred or
+   unapproved during the loop, a Deferred / Unapproved register artifact
+   is created and committed.
+2. **Verification artifact.** A Verification artifact is always created
+   and committed, regardless of whether any issues were deferred.
+
+### Post-Verification Constraint
+
+No new proposals may be started after the Verification artifact is created
+without a new inventory.
+
+---
+
 ## Document History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-09 | Add issue resolution loop and termination rules |
 | 1.0 | 2026-02-09 | Initial issue numbering and severity scheme |

@@ -8,6 +8,27 @@
 
 ## 2026-02-09
 
+### Issue Resolution Loop
+
+**Type**: Feature
+**Impact**: Minor
+**Status**: Complete
+
+**Description**:
+Codified the approved issue resolution loop into `docs/system/issues.md`.
+Defines the Inventory → Proposal → Approval → Change → Summary per-issue
+cycle, termination conditions, end-of-loop artifact requirements (Deferred /
+Unapproved register and Verification), and the post-verification constraint
+against new proposals without a new inventory.
+
+**Files Affected**:
+- `docs/system/issues.md` (v1.0 → v1.1)
+- `docs/system/changelog.md` (this entry)
+
+**See**: `docs/system/issues.md`, Issue Resolution Loop section
+
+---
+
 ### Issue Numbering and Severity Scheme
 
 **Type**: Feature
