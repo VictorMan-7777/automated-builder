@@ -8,6 +8,10 @@ This file is **human-facing documentation only**.
 Claude MUST NOT read or use this file unless a session access mode is explicitly
 declared in the prompt.
 
+This file is governance-locked by default under CP-2 (see
+`docs/implementation/system/checkpoint-taxonomy.md`). Sessions read this file
+for integrity baselining; this does not constitute behavioral use.
+
 Prompts declare access by **reference**, not by restating rules.
 
 ---
@@ -71,21 +75,30 @@ This is the canonical output directory for all reviewable artifacts.
 
 **Output requirement rule.** Any session that produces a reviewable artifact —
 defined as a plan, audit, decision, governance guidance document, build report,
-or review — must write that artifact to `docs/system/outputs/`, regardless of
-length. Length is not a factor; the obligation is triggered by artifact type,
+review, interruption report, or gap report — must write that artifact to
+`docs/system/outputs/`, regardless of length. Length is not a factor; the obligation is triggered by artifact type,
 not size.
 
 **Output compliance clause.** A qualifying session — one that produced any
 reviewable artifact — may not be considered complete until the output artifact
 exists in `docs/system/outputs/`. The session must confirm output creation
 explicitly in chat before stopping. Failure to do so is a session failure.
+
+For interrupted sessions — sessions that terminate before CP-9 records a
+PASS — the output obligation is satisfied via the exception path defined in the
+checkpoint taxonomy (Section 3.4). An interrupted session that produces an
+interruption artifact via CP-7 out-of-order satisfies this clause.
+Post-termination recovery artifacts are governed by Section 3.4.2 of the
+checkpoint taxonomy and are not subject to in-session confirmation.
+
 This is enforced by the session authority header (see `initial-prompt.md`).
 
 Producing an output artifact is conceptually separate from applying doc changes.
 A session may do both only when its authority declaration permits both.
 
-Output filenames are managed by the system iterator and must not be chosen or
-suggested by the assistant.
+Output filenames are managed by the system iterator (defined in
+`docs/system/outputs/README.md`) and must not be chosen or suggested by the
+assistant.
 
 This permission does not allow:
 - modifying or overwriting existing output files
@@ -96,6 +109,11 @@ This permission does not allow:
 
 ## Authority Boundary
 
-Access mode behavior is enforced by the session authority header.
+Access mode behavior is enforced by the session authority header
+(`docs/system/initial-prompt.md`). The session lifecycle — including checkpoint
+ordering, governance locking, artifact production, and commit validation — is
+governed by the checkpoint taxonomy
+(`docs/implementation/system/checkpoint-taxonomy.md`).
+
 This document must not be used to infer permissions or justify actions
 outside the declared session mode.
