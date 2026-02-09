@@ -333,6 +333,60 @@ rather than *on*.
 
 ---
 
+### 3.4 Interrupted Sessions
+
+A session is **interrupted** if it terminates before CP-9 (POSTCHECK) records
+a PASS. This includes: HARD checkpoint failure with abandonment, context
+exhaustion, operator termination, or system failure. A session that pauses at
+a SOFT stop (CP-5) and later resumes is not interrupted — it is paused.
+
+#### 3.4.1 In-Session Exception Path
+
+When a session is still active but is being abandoned (human decides not to
+retry after a HARD stop or unrecoverable error):
+
+1. **CP-7 (ARTIFACT-PRODUCE) may be entered out of order** for the sole
+   purpose of producing an interruption report. This is the only permitted
+   exception to the checkpoint ordering rule (Section 3.2, rule 2).
+2. The interruption artifact MUST clearly identify itself as an interruption
+   report. It must document:
+   - Which checkpoints passed (with evidence).
+   - Which checkpoint failed and why.
+   - What state was left behind (commits made, files on disk, partial work).
+   - Whether recovery is needed by a subsequent session or operator.
+3. **CP-8 (COMMIT-PREPARE) may then be entered** to commit the interruption
+   artifact. The commit message must indicate it is an interruption record.
+4. **CP-9 is skipped.** The session did not complete normally; recording a
+   POSTCHECK pass would be misleading.
+
+#### 3.4.2 Post-Termination Recovery
+
+When a session terminated without producing or committing its artifact
+(context exhaustion, crash, operator abort), recovery falls to the next
+session operator or the human.
+
+**Detection:** Check for evidence of a prior interrupted session:
+- Untracked files in `docs/system/outputs/` that were not committed.
+- Uncommitted modifications in the working tree.
+- Commits in a project repo with no corresponding report in the builder
+  repo's `docs/system/outputs/`.
+
+**Recovery actions by situation:**
+
+| Situation | Action |
+|-----------|--------|
+| Artifact on disk, content complete | Commit as-is with message: `outputs: recover interrupted session artifact from YYYY-MM-DD` |
+| Artifact on disk, content partial | Complete from transcript or logs if possible, then commit. |
+| No artifact on disk, transcript available | Create interruption report from transcript, commit. |
+| No artifact on disk, no transcript | Create a gap report documenting the date, approximate scope, and that no artifacts could be recovered. Commit. |
+| Commits in project repo with no builder report | Create retrospective interruption report documenting the orphaned commits, commit to builder repo. |
+
+The goal is to ensure that every interrupted session is either recovered
+(artifact committed) or explicitly documented as a gap. Silent gaps — where
+an interruption leaves no trace in the repository — are not permitted.
+
+---
+
 ## 4. Execution Contract
 
 ### 4.1 Inputs
