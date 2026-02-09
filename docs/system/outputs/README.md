@@ -157,6 +157,32 @@ YYYY-MM-DD__NN__<context>__<short-description>.md
 5. **Separators**: Use double underscores `__` between components
 6. **Extension**: Always `.md` (markdown)
 
+### System Iterator
+
+The **system iterator** is the deterministic application of the naming convention
+rules defined above. It is not a tool, not a human action, and not an external
+service. Other documents that reference "the system iterator" refer to this
+protocol.
+
+**Algorithm:**
+
+1. Scan all existing files in `docs/system/outputs/`.
+2. For today's date (`YYYY-MM-DD`), find the highest existing `NN`.
+3. The next filename uses `NN + 1` (zero-padded to two digits).
+4. If no files exist for today's date, `NN` = `01`.
+5. Context is determined by the session's role (`planner`, `builder`,
+   `gatekeeper`, or `system`).
+6. Description is determined by the session's task (lowercase,
+   hyphen-separated, max 50 chars).
+
+**Who executes it:** The session (assistant) applies the algorithm directly.
+No human confirmation of the filename is required. No external tool is invoked.
+
+**Verification (CP-7):** A filename is compliant if it was produced by this
+algorithm — correct date, correct next `NN` for that date, valid context, and
+valid description format. "Supplied by the system iterator" means "produced by
+following this algorithm," not "provided by an external source."
+
 ---
 
 ## Chat vs Repository Relationship
