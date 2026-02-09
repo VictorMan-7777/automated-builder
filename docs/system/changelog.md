@@ -6,6 +6,29 @@
 
 ---
 
+## 2026-02-09
+
+### Issue Numbering and Severity Scheme
+
+**Type**: Feature
+**Impact**: Minor
+**Status**: Complete
+
+**Description**:
+Codified the approved issue numbering and severity scheme into system
+documentation. Defines `Issue-###` format, severity suffixes (C for CRITICAL,
+H for HIGH, none for MEDIUM/LOW), placement rules for issue identifiers in
+output artifacts, and changelog entry format.
+
+**Files Affected**:
+- `docs/system/issues.md` (new)
+- `docs/system/README.md` (directory structure updated)
+- `docs/system/changelog.md` (this entry)
+
+**See**: `docs/system/issues.md` for full specification
+
+---
+
 ## 2026-02-05
 
 ### Naming Convention Correction

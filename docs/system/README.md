@@ -32,6 +32,7 @@ docs/system/
 ├── index.md            # System Overview (START HERE)
 ├── README.md           # This file (directory index)
 ├── changelog.md        # System documentation changes
+├── issues.md           # Issue numbering and severity scheme
 └── outputs/            # Long output capture directory
     ├── README.md       # Output capture rules
     └── YYYY-MM-DD__NN__<context>__*.md  # Dated output files
