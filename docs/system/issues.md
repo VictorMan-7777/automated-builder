@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.8
+**Version**: 1.9
 **Last Updated**: 2026-02-10
 
 ---
@@ -180,10 +180,10 @@ executes the following sequence without pausing:
 6. Create the implementation summary artifact.
 7. Commit the summary.
 
-**Backlog hygiene.** If the approved change completes a pending item
-identified as P-###, move that item from Pending to Completed in
-`docs/system/pending-items.md` during step 4. The move is committed as
-part of the implementation commit (step 5).
+**Backlog hygiene.** Approval authorizes execution of the approved change.
+It does not authorize marking a P-### item as Completed. Items targeted
+by the approved change remain in Pending until verification explicitly
+authorizes their completion.
 
 No secondary approval is implied. Verification is NEVER part of approval
 and is always a separate prompt.
@@ -254,12 +254,40 @@ When an item is deferred during issue resolution or verification:
 Deferred until: <condition>
 ```
 
+**Verification artifact — required content.**
+
+Every verification artifact must include:
+
+1. **Pending-item context** (when the change targets a P-### item):
+   - Pending item ID (P-###).
+   - Intent and scope (from the item's Summary in `pending-items.md`).
+   - Acceptance criteria: what constitutes "done" for this item.
+
+2. **Checks**: Specific checks confirming the change was applied correctly
+   and completely.
+
+3. **Verdict**: PASS or FAIL with justification.
+
+4. **Completion authority.** Verification — not approval — authorizes
+   marking a P-### item as Completed. When the verdict is PASS and all
+   acceptance criteria are met, the verification artifact must explicitly
+   state that completion is authorized. When the verdict is FAIL, the item
+   remains in Pending and the artifact must state what remediation is
+   required.
+
+**Backlog hygiene at verification.** When verification authorizes
+completion of a P-### item, move that item from Pending to Completed in
+`docs/system/pending-items.md` and commit the change as part of the
+verification commit. The completion date is the date of the verification
+artifact.
+
 ---
 
 ## Document History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.9 | 2026-02-10 | Add Pending-item context to verification template; shift completion authority from approval to verification (P-015) |
 | 1.8 | 2026-02-10 | Add backlog hygiene rule: move completed P-### items to Completed during execution |
 | 1.7 | 2026-02-10 | Correct loop diagram to show pause-for-review and execution-trigger semantics; add approved artifact immutability rule |
 | 1.6 | 2026-02-10 | Add deferred-item disposition rules and example to verification template |

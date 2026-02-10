@@ -20,18 +20,6 @@ No action is taken until explicitly promoted.
 
 ## Pending
 
-### P-002 — issues.md Requires Diff to Reflect Corrected Loop Semantics
-- Source: Output File System Issue loop
-- Captured: 2026-02-10
-- Summary:
-  issues.md does not currently reflect the clarified execution model:
-  - proposals uncommitted
-  - approval triggers execution
-  - verification is separate
-  - approved-with-updates semantics
-- Notes:
-    Requires a diff/update pass, not in scope of current Issue loop.
-
 ### P-003 — Add proposal-artifact reference requirement to Approval template in issues.md
 - Source: Output File System inventory session
 - Captured: 2026-02-10
@@ -57,6 +45,7 @@ No action is taken until explicitly promoted.
   Capture updates and refinements to the devotional generator builder
   plan, including newly identified features or adjustments to the existing
   builder design.
+Deferred until: automated builder is complete
 
 ### P-012 — Automated builder — completion definition and guardrails
 - Source: System architecture clarification
@@ -128,6 +117,19 @@ No action is taken until explicitly promoted.
         requirements or rewrite plans; run record references the planner output
         it executed.
 
+### P-013 — Scan system for documentation inconsistencies
+- Source: Output File System pending items update
+- Captured: 2026-02-10
+- Summary:
+  Add a pending item for scanning the repository and docs to identify
+  inconsistencies or missing documentation.
+
+### P-014 — Add agents to planner
+- Source: Output File System pending items update
+- Captured: 2026-02-10
+- Summary:
+  Add a pending item to integrate agent support into the planner component.
+
 ### P-006 — Devotional generator — multi-volume series support (Vol 1–6)
 - Source: Devotional generator planning
 - Captured: 2026-02-10
@@ -135,6 +137,7 @@ No action is taken until explicitly promoted.
   Support a devotional series with 6 volumes (Vol 1 overview; Vol 2–6
   topic-specific), each 30 days (Mon–Sat). Generator completes Vol 1 and
   generates Vol 2–6 from a structured plan.
+Deferred until: automated builder is complete
 
 ### P-007 — Devotional generator — series-level uniqueness (scripture + quotes)
 - Source: Devotional generator planning
@@ -143,6 +146,7 @@ No action is taken until explicitly promoted.
   Enforce series-wide uniqueness: no scriptures or quotes used in Volume 1 may
   appear in Volumes 2–6. Track used scriptures/quotes in a registry and
   validate before generation/export.
+Deferred until: automated builder is complete
 
 ### P-008 — Devotional generator — one-time spreadsheet import (Vol 1 mapping)
 - Source: Devotional generator planning
@@ -151,6 +155,7 @@ No action is taken until explicitly promoted.
   One-time ingest of existing spreadsheet mapping (weeks 2–5 scripture + topics
   for Volume 1). Define import format, validation, and mapping into internal
   series plan model.
+Deferred until: automated builder is complete
 
 ### P-009 — Devotional generator — one-time Scrivener import (existing draft)
 - Source: Devotional generator planning
@@ -159,6 +164,7 @@ No action is taken until explicitly promoted.
   One-time ingest of already-written content from Scrivener (Week 1 of Volume 1).
   Define export format and parsing, and mark imported days as locked so
   generator fills only missing days.
+Deferred until: automated builder is complete
 
 ### P-010 — Devotional generator — workflow to finish Volume 1 then generate Vol 2–6
 - Source: Devotional generator planning
@@ -166,6 +172,7 @@ No action is taken until explicitly promoted.
 - Summary:
   Workflow: import spreadsheet + Scrivener → generate remaining days in Volume 1
   → generate Volumes 2–6 → enforce series-level uniqueness throughout.
+Deferred until: automated builder is complete
 
 ### P-011 — Devotional generator — per-volume KDP-ready export
 - Source: Devotional generator planning
@@ -173,6 +180,7 @@ No action is taken until explicitly promoted.
 - Summary:
   Export separate KDP-ready PDFs per volume with consistent formatting and
   volume-specific front/back matter; optionally support a series bundle export.
+Deferred until: automated builder is complete
 
 ## Completed
 
@@ -185,5 +193,36 @@ No action is taken until explicitly promoted.
   Approval renames proposal to approved and triggers execution.
 - Notes:
     Identified while resolving Issue-001H.
+
+### P-002 — issues.md Requires Diff to Reflect Corrected Loop Semantics
+- Source: Output File System Issue loop
+- Captured: 2026-02-10
+- Summary:
+  issues.md does not currently reflect the clarified execution model:
+  - proposals uncommitted
+  - approval triggers execution
+  - verification is separate
+  - approved-with-updates semantics
+- Notes:
+    Requires a diff/update pass, not in scope of current Issue loop.
+
+### P-015 — Verification template — add Pending item context (not inventory-only)
+- Source: Verification workflow gap
+- Captured: 2026-02-10
+- Completed: 2026-02-10
+- Summary:
+  Update verification template to include Pending-item context fields (P-###, target file(s), proposal artifact, acceptance checks) so verification works for non-inventory changes as well.
+- Notes:
+    Verification template updated to include Pending-item context and shift completion authority to verification; dogfooded on P-016.
+
+### P-016 — Enforce output artifact after every Claude iteration
+- Source: Process enforcement gap
+- Captured: 2026-02-10
+- Completed: 2026-02-10
+- Summary:
+  Add/clarify system rule that every Claude iteration must produce an output artifact (saved under docs/system/outputs/) to prevent untracked changes and lost work.
+- Notes:
+    Completion authorized by PASS verification (`2026-02-10__23__system__p-016-re-verification.md`).
+    Proposal/approval loop was not used; retroactive approval recorded (`2026-02-10__22__system__p-016-retroactive-approval.md`).
 
 ---

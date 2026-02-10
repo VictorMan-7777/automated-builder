@@ -24,6 +24,7 @@ tmp.*
 .workspace/
 local/
 scratch/
+docs/system/outputs/active-pending.md
 
 # Build artifacts
 node_modules/

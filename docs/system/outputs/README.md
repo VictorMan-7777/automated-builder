@@ -1,7 +1,7 @@
-# Long Output Capture Directory
+# Output Capture Directory
 
 **Location**: `docs/system/outputs/`
-**Purpose**: Canonical storage for lengthy Claude Code outputs that exceed chat readability
+**Purpose**: Canonical storage for every Claude iteration output artifact
 **Version**: 1.1
 **Last Updated**: 2026-02-10
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This directory stores formal, permanent records of Claude Code outputs that are too long for comfortable chat consumption. When Claude generates comprehensive summaries, planning artifacts, or detailed reports, those outputs must be saved here for permanent record.
+This directory stores formal, permanent records of Claude Code outputs. Every Claude iteration must produce an output artifact saved here for permanent record.
 
 ---
 
@@ -17,30 +17,8 @@ This directory stores formal, permanent records of Claude Code outputs that are 
 
 ### When to Save Output to File
 
-Claude MUST save output to a file in this directory when the session produces
-a **reviewable artifact**. Length is not a factor; the obligation is triggered
-by artifact type, not size.
-
-Reviewable artifacts:
-
-- **Plans** — iteration plans, phase plans, implementation plans
-- **Audits** — compliance checks, rule audits, quote-sourcing audits
-- **Decisions** — rule changes, scope rulings, governance clarifications
-- **Governance guidance** — policy interpretations, process documentation
-- **Build reports** — phase completion reports, commit point summaries
-- **Reviews** — gatekeeper review decisions, milestone gate decisions
-- **Interruption reports** — session interruption artifacts
-- **Gap reports** — gap analysis and diagnostic artifacts
-
-Additionally, Claude saves to this directory when the user explicitly
-requests it (e.g., "save output to file").
-
-### When NOT to Save
-
-- Interactive Q&A exchanges
-- Error messages or debugging output
-- Quick status updates
-- File content displays (those belong in their proper locations)
+Every Claude iteration must produce an output artifact saved to
+`docs/system/outputs/`.
 
 ---
 
