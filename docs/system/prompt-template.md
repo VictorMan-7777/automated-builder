@@ -1,7 +1,7 @@
 # Canonical Prompt Template
 
-**Version**: 1.1
-**Last Updated**: 2026-02-07
+**Version**: 1.2
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -173,13 +173,14 @@ All prompts with `MODE: PLANNER` MUST include this instruction block:
 
 ### Output Compliance (All Modes)
 
-All prompts that produce reviewable artifacts (plans, audits, decisions,
-governance guidance, build reports, or reviews) MUST include this instruction
-block:
+All prompts MUST include this instruction block. Every Claude iteration must
+produce an output artifact — this obligation is unconditional.
 
 > **OUTPUT COMPLIANCE:**
-> - This session may not stop or declare completion until a reviewable output
->   artifact has been created in `docs/system/outputs/` using the system iterator.
+> - Every iteration must produce an output artifact saved to
+>   `docs/system/outputs/` using the system iterator.
+> - This session may not stop or declare completion until the output artifact
+>   exists.
 > - The session must confirm output creation explicitly in chat, citing the
 >   file path.
 > - Failure to create the output is a session failure.
@@ -201,4 +202,5 @@ Compliance Clause in the session authority header (`initial-prompt.md`).
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-02-06 | Initial prompt template |
+| 1.2 | 2026-02-10 | Make output compliance unconditional — every iteration (P-016) |
 | 1.1 | 2026-02-07 | Add Output Compliance standard instruction block |

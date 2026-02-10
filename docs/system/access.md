@@ -73,16 +73,16 @@ This mode is appropriate when:
 Writing **new** files to `docs/system/outputs/` is permitted in all access modes.
 This is the canonical output directory for all reviewable artifacts.
 
-**Output requirement rule.** Any session that produces a reviewable artifact —
-defined as a plan, audit, decision, governance guidance document, build report,
-review, interruption report, or gap report — must write that artifact to
-`docs/system/outputs/`, regardless of length. Length is not a factor; the obligation is triggered by artifact type,
-not size.
+**Output requirement rule.** Every Claude iteration must produce an output
+artifact saved to `docs/system/outputs/`. This obligation is unconditional — it
+is not gated by artifact type, length, or session mode. The output artifact
+documents the work performed during the iteration and prevents untracked changes
+and lost work.
 
-**Output compliance clause.** A qualifying session — one that produced any
-reviewable artifact — may not be considered complete until the output artifact
-exists in `docs/system/outputs/`. The session must confirm output creation
-explicitly in chat before stopping. Failure to do so is a session failure.
+**Output compliance clause.** A session may not be considered complete until its
+output artifact exists in `docs/system/outputs/`. The session must confirm
+output creation explicitly in chat before stopping. Failure to do so is a
+session failure.
 
 For interrupted sessions — sessions that terminate before CP-9 records a
 PASS — the output obligation is satisfied via the exception path defined in the

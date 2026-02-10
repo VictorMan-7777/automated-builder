@@ -1,7 +1,7 @@
 # Session Authority Header
 
-**Version**: 1.1
-**Last Updated**: 2026-02-07
+**Version**: 1.2
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -64,10 +64,10 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
    In all access modes, the session may write NEW files to the canonical
    output directory (docs/system/outputs/).
 
-   OUTPUT REQUIREMENT RULE: Any session that produces a reviewable
-   artifact (plan, audit, decision, or governance guidance) MUST write
-   that artifact to docs/system/outputs/, regardless of length.
-   Length is not a factor; the obligation is triggered by artifact type.
+   OUTPUT REQUIREMENT RULE: Every Claude iteration MUST produce an
+   output artifact saved to docs/system/outputs/. This obligation is
+   unconditional — it is not gated by artifact type, length, or
+   session mode.
 
    Producing an output artifact is conceptually separate from applying
    doc changes. A session may do both only when its authority declaration
@@ -83,10 +83,8 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
 
    OUTPUT COMPLIANCE CLAUSE
 
-   This session will not be considered complete until a reviewable output
-   artifact has been created in docs/system/outputs/ using the system
-   iterator, if the session produced any reviewable artifact (plan, audit,
-   decision, governance guidance, build report, or review).
+   This session will not be considered complete until an output artifact
+   has been created in docs/system/outputs/ using the system iterator.
 
    The session MUST:
    a) Create the output artifact before declaring completion.
@@ -157,4 +155,5 @@ SESSION AUTHORITY HEADER — IMMUTABLE FOR THIS SESSION
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-02-07 | Initial authority header specification |
+| 1.2 | 2026-02-10 | Make output requirement unconditional — every iteration (P-016) |
 | 1.1 | 2026-02-07 | Add Output Compliance Clause to authority header |
