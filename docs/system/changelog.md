@@ -2,7 +2,7 @@
 
 **Purpose**: Track changes to system-level documentation and framework rules
 **Location**: `docs/system/changelog.md`
-**Last Updated**: 2026-02-05
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -68,6 +68,118 @@ output artifacts, and changelog entry format.
 - `docs/system/changelog.md` (this entry)
 
 **See**: `docs/system/issues.md` for full specification
+
+---
+
+### Architecture Review Pass 1 — Fixes A–E
+
+**Type**: Fix
+**Impact**: Minor
+**Status**: Complete
+
+**Description**:
+Five fixes from Architecture Review Pass 1
+(`2026-02-09__01__system__architecture-review-pass-1.md`):
+
+- **Fix A** — Define system iterator protocol for output filenames.
+  Added "System Iterator" subsection to `docs/system/outputs/README.md`.
+- **Fix B** — Resolve NN sequence-number contradiction. Removed
+  monotonic-across-repo rule from `docs/system/run-planner.md`; per-day
+  rule in `outputs/README.md` is authoritative.
+- **Fix C** — Expand CP-2 governance lock list from 4 to 10 files in
+  `docs/implementation/system/checkpoint-taxonomy.md`.
+- **Fix D** — Clarify operator delegation for planner checkpoint commands.
+  Added Section 5.1 to `docs/implementation/system/checkpoint-taxonomy.md`.
+- **Fix E** — Add interrupted session protocol. Added Section 3.4 to
+  `docs/implementation/system/checkpoint-taxonomy.md`.
+
+**Files Affected**:
+- `docs/system/outputs/README.md` (Fix A)
+- `docs/system/run-planner.md` (Fix B)
+- `docs/implementation/system/checkpoint-taxonomy.md` (Fixes C, D, E)
+
+**See**: `2026-02-09__01__system__architecture-review-pass-1.md` and
+individual implementation summaries (output artifacts 03, 05, 07, 09, 11)
+
+---
+
+## 2026-02-07
+
+### Output Requirement Rule Change
+
+**Type**: Feature
+**Impact**: Major
+**Status**: Complete
+
+**Description**:
+Replaced the length-based heuristic ("save outputs only if long") with a
+deterministic artifact-type trigger: outputs must be created for any session
+producing a reviewable artifact (plans, audits, decisions, governance
+guidance), regardless of length.
+
+**Files Affected**:
+- `docs/system/access.md` (Output Writes section updated)
+- `docs/system/initial-prompt.md` (Cross-Mode Provision updated)
+
+**See**: `2026-02-07__04__system__output-requirement-rule-change.md`
+
+---
+
+### Output Compliance Enforcement
+
+**Type**: Feature
+**Impact**: Major
+**Status**: Complete
+
+**Description**:
+Introduced a mandatory Output Compliance Clause making output artifact
+creation a structural precondition for session completion. Enforced at three
+layers: authority header (session stop-condition), prompt template (standard
+instruction block), and role-specific checklists.
+
+**Files Affected**:
+- `docs/system/initial-prompt.md` (v1.0 → v1.1, authority header clause)
+- `docs/system/access.md` (compliance clause paragraph)
+- `docs/system/prompt-template.md` (v1.0 → v1.1, standard instruction block)
+- `prompts/planner/run-planner.md` (Step 7 and checklist updated)
+- `prompts/builder/run-builder.md` (checklist updated)
+
+**See**: `2026-02-07__10__system__output-compliance-enforcement.md`
+
+---
+
+### System Builder MVP Plan
+
+**Type**: Feature
+**Impact**: Minor
+**Status**: Complete
+
+**Description**:
+Approved the System Builder MVP plan defining the minimum viable execution
+framework for builder sessions.
+
+**Files Affected**:
+- Planning artifact only (no system files modified)
+
+**See**: `2026-02-07__07__planner__system-builder-mvp-plan.md`
+
+---
+
+### Checkpoint Taxonomy Execution Contract
+
+**Type**: Feature
+**Impact**: Major
+**Status**: Complete
+
+**Description**:
+Approved the Checkpoint Taxonomy defining the 9-checkpoint execution contract
+(CP-1 through CP-9) for all system sessions. Establishes checkpoint ordering,
+verification criteria, pass/fail conditions, and 7 invariants.
+
+**Files Affected**:
+- `docs/implementation/system/checkpoint-taxonomy.md` (new, APPROVED)
+
+**See**: `2026-02-07__11__builder__checkpoint-taxonomy-execution-contract.md`
 
 ---
 
@@ -186,5 +298,6 @@ For existing outputs using old format:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-02-10 | Add missing entries for 2026-02-07 and 2026-02-09 changes (Issue-004) |
 | 1.1 | 2026-02-05 | Added naming convention correction entry |
 | 1.0 | 2026-02-05 | Initial changelog created |
