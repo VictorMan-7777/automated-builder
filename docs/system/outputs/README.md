@@ -230,7 +230,7 @@ See detailed output: docs/system/outputs/2026-02-05__01__planner__reorganization
 
 **Best Practice**:
 1. Claude generates comprehensive output
-2. Claude saves to `docs/system/outputs/YYYY-MM-DD-name.md`
+2. Claude saves to `docs/system/outputs/YYYY-MM-DD__NN__<context>__<description>.md`
 3. Claude responds in chat with summary + file path
 4. User reads summary, clicks file path if detail needed
 
@@ -309,7 +309,7 @@ Full review: docs/system/outputs/2026-02-10__01__gatekeeper__review-phase-001.md
 
 **Claude Action**:
 1. Determine appropriate filename based on context
-2. Save to `docs/system/outputs/YYYY-MM-DD-context-name.md`
+2. Save to `docs/system/outputs/YYYY-MM-DD__NN__<context>__<description>.md`
 3. Respond with confirmation and file path
 
 ---
@@ -319,19 +319,19 @@ Full review: docs/system/outputs/2026-02-10__01__gatekeeper__review-phase-001.md
 ### Planner
 
 When planning phase completes:
-- Save planning summary to `docs/system/outputs/YYYY-MM-DD-planning-<project>-iteration-N.md`
+- Save planning summary to `docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md`
 - Include: files created, structure, commit points identified, next steps
 
 ### Builder
 
 When phase completes:
-- Save phase completion report to `docs/system/outputs/YYYY-MM-DD-build-phase-NNN.md`
+- Save phase completion report to `docs/system/outputs/YYYY-MM-DD__NN__builder__<description>.md`
 - Include: commits made, verification results, issues encountered
 
 ### Gatekeeper
 
 When review completes:
-- Save review decision to `docs/system/outputs/YYYY-MM-DD-gate-<phase-or-milestone>.md`
+- Save review decision to `docs/system/outputs/YYYY-MM-DD__NN__gatekeeper__<description>.md`
 - Include: checklist results, decision, rationale, required changes
 
 ---
@@ -368,7 +368,7 @@ docs/system/outputs/
 
 All outputs in this directory MUST:
 
-1. ✅ Follow naming convention (YYYY-MM-DD-name.md)
+1. ✅ Follow naming convention (YYYY-MM-DD__NN__<context>__<description>.md)
 2. ✅ Be markdown format
 3. ✅ Contain permanent, reference-quality content
 4. ✅ Include date and context
