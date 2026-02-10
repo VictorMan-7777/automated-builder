@@ -1,7 +1,7 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.3
-**Last Updated**: 2026-02-09
+**Version**: 1.5
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -143,24 +143,65 @@ approval. The approval step determines what happens next.
 
 ---
 
-### Approval (Same-Session)
+### Approval
 
-Approval is granted by the human within the same session that produced the
-proposal.
+Approval is the execution trigger for an issue. Proposal artifacts are draft
+and MUST NOT be committed; only approved artifacts are committed. The human
+responds to a proposal with one of the following instructions.
 
-**Approval text:**
+**Proposal artifact prerequisite.** Approval MUST reference a proposal
+artifact. If the proposal artifact is present in the current session context,
+the reference is implicit. If the proposal artifact is not present in the
+current session context, the approval instruction MUST include the proposal
+artifact filename or path. If the proposal artifact reference is missing,
+STOP and request it from the human.
+
+**Approved / Approved with updates:**
 
 ```
-Approved to implement Issue-###
+Approved
 ```
 
-The human may optionally append considerations (scope constraints, caveats,
-or conditions).
+or
 
-**Effect of approval:**
+```
+Approved with <updates>
+```
 
-- Defines the scope and constraints for the implementation.
-- Commits are allowed only after approval has been granted.
+When the instruction is "Approved" or "Approved with \<updates\>", Claude
+executes the following sequence without pausing:
+
+1. Apply the specified updates to the proposal, if any.
+2. Rename the proposal artifact from `*-proposal.md` to `*-approved.md`.
+3. Commit the approved artifact.
+4. Implement the approved change.
+5. Commit the implementation.
+6. Create the implementation summary artifact.
+7. Commit the summary.
+
+No secondary approval is implied. Verification is NEVER part of approval
+and is always a separate prompt.
+
+**Not approved / Update proposal:**
+
+```
+Update the proposal…
+```
+
+or
+
+```
+Redo the proposal…
+```
+
+An explicit instruction to update or redo the proposal keeps the proposal
+unapproved and in draft. Claude revises the proposal artifact per the
+instruction. The proposal remains uncommitted and awaits a subsequent
+approval instruction.
+
+**Artifact requirement.** All approvals MUST be saved as approved artifacts
+(the renamed `*-approved.md` file). The approved artifact is the
+authoritative record of what was approved.
 
 ---
 
@@ -184,6 +225,8 @@ deferred, or left unapproved.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.5 | 2026-02-10 | Add proposal artifact prerequisite to approval template |
+| 1.4 | 2026-02-10 | Rewrite approval template: encode execution sequence, distinguish approved/not-approved paths, add artifact requirement |
 | 1.3 | 2026-02-09 | Add exclusivity rule: numeric Issue-### identifiers only, no letter-based identifiers |
 | 1.2 | 2026-02-09 | Add loop templates (proposal, approval, deferred/verification) |
 | 1.1 | 2026-02-09 | Add issue resolution loop and termination rules |
