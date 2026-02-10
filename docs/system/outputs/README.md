@@ -2,8 +2,8 @@
 
 **Location**: `docs/system/outputs/`
 **Purpose**: Canonical storage for lengthy Claude Code outputs that exceed chat readability
-**Version**: 1.0
-**Last Updated**: 2026-02-05
+**Version**: 1.1
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -332,27 +332,10 @@ When review completes:
 
 ### Current Structure
 
-```
-docs/system/outputs/
-├── README.md (this file)
-├── 2026-02-05__01__planner__reorganization-summary.md
-├── 2026-02-05__02__system__long-output-capture-implementation.md
-└── (future outputs...)
-```
-
-### Future Structure (with archives)
-
-```
-docs/system/outputs/
-├── README.md
-├── archive/
-│   └── (superseded outputs)
-├── 2026-02-05__01__planner__reorganization-summary.md
-├── 2026-02-05__02__system__long-output-capture-implementation.md
-├── 2026-02-10__01__planner__planning-phase-complete.md
-├── 2026-02-10__02__builder__phase-001-complete.md
-└── (ongoing outputs...)
-```
+The authoritative directory listing is the filesystem itself. Run
+`ls docs/system/outputs/` or check the repository for the current file
+inventory. Static file trees in this section are not maintained because
+the directory changes frequently.
 
 ---
 
@@ -388,4 +371,5 @@ All outputs MUST NOT:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-10 | Replace stale file trees with filesystem-is-source-of-truth note; update header (Issue-005). Incorporates prior changes: canonical format references (Issue-002H), output capture rule replacement (Issue-003) |
 | 1.0 | 2026-02-05 | Initial long output capture rule documentation |
