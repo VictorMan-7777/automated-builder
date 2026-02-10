@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.7
+**Version**: 1.8
 **Last Updated**: 2026-02-10
 
 ---
@@ -180,6 +180,11 @@ executes the following sequence without pausing:
 6. Create the implementation summary artifact.
 7. Commit the summary.
 
+**Backlog hygiene.** If the approved change completes a pending item
+identified as P-###, move that item from Pending to Completed in
+`docs/system/pending-items.md` during step 4. The move is committed as
+part of the implementation commit (step 5).
+
 No secondary approval is implied. Verification is NEVER part of approval
 and is always a separate prompt.
 
@@ -255,6 +260,7 @@ Deferred until: <condition>
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.8 | 2026-02-10 | Add backlog hygiene rule: move completed P-### items to Completed during execution |
 | 1.7 | 2026-02-10 | Correct loop diagram to show pause-for-review and execution-trigger semantics; add approved artifact immutability rule |
 | 1.6 | 2026-02-10 | Add deferred-item disposition rules and example to verification template |
 | 1.5 | 2026-02-10 | Add proposal artifact prerequisite to approval template |
