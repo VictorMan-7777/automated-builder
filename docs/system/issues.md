@@ -1,6 +1,6 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.5
+**Version**: 1.7
 **Last Updated**: 2026-02-10
 
 ---
@@ -88,15 +88,16 @@ Date — Description — Inventory file — Issue-###(C|H)?
 
 ## Issue Resolution Loop
 
-Issues are resolved through a repeating loop per issue:
+Issues are resolved through a repeating loop. Each issue passes through
+proposal, approval, and execution before the next issue begins:
 
 ```
 Inventory
-→ Proposal
-→ Approval
-→ Change
-→ Summary
-→ repeat per Issue
+→ Proposal → STOP (await human review)
+→ Approval (execution trigger)
+  → Change
+  → Summary
+→ repeat for next issue
 → Deferred / Unapproved + Verification
 → STOP
 ```
@@ -203,6 +204,10 @@ approval instruction.
 (the renamed `*-approved.md` file). The approved artifact is the
 authoritative record of what was approved.
 
+**Approved artifact immutability.** Once an approved artifact is committed,
+it MUST NOT be modified. The committed artifact is the permanent record of
+what was authorized.
+
 ---
 
 ### Deferred / Unapproved + Verification
@@ -219,12 +224,39 @@ deferred, or left unapproved.
    were deferred or unapproved).
 4. Stop.
 
+**Deferred-item disposition in `pending-items.md`:**
+
+When an item is deferred during issue resolution or verification:
+
+1. Do NOT move the item to a separate Deferred section or list.
+2. Keep the item in **Pending** in `docs/system/pending-items.md`.
+3. Append exactly one deferred marker line inside the item block, using one
+   of these forms:
+   - `Deferred: <reason>`
+   - `Deferred until: <condition>`
+4. Deferred items remain part of the canonical backlog. Derived views
+   (e.g., an active-pending filter) may exclude deferred items, but the
+   Verification step must not.
+
+**Example — pending item with deferred marker:**
+
+```markdown
+### P-042 — Example deferred item
+- Source: Issue loop
+- Captured: 2026-02-10
+- Summary:
+  Description of the pending item.
+Deferred until: <condition>
+```
+
 ---
 
 ## Document History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.7 | 2026-02-10 | Correct loop diagram to show pause-for-review and execution-trigger semantics; add approved artifact immutability rule |
+| 1.6 | 2026-02-10 | Add deferred-item disposition rules and example to verification template |
 | 1.5 | 2026-02-10 | Add proposal artifact prerequisite to approval template |
 | 1.4 | 2026-02-10 | Rewrite approval template: encode execution sequence, distinguish approved/not-approved paths, add artifact requirement |
 | 1.3 | 2026-02-09 | Add exclusivity rule: numeric Issue-### identifiers only, no letter-based identifiers |
