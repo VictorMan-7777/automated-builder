@@ -13,38 +13,30 @@ This directory stores formal, permanent records of Claude Code outputs that are 
 
 ---
 
-## The Long Output Capture Rule
+## The Output Capture Rule
 
 ### When to Save Output to File
 
-Claude MUST save output to a file in this directory when:
+Claude MUST save output to a file in this directory when the session produces
+a **reviewable artifact**. Length is not a factor; the obligation is triggered
+by artifact type, not size.
 
-1. **Length Exceeds Chat Readability**
-   - Output is > 500 lines
-   - Output includes multiple sections with detailed sub-content
-   - Scrolling through chat would be cumbersome
+Reviewable artifacts:
 
-2. **Permanent Record Required**
-   - Summary of significant work completed
-   - Planning phase outputs
-   - Gatekeeper review decisions
-   - Major milestone completions
-   - Iteration summaries
+- **Plans** — iteration plans, phase plans, implementation plans
+- **Audits** — compliance checks, rule audits, quote-sourcing audits
+- **Decisions** — rule changes, scope rulings, governance clarifications
+- **Governance guidance** — policy interpretations, process documentation
+- **Build reports** — phase completion reports, commit point summaries
+- **Reviews** — gatekeeper review decisions, milestone gate decisions
+- **Interruption reports** — session interruption artifacts
+- **Gap reports** — gap analysis and diagnostic artifacts
 
-3. **Reference Material**
-   - File trees of project structure
-   - Comprehensive checklists
-   - Detailed status reports
-   - Migration or reorganization summaries
-
-4. **User Explicitly Requests**
-   - User says "save output to file"
-   - User says "send output to temp-output.md" (or similar)
-   - User provides specific filename
+Additionally, Claude saves to this directory when the user explicitly
+requests it (e.g., "save output to file").
 
 ### When NOT to Save
 
-- Short responses (< 100 lines)
 - Interactive Q&A exchanges
 - Error messages or debugging output
 - Quick status updates
