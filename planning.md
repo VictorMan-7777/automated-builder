@@ -1,7 +1,7 @@
 # Planning Requirements
 
-**Version**: 1.2
-**Last Updated**: 2026-02-06
+**Version**: 1.3
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -39,32 +39,49 @@ This document defines requirements and constraints for the **Planning** stage of
 
 ## Project Artifacts Location
 
-**MANDATORY**: All project artifacts produced by the Planner MUST live under:
+**MANDATORY**: All project planning docs produced by the Planner MUST live under:
 
 ```
-docs/projects/<project-slug>/
+../<project-slug>/
 ```
 
-With phase prompts under:
+With phase plans under:
 
 ```
-docs/projects/<project-slug>/phases/
+../<project-slug>/phases/
 ```
+
+Project-specific workflow artifacts (proposals, approvals, verifications,
+implementation summaries) MUST live under:
+
+```
+../<project-slug>/docs/system/outputs/
+```
+
+All paths are relative to the automated-builder repository root.
+
+Automated-builder's own `docs/system/outputs/` is reserved for system-level
+artifacts (issue resolutions, architecture reviews, etc.) that are about the
+automated-builder itself, not about a specific project.
 
 ### Example Structure
 
 ```
-docs/
-└── projects/
-    └── my-project/
-        ├── index.md
-        ├── prd.md
-        ├── roadmap.md
-        ├── iteration-log.md
-        └── phases/
-            ├── 001-phase-one.md
-            ├── 002-phase-two.md
-            └── 003-phase-three.md
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── my-project/
+    ├── index.md
+    ├── prd.md
+    ├── roadmap.md
+    ├── iteration-log.md
+    ├── phases/
+    │   ├── 001-phase-one.md
+    │   ├── 002-phase-two.md
+    │   └── 003-phase-three.md
+    └── docs/
+        └── system/
+            └── outputs/
+                └── YYYY-MM-DD__NN__<context>__<description>.md
 ```
 
 ### Naming Conventions
@@ -72,7 +89,7 @@ docs/
 - **Project slug**: lowercase, hyphen-separated (e.g., `devotional-generator`)
 - **Phase files**: NNN format (001, 002, 003, etc.)
 - **Project artifacts**: lowercase, hyphen-separated, `.md` extension (no underscores)
-- **System outputs**: Use double underscores (`__`) only in canonical format: `YYYY-MM-DD__NN__<context>__<description>.md`
+- **Workflow artifacts**: Use double underscores (`__`) in canonical format: `YYYY-MM-DD__NN__<context>__<description>.md`
 
 ---
 
@@ -272,10 +289,14 @@ Plans MUST specify where human review is required:
 
 When planning phase completes or generates comprehensive output:
 
-1. **Save to**: `docs/system/outputs/YYYY-MM-DD__NN__<context>__<description>.md`
+1. **Save to**: `../<slug>/docs/system/outputs/YYYY-MM-DD__NN__<context>__<description>.md`
 2. **Naming**: Follow canonical format with daily sequence and context
 3. **Content**: Comprehensive details (file trees, checklists, summaries)
 4. **Chat**: Provide summary + file path pointer
+
+The system iterator scans `../<slug>/docs/system/outputs/` (not
+`docs/system/outputs/`) to determine the next sequence number for
+project-specific workflow artifacts.
 
 ### When to Save Output
 
@@ -319,6 +340,7 @@ All planning outputs MUST comply with:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3 | 2026-02-12 | Relocate project output root to parent projects directory; workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.2 | 2026-02-06 | Added Artifact Approval Rules section |
 | 1.1 | 2026-02-05 | Added Long Output Capture requirement |
 | 1.0 | 2026-02-05 | Initial planning requirements |

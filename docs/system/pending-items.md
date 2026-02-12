@@ -1220,6 +1220,37 @@ Deferred until: automated builder is complete
     - reduction triggers when quality or velocity drops
   Goal is to maximize throughput while preserving clarity and stability.
 
+### P-083 — run-create-project — create project directory + bootstrap required system docs
+- Source: Builder execution readiness for devotional-generator
+- Captured: 2026-02-12
+- Summary:
+  Define and approve `run-create-project` as the prerequisite step before
+  running Builder on `devotional-generator`. This capability must create the
+  target project directory and bootstrap the minimum required system docs so
+  planner/builder loops can run without manual setup.
+- Scope:
+  - create project root directory for a new project slug
+  - scaffold required docs/contracts needed by run-planner and run-builder
+  - include output file rules references from `docs/system/outputs/README.md`
+    and any required supporting docs
+  - include issues proposal template and issue-loop requirements from
+    `docs/system/issues.md`
+  - include planner/builder runner docs only when required by the new
+    architecture contracts
+  - identify and include any "must exist in project" docs implied by
+    `run-planner` and `run-builder` contracts
+- Definition of Done:
+  - explicit list of files/directories `run-create-project` must create
+  - each required file mapped to the contract/rule that requires it
+  - no manual bootstrap steps required before first planner run
+  - prerequisite is documented: Builder must not run on
+    `devotional-generator` until `run-create-project` is implemented
+    and validated
+- Non-goals:
+  - implement `run-create-project`
+  - modify planner/builder prompt behavior beyond documenting requirements
+  - create or migrate devotional-generator content in this item
+
 ## Completed
 
 ### P-001 — Proposal / Approval commit semantics clarification

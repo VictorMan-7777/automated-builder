@@ -1,7 +1,7 @@
 # Running the Planner
 
-**Version**: 1.0
-**Last Updated**: 2026-02-06
+**Version**: 1.1
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -28,7 +28,7 @@ Before running the Planner, gather these inputs:
 ### 1. Project Slug
 - **Format**: lowercase, hyphen-separated
 - **Example**: `devotional-generator`, `api-gateway`, `user-dashboard`
-- **Purpose**: Determines output directory (`docs/projects/<slug>/`)
+- **Purpose**: Determines output directory (`../<slug>/`)
 
 ### 2. Project Goal
 - **What**: Brief description of what the project does or achieves
@@ -57,31 +57,40 @@ Before running the Planner, gather these inputs:
 
 ## Output Locations
 
-All Planner outputs are written to:
+All Planner outputs are written to `../<slug>/` relative to the
+automated-builder repository root:
 
 ```
-docs/projects/<project-slug>/
-├── index.md           # Navigation and overview
-├── prd.md             # Product requirements document
-├── roadmap.md         # Milestones and timeline
-├── iteration-log.md   # Planning evolution tracking
-└── phases/            # Detailed phase plans (numbered)
-    ├── 001-phase-name.md
-    ├── 002-phase-name.md
-    └── ...
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── <project-slug>/
+    ├── index.md           # Navigation and overview
+    ├── prd.md             # Product requirements document
+    ├── roadmap.md         # Milestones and timeline
+    ├── iteration-log.md   # Planning evolution tracking
+    ├── phases/            # Detailed phase plans (numbered)
+    │   ├── 001-phase-name.md
+    │   ├── 002-phase-name.md
+    │   └── ...
+    └── docs/
+        └── system/
+            └── outputs/   # Project workflow artifacts
+                └── YYYY-MM-DD__NN__<context>__<description>.md
 ```
 
 ### Allowed Write Paths
 
 **ONLY these paths are allowed during planning:**
-- `docs/projects/<slug>/*.md` (project root files)
-- `docs/projects/<slug>/phases/*.md` (phase plans)
-- `docs/system/outputs/*.md` (planning summaries, when output is lengthy)
+- `../<slug>/*.md` (project root files)
+- `../<slug>/phases/*.md` (phase plans)
+- `../<slug>/docs/system/outputs/*.md` (project workflow artifacts)
+
+All paths are relative to the automated-builder repository root.
 
 ### Stop Conditions
 
 **Planner MUST STOP if:**
-- Attempting to write outside `docs/projects/<slug>/` (except outputs)
+- Attempting to write outside `../<slug>/`
 - Attempting to create or modify code files
 - Attempting to run commands or scripts
 - Attempting to enable automation, hooks, or workflows
@@ -246,7 +255,7 @@ Planning is iterative. Here's how to run subsequent iterations:
 
 1. **Gather inputs** (slug, goal, requirements, constraints, sources)
 2. **Read authoritative docs** ([planning.md](../../planning.md), [docs/system/index.md](index.md))
-3. **Create project directory** (`docs/projects/<slug>/`)
+3. **Create project directory** (`../<slug>/`)
 4. **Generate all required outputs** (index, prd, roadmap, iteration-log, phases)
 5. **Save planning summary** (if output is lengthy, see Long Output Rule below)
 6. **Submit for Gatekeeper review**
@@ -292,7 +301,7 @@ Planning is iterative. Here's how to run subsequent iterations:
 
 ### When to Save Output
 
-Save to `docs/system/outputs/` when:
+Save to `../<slug>/docs/system/outputs/` when:
 - Planning phase completes (comprehensive summary)
 - Output exceeds ~500 lines or has multiple detailed sections
 - Output includes complete file trees, checklists, or status reports
@@ -301,7 +310,7 @@ Save to `docs/system/outputs/` when:
 ### Output File Format
 
 ```
-docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md
+../<slug>/docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md
 ```
 
 **Components:**
@@ -311,9 +320,12 @@ docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md
 - `<description>`: Brief description (lowercase, hyphen-separated)
 
 **Examples:**
-- `2026-02-06__01__planner__initial-planning-complete.md`
-- `2026-02-06__02__planner__iteration-2-updates.md`
-- `2026-02-10__01__planner__devotional-generator-approved.md`
+- `../devotional-generator/docs/system/outputs/2026-02-06__01__planner__initial-planning-complete.md`
+- `../devotional-generator/docs/system/outputs/2026-02-06__02__planner__iteration-2-updates.md`
+
+The system iterator scans `../<slug>/docs/system/outputs/` (not
+automated-builder's `docs/system/outputs/`) to determine the next
+sequence number.
 
 ### What to Include in Output File
 
@@ -336,7 +348,7 @@ Created:
 - 4 phase plans (001-004)
 - 11 commit points identified
 
-Full details: docs/system/outputs/2026-02-06__01__planner__initial-planning-complete.md
+Full details: ../devotional-generator/docs/system/outputs/2026-02-06__01__planner__initial-planning-complete.md
 ```
 
 **In File** (comprehensive details):
@@ -379,11 +391,11 @@ is the single source of truth for filename determination.
 Use this checklist to confirm a Planner run is complete:
 
 ### Required Files
-- [ ] `docs/projects/<slug>/index.md` exists
-- [ ] `docs/projects/<slug>/prd.md` exists
-- [ ] `docs/projects/<slug>/roadmap.md` exists
-- [ ] `docs/projects/<slug>/iteration-log.md` exists
-- [ ] `docs/projects/<slug>/phases/` directory exists
+- [ ] `../<slug>/index.md` exists
+- [ ] `../<slug>/prd.md` exists
+- [ ] `../<slug>/roadmap.md` exists
+- [ ] `../<slug>/iteration-log.md` exists
+- [ ] `../<slug>/phases/` directory exists
 - [ ] At least one phase plan (`001-*.md`) exists
 
 ### Content Requirements
@@ -410,7 +422,7 @@ Use this checklist to confirm a Planner run is complete:
 - [ ] All outputs are markdown documentation
 
 ### Output Capture
-- [ ] If output is lengthy, saved to `docs/system/outputs/`
+- [ ] If output is lengthy, saved to `../<slug>/docs/system/outputs/`
 - [ ] Output file follows naming convention (YYYY-MM-DD__NN__planner__desc.md)
 - [ ] Chat includes summary + file path pointer
 
@@ -438,7 +450,7 @@ Use this checklist to confirm a Planner run is complete:
 **Solution**: Every significant change should be a commit point; err on side of more CPs
 
 ### Issue: Output Too Long for Chat
-**Solution**: Save to `docs/system/outputs/` and provide summary + file path in chat
+**Solution**: Save to `../<slug>/docs/system/outputs/` and provide summary + file path in chat
 
 ---
 
@@ -468,4 +480,5 @@ Use this checklist to confirm a Planner run is complete:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-12 | Relocate project output root to `../<slug>/`; workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.0 | 2026-02-06 | Initial run-planner system documentation |

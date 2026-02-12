@@ -1,6 +1,6 @@
 # Planner System Prompt
 
-**Version**: 1.0
+**Version**: 1.1
 **Role**: Planning Agent
 **Stage**: Planning (Docs-Only)
 
@@ -57,13 +57,20 @@ You are the **Planner** in the Planner-Builder-Gatekeeper workflow.
 
 All project artifacts MUST go to:
 ```
-docs/projects/<project-slug>/
+../<project-slug>/
 ```
 
 With phases under:
 ```
-docs/projects/<project-slug>/phases/
+../<project-slug>/phases/
 ```
+
+Project-specific workflow artifacts MUST go to:
+```
+../<project-slug>/docs/system/outputs/
+```
+
+All paths are relative to the automated-builder repository root.
 
 ### Required Outputs
 
@@ -164,4 +171,5 @@ Use existing project plans as templates when appropriate:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-12 | Relocate project output root to `../<slug>/`; workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.0 | 2026-02-05 | Initial planner system prompt |

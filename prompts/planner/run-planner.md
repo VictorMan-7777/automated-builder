@@ -1,8 +1,8 @@
 # Run Planner — Entry Prompt
 
-**Version**: 1.0
+**Version**: 1.1
 **Purpose**: Runnable prompt to execute a Planner iteration
-**Last Updated**: 2026-02-06
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -17,7 +17,7 @@
 
 Do not proceed until you understand:
 - Docs-only rule (no execution during planning)
-- Output location requirements (`docs/projects/<slug>/`)
+- Output location requirements (`../<slug>/`)
 - Required outputs (index, prd, roadmap, iteration-log, phases)
 - Commit point requirements
 - Long output capture rule
@@ -77,18 +77,24 @@ Before creating any files, read:
 
 ### Step 3: Create Project Structure
 
-Create the project directory and all required files:
+Create the project directory and all required files at `../<slug>/`
+relative to the automated-builder repository root:
 
 ```
-docs/projects/<project-slug>/
-├── index.md           # Navigation and overview
-├── prd.md             # Product requirements document
-├── roadmap.md         # Milestones and timeline
-├── iteration-log.md   # Planning evolution tracking
-└── phases/            # Detailed phase plans
-    ├── 001-phase-one.md
-    ├── 002-phase-two.md
-    └── ...
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── <project-slug>/
+    ├── index.md           # Navigation and overview
+    ├── prd.md             # Product requirements document
+    ├── roadmap.md         # Milestones and timeline
+    ├── iteration-log.md   # Planning evolution tracking
+    ├── phases/            # Detailed phase plans
+    │   ├── 001-phase-one.md
+    │   ├── 002-phase-two.md
+    │   └── ...
+    └── docs/
+        └── system/
+            └── outputs/   # Project workflow artifacts
 ```
 
 ### Step 4: Generate Planning Documents
@@ -132,7 +138,7 @@ For each commit point, specify:
 
 When planning is complete, create the output artifact. This is not optional.
 
-1. Write the planning output to `docs/system/outputs/` using the system iterator.
+1. Write the planning output to `../<slug>/docs/system/outputs/` using the system iterator.
 2. In chat, confirm output creation and cite the file path.
 
 **Output compliance**: This session may not stop or declare completion until
@@ -172,13 +178,13 @@ State clearly:
 
 ## Output Path Restrictions
 
-**Allowed write paths:**
-- `docs/projects/<slug>/*.md`
-- `docs/projects/<slug>/phases/*.md`
-- `docs/system/outputs/*.md` (for lengthy planning summaries)
+**Allowed write paths** (relative to automated-builder repo root):
+- `../<slug>/*.md` (project root files)
+- `../<slug>/phases/*.md` (phase plans)
+- `../<slug>/docs/system/outputs/*.md` (project workflow artifacts)
 
 **Prohibited write paths:**
-- Any path outside `docs/projects/<slug>/` (except outputs)
+- Any path outside `../<slug>/`
 - Any code files (`.ts`, `.js`, `.py`, etc.)
 - Any executable files (`.sh`, `.bat`, etc.)
 - Any configuration files (`.json`, `.yaml`, `.toml`, etc.) outside docs
@@ -215,7 +221,7 @@ Before declaring planning complete, verify:
 - [ ] Rollback procedures are documented
 - [ ] Naming conventions followed (lowercase, hyphen-separated)
 - [ ] Docs-only rule maintained (no code, scripts, or execution)
-- [ ] Output artifact created in `docs/system/outputs/` (mandatory — not conditional on length)
+- [ ] Output artifact created in `../<slug>/docs/system/outputs/` (mandatory — not conditional on length)
 - [ ] Output creation confirmed in chat with file path cited
 - [ ] Ready for Gatekeeper review
 
@@ -228,11 +234,11 @@ Before declaring planning complete, verify:
 **Planner**:
 1. ✅ Confirm inputs (slug: `blog-api`, stack: Express + Postgres, timeline: 2 weeks)
 2. ✅ Read system docs (planning.md, index.md, run-planner.md)
-3. ✅ Create `docs/projects/blog-api/` directory
+3. ✅ Create `../blog-api/` directory
 4. ✅ Generate index.md, prd.md, roadmap.md, iteration-log.md
 5. ✅ Create phases: 001-setup.md, 002-api-core.md, 003-database.md, 004-testing.md
 6. ✅ Document commit points in each phase (CP1-CP9)
-7. ✅ Save planning summary to `docs/system/outputs/2026-02-06__01__planner__blog-api-initial.md`
+7. ✅ Save planning summary to `../blog-api/docs/system/outputs/2026-02-06__01__planner__blog-api-initial.md`
 8. ✅ In chat: "Planning complete! See details: [file path]"
 9. ✅ Submit for Gatekeeper review
 
@@ -252,4 +258,5 @@ Before declaring planning complete, verify:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-12 | Relocate project output root to `../<slug>/`; workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.0 | 2026-02-06 | Initial runnable Planner entry prompt |

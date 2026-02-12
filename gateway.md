@@ -1,7 +1,7 @@
 # Gateway (Gatekeeper) Requirements
 
-**Version**: 1.0
-**Last Updated**: 2026-02-05
+**Version**: 1.1
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -90,7 +90,7 @@ Plan is **APPROVED** if:
 
 - [ ] All required documents present (index, PRD, roadmap, iteration-log, phases)
 - [ ] Project slug follows conventions (lowercase, hyphen-separated)
-- [ ] Files in correct location (`docs/projects/<slug>/`)
+- [ ] Files in correct location (`../<slug>/`)
 - [ ] Phase files numbered correctly (001, 002, etc.)
 - [ ] Commit points explicitly identified in each phase
 - [ ] Acceptance criteria are measurable (not vague)
@@ -469,4 +469,5 @@ The following sections will be added in future versions:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-12 | Update Planning Approval path from `docs/projects/<slug>/` to `../<slug>/` (P-083) |
 | 1.0 | 2026-02-05 | Initial gatekeeper requirements |

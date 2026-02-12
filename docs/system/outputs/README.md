@@ -2,8 +2,8 @@
 
 **Location**: `docs/system/outputs/`
 **Purpose**: Canonical storage for every Claude iteration output artifact
-**Version**: 1.1
-**Last Updated**: 2026-02-10
+**Version**: 1.2
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -59,10 +59,15 @@ Every Claude iteration must produce an output artifact saved to
 ### ❌ DOES NOT BELONG HERE
 
 **Project-Specific Planning:**
-- Individual project PRDs → `docs/projects/<slug>/prd.md`
-- Phase plans → `docs/projects/<slug>/phases/`
-- Roadmaps → `docs/projects/<slug>/roadmap.md`
-- Iteration logs → `docs/projects/<slug>/iteration-log.md`
+- Individual project PRDs → `../<slug>/prd.md`
+- Phase plans → `../<slug>/phases/`
+- Roadmaps → `../<slug>/roadmap.md`
+- Iteration logs → `../<slug>/iteration-log.md`
+
+**Project-Specific Workflow Artifacts:**
+- Project proposals, approvals, verifications → `../<slug>/docs/system/outputs/`
+- Project implementation summaries → `../<slug>/docs/system/outputs/`
+- Project run reports → `../<slug>/docs/system/outputs/`
 
 **Code and Implementation:**
 - Source code → project directories (outside this repo)
@@ -289,20 +294,26 @@ Full review: docs/system/outputs/2026-02-10__01__gatekeeper__review-phase-001.md
 ### Planner
 
 When planning phase completes:
-- Save planning summary to `docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md`
+- Save planning summary to `../<slug>/docs/system/outputs/YYYY-MM-DD__NN__planner__<description>.md`
 - Include: files created, structure, commit points identified, next steps
 
 ### Builder
 
 When phase completes:
-- Save phase completion report to `docs/system/outputs/YYYY-MM-DD__NN__builder__<description>.md`
+- Save phase completion report to `../<slug>/docs/system/outputs/YYYY-MM-DD__NN__builder__<description>.md`
 - Include: commits made, verification results, issues encountered
 
 ### Gatekeeper
 
 When review completes:
-- Save review decision to `docs/system/outputs/YYYY-MM-DD__NN__gatekeeper__<description>.md`
+- Save review decision to `../<slug>/docs/system/outputs/YYYY-MM-DD__NN__gatekeeper__<description>.md`
 - Include: checklist results, decision, rationale, required changes
+
+### System (automated-builder)
+
+System-level artifacts about automated-builder itself continue to be saved here:
+- Save to `docs/system/outputs/YYYY-MM-DD__NN__system__<description>.md`
+- Include: issue resolutions, architecture reviews, verification artifacts
 
 ---
 
@@ -349,5 +360,6 @@ All outputs MUST NOT:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-02-12 | Update project-specific paths from `docs/projects/<slug>/` to `../<slug>/`; direct project workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.1 | 2026-02-10 | Replace stale file trees with filesystem-is-source-of-truth note; update header (Issue-005). Incorporates prior changes: canonical format references (Issue-002H), output capture rule replacement (Issue-003) |
 | 1.0 | 2026-02-05 | Initial long output capture rule documentation |
