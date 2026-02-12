@@ -1,7 +1,7 @@
 # Builder Requirements
 
-**Version**: 1.1
-**Last Updated**: 2026-02-05
+**Version**: 1.2
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -231,6 +231,80 @@ Builder must provide:
 
 ---
 
+## Definition of Done — Builder Complete
+
+The builder is complete when it can take an approved, planner-produced work
+packet and execute it end-to-end safely, repeatably, and audibly — without
+manual patching of core artifacts.
+
+1. **End-to-end execution loop exists**
+   - Inputs: consumes planner output and governance rules.
+   - Execution: applies only approved changes.
+   - Outputs: produces audit/summaries and updates tracking files.
+
+2. **Write-safety & governance enforcement**
+   - Approved artifacts are never modified directly (refuse/abort).
+   - Writes restricted to explicitly allowed paths.
+   - All changes attributable to a builder run.
+
+3. **Deterministic, reviewable changes**
+   - Produces a reviewable diff/change summary.
+   - Re-runs with same inputs are stable or differences are explained via
+     captured inputs/versioning.
+
+4. **Audit trail + run record**
+   - Records inputs (planner output references / commit hash), files changed,
+     checks performed, and outcome.
+
+5. **Integrates with pending-items workflow**
+   - Updates pending-items status explicitly on completion; no silent meaning
+     changes.
+
+6. **Failure behavior is safe**
+   - Fails closed; leaves repo in diagnosable state.
+
+---
+
+## Minimal Architecture Guardrails
+
+Must-not-break invariants during and after builder completion.
+
+1. **Approved artifacts are immutable**
+   - Builder must never modify artifacts marked Approved; hard fail on
+     violation; record PASS/FAIL in run output.
+
+2. **Explicit write boundaries**
+   - Builder may write only to explicitly approved target files for the current
+     work packet and builder-owned output/audit paths; hard fail on any
+     out-of-bounds write.
+
+3. **Every run writes an audit record**
+   - Success or failure, every run produces a run record: timestamp,
+     inputs/work packet reference, files changed (or none), outcome, and
+     failure reason.
+
+4. **Pending-items updates are explicit and attributable**
+   - Builder updates pending-items only when explicitly targeted; edits must be
+     attributable to a specific builder run and limited to targeted items.
+
+5. **Fail closed (no partial/ambiguous state)**
+   - On any violation, stop safely; still write audit output and leave clear
+     diagnostics.
+
+6. **Planner/builder role separation**
+   - Builder executes approved instructions only; does not invent new
+     requirements or rewrite plans; run record references the planner output
+     it executed.
+
+---
+
+## Builder Completion Non-Goals
+
+- Does not require full verifier automation, downstream generator readiness,
+  or performance optimization.
+
+---
+
 ## Communication
 
 Builder MUST communicate status clearly.
@@ -392,5 +466,6 @@ All Builder actions MUST comply with:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-02-12 | Add Definition of Done, Minimal Architecture Guardrails, and Builder Completion Non-Goals (P-012) |
 | 1.1 | 2026-02-05 | Added Long Output Capture requirement |
 | 1.0 | 2026-02-05 | Initial builder requirements |
