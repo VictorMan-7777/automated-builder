@@ -10,12 +10,14 @@ No action is taken until explicitly promoted.
 1. Pending item IDs (`P-###`) are unique and never reused after completion.
 2. This file contains exactly two item-state sections: **Pending Items** (open items) and **Completed Items** (finished items).
 3. New pending items are assigned using the lowest missing `P-###` in the current range first; if no gaps exist, assign `max(existing P-###) + 1`.
-4. Completed items are moved from Pending to Completed; they are never deleted.
-5. A completed item MUST include a completion date line formatted exactly: `- Completed: YYYY-MM-DD`.
-6. Pending items are capture-only and do not trigger work unless explicitly promoted.
-7. This file is not an Issue tracker and does not start Issue loops.
-8. If an instruction requires moving an item to Completed but the **Completed** section does not exist, STOP and report the error instead of partially applying changes.
-9. Deferred pending items MUST include a deferment line formatted as `- Deferred until: <condition>`. If the item has a `- Notes:` block, use `  - Deferred until: <condition>` inside that block.
+4. New pending items MUST be inserted in numeric order within the **Pending Items** section (ascending by `P-###`).
+5. Completed items are moved from Pending to Completed; they are never deleted.
+6. When an item is moved to **Completed Items**, it MUST be inserted in numeric order within the **Completed Items** section (ascending by `P-###`).
+7. A completed item MUST include a completion date line formatted exactly: `- Completed: YYYY-MM-DD`.
+8. Pending items are capture-only and do not trigger work unless explicitly promoted.
+9. This file is not an Issue tracker and does not start Issue loops.
+10. If an instruction requires moving an item to Completed but the **Completed** section does not exist, STOP and report the error instead of partially applying changes.
+11. Deferred pending items MUST include a deferment line formatted as `- Deferred until: <condition>`. If the item has a `- Notes:` block, use `  - Deferred until: <condition>` inside that block.
 
 ---
 
@@ -24,6 +26,7 @@ No action is taken until explicitly promoted.
 ### P-003 — Add proposal-artifact reference requirement to Approval template in issue-resolution.md
 - Source: Output File System inventory session
 - Captured: 2026-02-10
+- Project: Automated-builder
 - Summary:
   Update the Approval template to require an explicit proposal artifact
   reference when the proposal is not present in-session, mirroring the inventory
@@ -32,6 +35,7 @@ No action is taken until explicitly promoted.
 ### P-004 — Architecture review — next pass planning
 - Source: System architecture clarification
 - Captured: 2026-02-10
+- Project: Automated-builder
 - Summary:
   Perform a full system architecture review AFTER the automated builder is complete.
   This review will assess the planner–builder–verification pipeline as a whole,
@@ -42,28 +46,17 @@ No action is taken until explicitly promoted.
 ### P-005 — Devotional generator — builder planning updates
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   Capture updates and refinements to the devotional generator builder
   plan, including newly identified features or adjustments to the existing
   builder design.
 - Deferred until: automated builder is complete
 
-### P-013 — Scan system for documentation inconsistencies
-- Source: Output File System pending items update
-- Captured: 2026-02-10
-- Summary:
-  Add a pending item for scanning the repository and docs to identify
-  inconsistencies or missing documentation.
-
-### P-014 — Add agents to planner
-- Source: Output File System pending items update
-- Captured: 2026-02-10
-- Summary:
-  Add a pending item to integrate agent support into the planner component.
-
 ### P-006 — Devotional generator — multi-volume series support (Vol 1–6)
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   Support a devotional series with 6 volumes (Vol 1 overview; Vol 2–6
   topic-specific), each 30 days (Mon–Sat). Generator completes Vol 1 and
@@ -73,6 +66,7 @@ No action is taken until explicitly promoted.
 ### P-007 — Devotional generator — series-level uniqueness (scripture + quotes)
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   Enforce series-wide uniqueness: no scriptures or quotes used in Volume 1 may
   appear in Volumes 2–6. Track used scriptures/quotes in a registry and
@@ -82,6 +76,7 @@ No action is taken until explicitly promoted.
 ### P-008 — Devotional generator — one-time spreadsheet import (Vol 1 mapping)
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   One-time ingest of existing spreadsheet mapping (weeks 2–5 scripture + topics
   for Volume 1). Define import format, validation, and mapping into internal
@@ -91,6 +86,7 @@ No action is taken until explicitly promoted.
 ### P-009 — Devotional generator — one-time Scrivener import (existing draft)
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   One-time ingest of already-written content from Scrivener (Week 1 of Volume 1).
   Define export format and parsing, and mark imported days as locked so
@@ -100,6 +96,7 @@ No action is taken until explicitly promoted.
 ### P-010 — Devotional generator — workflow to finish Volume 1 then generate Vol 2–6
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   Workflow: import spreadsheet + Scrivener → generate remaining days in Volume 1
   → generate Volumes 2–6 → enforce series-level uniqueness throughout.
@@ -108,14 +105,31 @@ No action is taken until explicitly promoted.
 ### P-011 — Devotional generator — per-volume KDP-ready export
 - Source: Devotional generator planning
 - Captured: 2026-02-10
+- Project: Devotional-generator
 - Summary:
   Export separate KDP-ready PDFs per volume with consistent formatting and
   volume-specific front/back matter; optionally support a series bundle export.
 - Deferred until: automated builder is complete
 
+### P-013 — Scan system for documentation inconsistencies
+- Source: Output File System pending items update
+- Captured: 2026-02-10
+- Project: Automated-builder
+- Summary:
+  Add a pending item for scanning the repository and docs to identify
+  inconsistencies or missing documentation.
+
+### P-014 — Add agents to planner
+- Source: Output File System pending items update
+- Captured: 2026-02-10
+- Project: Automated-builder
+- Summary:
+  Add a pending item to integrate agent support into the planner component.
+
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Investigate the changes, enhancements, and new capabilities in Claude
   Opus 4.6 compared to prior versions. Determine which of these
@@ -133,6 +147,7 @@ No action is taken until explicitly promoted.
 ### P-018 — Review OpenClaw 2026.2.9 release and assess impact
 - Source: OpenClaw release update
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Review the OpenClaw 2026.2.9 release notes and changes to identify any
   new capabilities, fixes, or breaking changes that could impact the
@@ -147,6 +162,7 @@ No action is taken until explicitly promoted.
 ### P-019 — Compare NanoClaw to OpenClaw
 - Source: OpenClaw ecosystem research
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Perform a comparative analysis of NanoClaw versus OpenClaw, evaluating
   differences in architecture, capabilities, performance, cost, ecosystem
@@ -162,6 +178,7 @@ No action is taken until explicitly promoted.
 ### P-020 — Compare Mac Mini vs VPS vs Cloudflare as deployment platform
 - Source: Infrastructure and cost optimization planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Compare running the system on a Mac Mini, a traditional VPS, and
   Cloudflare-based infrastructure to determine the best platform for
@@ -178,6 +195,7 @@ No action is taken until explicitly promoted.
 ### P-021 — Compare OpenClaw vs human VA for protecting devotionals from hallucinations
 - Source: Quality control and risk mitigation planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Compare using OpenClaw-based automation versus a human virtual assistant
   (VA) to review and protect devotional content from hallucinations,
@@ -193,6 +211,7 @@ No action is taken until explicitly promoted.
 ### P-022 — Explore “VA in a box” for churches using OpenClaw + local LLMs
 - Source: Product expansion and ministry tooling ideation
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Consider expanding the devotional generator into a “VA in a box” offering
   for churches, built on OpenClaw with local LLMs to keep operating costs
@@ -206,9 +225,129 @@ No action is taken until explicitly promoted.
     - deployment and support model
     - ethical, theological, and trust considerations
 
+### P-023 — AI Coding Ladder
+- Source: AI workflow maturity planning
+- Captured: 2026-02-12
+- Project: Automated-builder
+- Intent:
+  Define an explicit AI Coding Ladder progression and transition to
+  mid-loop generation workflow documentation.
+- Scope:
+  - define canonical ladder stages:
+    chat -> mid-loop -> in-the-loop -> on-the-loop -> multi-agent
+  - document graduation criteria between each stage
+  - define required controls, checkpoints, and authority boundaries per stage
+  - integrate explicit mid-loop generation workflow documentation
+  - define where ladder docs are anchored and linked in system navigation
+- Non-Goals:
+  - implement new automation tooling
+  - modify builder/planner runtime behavior in this item
+  - deploy multi-agent workflows in this item
+- Definition of Done:
+  - ladder stages are documented canonically with unambiguous definitions
+  - graduation criteria are explicit for each stage transition
+  - mid-loop generation workflow is documented as a named, repeatable workflow
+  - ladder documentation is linked from system index/navigation docs
+
+### P-024 — Classify OpenClaw as High-Risk Creation Environment
+- Source: Security posture and environment classification
+- Captured: 2026-02-12
+- Project: Automated-builder
+- Intent:
+  Define OpenClaw as isolated non-production tooling in system documentation.
+- Scope:
+  - document OpenClaw as high-risk creation environment
+  - explicitly label OpenClaw as isolated, non-secure, and non-production
+  - define allowed vs prohibited usage boundaries for OpenClaw outputs
+  - align relevant system docs to the same risk language and boundary model
+- Non-Goals:
+  - implement runtime security controls
+  - change infrastructure architecture
+  - productionize OpenClaw
+- Definition of Done:
+  - canonical docs explicitly label OpenClaw as isolated non-production tooling
+  - risk boundary language is consistent across updated references
+  - usage constraints are clear enough to prevent production misclassification
+
+### P-025 — Refactor ChMS Pending Items to Align with OpenClaw Isolation Model
+- Source: Backlog consistency and risk-boundary alignment
+- Captured: 2026-02-12
+- Project: ChMS
+- Deferred until: ChMS project activation
+- Intent:
+  Align ChMS backlog items with OpenClaw isolation and non-production constraints.
+- Scope:
+  - audit ChMS-related pending items for unsafe OpenClaw assumptions
+  - update wording to remove assumptions that OpenClaw is secure or production
+  - align ChMS item dependencies with the documented isolation model
+  - preserve item intent while correcting environment and risk assumptions
+- Non-Goals:
+  - restructure backlog sections
+  - execute ChMS implementation work
+  - remove valid ChMS strategic work from backlog
+- Definition of Done:
+  - all ChMS-related pending items are reviewed against isolation constraints
+  - unsafe/incorrect production assumptions are corrected
+  - updated items are consistent with OpenClaw high-risk classification
+
+### P-026 — Evaluate Integrating Claude Task Master into Builder
+- Source: Builder tooling strategy review
+- Captured: 2026-02-12
+- Project: Automated-builder
+- Intent:
+  Assess whether Claude Task Master should be integrated into automated-builder.
+- Scope:
+  - evaluate feature overlap with existing builder workflow
+  - assess risks, benefits, and operational complexity
+  - assess governance, reliability, and maintainability impacts
+  - produce explicit decision and rationale (adopt, defer, or reject)
+- Non-Goals:
+  - implement Claude Task Master integration
+  - replace current builder workflow in this item
+  - commit to tooling migration without decision artifact
+- Definition of Done:
+  - documented assessment covers overlap, risks, and benefits
+  - a clear integration decision is recorded with rationale
+  - follow-up actions (if any) are explicit and bounded
+
+### P-027 — Implement RAG for Quote Retrieval
+- Source: Devotional generator retrieval quality improvement
+- Captured: 2026-02-12
+- Project: Devotional-generator
+- Intent:
+  Add RAG to quote retrieval for devotional-generator.
+- Scope:
+  - design and implement a RAG-based quote retrieval pipeline
+  - integrate retrieval flow into devotional quote generation path
+  - include source attribution and traceable retrieval metadata
+  - define retrieval quality checks and failure handling for quote selection
+- Non-Goals:
+  - build UI features
+  - introduce multi-agent orchestration
+  - expand to unrelated devotional subsystems in this item
+- Definition of Done:
+  - RAG quote retrieval pipeline is integrated into devotional-generator flow
+  - retrieved quotes include traceable metadata/source references
+  - verification confirms quote retrieval path is operational and reproducible
+
+### P-028 — Define versioning and upgrade strategy for Devotional Generator
+- Source: Long-term system stability planning
+- Captured: 2026-02-12
+- Project: Devotional-generator
+- Summary:
+  Define a consistent versioning strategy for Devotional Generator
+  components to prevent upgrade chaos and release inconsistency.
+- Notes:
+  Should define:
+    - semantic versioning rules
+    - upgrade sequencing
+    - rollback guarantees
+    - compatibility expectations across generator releases
+
 ### P-029 — Evaluate OpenClaw VA for Evangelical-focused content auditing
 - Source: Theological quality and alignment planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Evaluate using an OpenClaw-based virtual assistant to audit Scripture
   selections, quotations, and devotional reflections to ensure alignment
@@ -225,6 +364,7 @@ No action is taken until explicitly promoted.
 ### P-030 — Identify security flaws in OpenClaw and the codebase that could deter customers
 - Source: Security and customer trust planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify potential security flaws, privacy risks, or trust gaps in
   OpenClaw and the surrounding codebase that could concern or deter
@@ -241,6 +381,7 @@ No action is taken until explicitly promoted.
 ### P-031 — Evaluate Church VA integration with online Bible study platforms (API, BYO, and low-cost paths)
 - Source: Content licensing, theological depth, and Church VA resource planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Evaluate how a Church-focused VA can integrate with licensed or
   subscription-based online Bible study platforms (e.g., study Bibles,
@@ -250,6 +391,7 @@ No action is taken until explicitly promoted.
   and identify cost-effective options for churches without existing
   subscriptions.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - landscape survey of major online Bible study platforms
     - API or integration availability (official APIs, SDKs, export tools)
@@ -265,6 +407,7 @@ No action is taken until explicitly promoted.
 ### P-032 — Evaluate training a Church VA to reflect the Pastor’s “voice”
 - Source: Church VA personalization and trust exploration
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Evaluate whether a Church-focused VA can be trained or configured to
   reflect the distinctive “voice” of a specific Pastor (tone, language,
@@ -281,6 +424,7 @@ No action is taken until explicitly promoted.
 ### P-033 — Design a software development company model to build and operate a ChMS
 - Source: Organizational and delivery model planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Design a hypothetical (or real-world–ready) software development company
   structure—including hierarchy, roles, and responsibilities—to support
@@ -298,6 +442,7 @@ No action is taken until explicitly promoted.
 ### P-034 — Create Devotional Generator “Ready” Checklist (v1 Release Gate)
 - Source: Devotional generator operational priority
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define a clear, versioned “Devotional Generator Ready” checklist that
   establishes what must be true before the generator is considered
@@ -317,6 +462,7 @@ No action is taken until explicitly promoted.
 ### P-035 — Define minimum OpenClaw skill interface for Devotional Generator
 - Source: Devotional generator OpenClaw integration planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define the minimum viable OpenClaw skill interface for the Devotional
   Generator, including required inputs, expected outputs, error handling,
@@ -334,6 +480,7 @@ No action is taken until explicitly promoted.
 ### P-036 — Define KDP-ready pipeline checklist for Devotional Generator
 - Source: Devotional product production planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define a concrete, repeatable pipeline checklist for producing
   Amazon KDP-ready devotional books using the Devotional Generator.
@@ -349,24 +496,10 @@ No action is taken until explicitly promoted.
     - final review and sign-off criteria
   This pipeline should be executable step-by-step without ambiguity.
 
-### P-037 — Determine required availability date for Mac Mini (special configuration)
-- Source: Infrastructure planning for OpenClaw + local LLM development
-- Captured: 2026-02-11
-- Summary:
-  Identify when the Mac Mini (special configuration; ~2-week lead time)
-  must be ordered to support local LLM experimentation, multi-agent
-  OpenClaw testing, and overnight verification loops.
-- Notes:
-  Lead time: approximately 2 weeks from order to arrival.
-  Decision should define:
-    - earliest milestone that requires local multi-agent execution
-    - whether interim development can proceed without it
-    - order-by date to avoid blocking Devotional Generator progress
-  This item prevents infrastructure timing from delaying execution.
-
 ### P-038 — Identify critical timing points and build dependencies to prevent derailment
 - Source: System execution stability planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Identify critical timing points, software dependencies, hardware
   requirements, and unaddressed blind spots that could cause the
@@ -386,6 +519,7 @@ No action is taken until explicitly promoted.
 ### P-039 — Define canonical data model for Devotional Generator (v1)
 - Source: Architecture stability planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define a canonical, versioned data model for devotional content
   (volume, week, day, scripture, reflection, quotes, metadata)
@@ -401,6 +535,7 @@ No action is taken until explicitly promoted.
 ### P-040 — Implement reproducibility and run-record logging for devotional builds
 - Source: Quality control and audit stability
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Ensure every devotional generation run produces a reproducible
   run-record (inputs, model configuration, date, version, output hash)
@@ -415,6 +550,7 @@ No action is taken until explicitly promoted.
 ### P-041 — Define hallucination and doctrinal error response protocol
 - Source: Risk mitigation planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define a clear protocol for identifying, correcting, and documenting
   hallucinations or doctrinal inconsistencies discovered after generation
@@ -429,6 +565,7 @@ No action is taken until explicitly promoted.
 ### P-042 — Define early adopter feedback capture and iteration loop
 - Source: OpenClaw skill launch planning
 - Captured: 2026-02-11
+- Project: Devotional-generator
 - Summary:
   Define how early adopter feedback will be captured, categorized,
   prioritized, and integrated into future Devotional Generator updates.
@@ -442,11 +579,13 @@ No action is taken until explicitly promoted.
 ### P-043 — Define minimum viable ChMS feature boundary (anti-scope creep guardrail)
 - Source: Scope control planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define the strict minimum viable feature set for the ChMS MVP to
   prevent scope creep driven by feature requests, ambition, or AI
   overreach.
 - Notes:
+  - Deferred until: ChMS project activation
   Should explicitly list:
     - what the MVP will NOT include
     - counseling/sermon/AI assistant exclusions
@@ -455,10 +594,12 @@ No action is taken until explicitly promoted.
 ### P-044 — Define data ownership and portability guarantees for churches
 - Source: Customer trust and retention planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define explicit data ownership, export, and portability guarantees
   for churches using the system.
 - Notes:
+  - Deferred until: ChMS project activation
   Must address:
     - full data export capability
     - deletion guarantees
@@ -468,10 +609,12 @@ No action is taken until explicitly promoted.
 ### P-045 — Define incident response and outage protocol (church-facing)
 - Source: Operational reliability planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a simple, clear incident response and outage protocol for
   system failures affecting churches.
 - Notes:
+  - Deferred until: ChMS project activation
   Should include:
     - communication template
     - severity classification
@@ -481,10 +624,12 @@ No action is taken until explicitly promoted.
 ### P-046 — Define versioning and upgrade strategy across Devotional Generator and ChMS
 - Source: Long-term system stability planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a consistent versioning strategy for generator, OpenClaw skills,
   and ChMS components to prevent upgrade chaos and tenant inconsistency.
 - Notes:
+  - Deferred until: ChMS project activation
   Should define:
     - semantic versioning rules
     - upgrade sequencing
@@ -494,12 +639,14 @@ No action is taken until explicitly promoted.
 ### P-047 — Prioritize critical system-stability pending items
 - Source: Stability and governance review
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Rank newly identified system-stability pending items (P-039–P-046)
   by urgency, impact, and sequencing relative to Devotional Generator v1.
   The goal is to prevent governance work from overwhelming execution
   while ensuring critical safeguards are not neglected.
 - Notes:
+  - Deferred until: ChMS project activation
   Output should:
     - identify which items are required before Devotional Generator v1 release
     - identify which can safely remain deferred
@@ -509,11 +656,13 @@ No action is taken until explicitly promoted.
 ### P-048 — Consolidate stability-related pending items into a System Stability Gate
 - Source: Backlog coherence and scope management
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Evaluate whether P-039–P-046 should be grouped under a unified
   “System Stability Gate” cluster to simplify backlog management
   and reduce fragmentation.
 - Notes:
+  - Deferred until: ChMS project activation
   Evaluation should determine:
     - whether items are truly independent or represent one governance layer
     - which safeguards belong in Devotional Generator v1
@@ -523,11 +672,13 @@ No action is taken until explicitly promoted.
 ### P-049 — Define trigger points for adding human resources (non-optional)
 - Source: Execution capacity and risk management planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify objective trigger points at which additional human resources
   become necessary (not merely helpful) to prevent quality degradation,
   operational risk, or strategic stagnation.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should define:
     - workload thresholds (e.g., number of churches, support volume)
     - quality risk indicators (hallucination frequency, theological disputes)
@@ -540,11 +691,13 @@ No action is taken until explicitly promoted.
 ### P-050 — Identify first non-negotiable hire (role, cost, and lead time)
 - Source: Scaling and sustainability planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the first non-negotiable human hire required to maintain
   product quality, operational stability, and customer trust once
   predefined trigger points are reached.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis must define:
     - specific role (e.g., theological reviewer, QA engineer, devops,
       support lead)
@@ -557,11 +710,13 @@ No action is taken until explicitly promoted.
 ### P-051 — Define church-count thresholds for dedicated Systems Manager and Customer Success
 - Source: Operational scaling and staffing planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Determine at what number of active churches the system requires:
     (1) a dedicated Systems Manager (infrastructure, uptime, security), and
     (2) dedicated Customer Success support.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should define:
     - church-count thresholds (e.g., 5, 15, 30, 50+)
     - workload indicators (support tickets per week, incidents, onboarding time)
@@ -573,11 +728,13 @@ No action is taken until explicitly promoted.
 ### P-052 — Determine marketability and critical pricing thresholds
 - Source: Product viability and revenue planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Assess the marketability of the Devotional Generator and future
   Church-focused offerings, and identify critical pricing thresholds
   that influence adoption, sustainability, and profitability.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - target customer segments (individual authors, small churches, larger churches)
     - perceived value vs. competing alternatives
@@ -591,12 +748,14 @@ No action is taken until explicitly promoted.
 ### P-053 — Model realistic slow revenue flow and identify income derailment risks
 - Source: Financial sustainability and risk planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Model a conservative, slow-growth revenue scenario for the Devotional
   Generator and future Church offerings, and identify operational,
   product, market, or trust-related issues that could materially derail
   income.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - realistic adoption rate assumptions (months 1–12)
     - conservative church acquisition pace
@@ -616,12 +775,14 @@ No action is taken until explicitly promoted.
 ### P-054 — Determine if system can be built without outside capital (path and constraints)
 - Source: Funding strategy and independence planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Determine whether the Devotional Generator, OpenClaw integration,
   and eventual Church-facing systems can be built and scaled without
   outside capital. Identify the most viable bootstrapped path and the
   constraints that would apply under a no-external-funding model.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - phased build strategy aligned with revenue generation
     - infrastructure cost ceilings
@@ -639,12 +800,14 @@ No action is taken until explicitly promoted.
 ### P-055 — Identify optimal order of functional integration for bootstrapped growth
 - Source: Bootstrapped execution strategy planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the order in which functional components (Devotional Generator,
   OpenClaw skill, local LLM integration, QA safeguards, Church features,
   ChMS elements) should be integrated to best support bootstrapped growth
   without outside capital.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should:
     - prioritize revenue-generating functionality first
     - delay cost-heavy infrastructure until justified by demand
@@ -657,14 +820,16 @@ No action is taken until explicitly promoted.
     - Phase 3 (expansion)
     - explicit “do not build yet” items
 
-### P-056 — Define feedback acquisition strategy without existing market contacts
+### P-056 — Define feedback & Aquisition strategy without existing market contacts
 - Source: Founder constraint and go-to-market planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a structured strategy for obtaining meaningful feedback on
   product direction and system desirability when the founder is a
   strong introvert and lacks existing contacts in the target market.
 - Notes:
+  - Deferred until: ChMS project activation
   Strategy should:
     - avoid reliance on cold networking or high-energy outreach
     - identify scalable, low-social-friction feedback channels
@@ -680,11 +845,13 @@ No action is taken until explicitly promoted.
 ### P-057 — Identify characteristics of initial hire to offset founder constraints
 - Source: Founder self-awareness and scaling strategy
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the characteristics, strengths, and behavioral traits required
   in the first hire to complement and offset the founder’s constraints
   (e.g., introversion, limited market contacts, execution bandwidth).
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should define:
     - key personality and communication traits needed
     - complementary strengths (e.g., market outreach, relationship-building,
@@ -698,11 +865,13 @@ No action is taken until explicitly promoted.
 ### P-058 — Design system to be welcoming to both introverts and extroverts without overwhelming the founder
 - Source: Founder constraint and community design planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify ways the Devotional Generator and future Church-facing systems
   can be welcoming and usable for both introverted and extroverted users
   without creating excessive social or operational burden on the founder.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should consider:
     - asynchronous vs synchronous communication channels
     - self-serve onboarding and documentation
@@ -715,10 +884,12 @@ No action is taken until explicitly promoted.
 ### P-059 — Define indicators of build slowdown and acceleration
 - Source: Execution velocity and system health monitoring
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define objective indicators that signal when the build is slowing down
   (risk of stall or derailment) and when it is accelerating sustainably.
 - Notes:
+  - Deferred until: ChMS project activation
   Indicators should include:
     - feature completion rate vs. plan
     - pending item growth vs. closure rate
@@ -736,6 +907,7 @@ No action is taken until explicitly promoted.
 ### P-060 — Map pending items to execution system (Human / ChatGPT / Claude / Codex / OpenClaw)
 - Source: Execution boundary clarification
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Create a structured mapping of all current Pending items to the most
   appropriate execution context: Human, ChatGPT, Claude, Codex/Claude Code,
@@ -756,6 +928,7 @@ No action is taken until explicitly promoted.
 ### P-062 — Define formal supersession rule for Pending items
 - Source: Backlog governance and audit clarity planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Define a formal rule for how Pending items are superseded, merged,
   or consolidated to prevent deletion ambiguity and preserve audit
@@ -772,6 +945,7 @@ No action is taken until explicitly promoted.
 ### P-063 — Define lightweight governance pattern to prevent backlog bureaucracy
 - Source: Backlog scaling and execution discipline planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Define a lightweight governance pattern that maintains clarity,
   auditability, and decision traceability without creating excessive
@@ -789,11 +963,13 @@ No action is taken until explicitly promoted.
 ### P-064 — Define best process for systemic review and optimal implementation points
 - Source: System stability and quality assurance planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a structured yet lightweight process for systemic review of the
   Devotional Generator, OpenClaw integration, and future Church-facing
   systems, including when in the development lifecycle reviews should occur.
 - Notes:
+  - Deferred until: ChMS project activation
   Process should define:
     - types of review (architecture, security, theological, revenue, UX)
     - appropriate trigger points (e.g., pre-v1 release, post-major feature,
@@ -808,11 +984,13 @@ No action is taken until explicitly promoted.
 ### P-065 — Define 3-layer review model (Light, Milestone, Gate)
 - Source: System review process refinement
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a structured 3-layer review model to balance execution speed
   with risk control across the Devotional Generator, OpenClaw integration,
   and future Church-facing systems.
 - Notes:
+  - Deferred until: ChMS project activation
   Model should define:
     - Layer 1 — Light Review:
         * quick validation checks
@@ -837,6 +1015,7 @@ No action is taken until explicitly promoted.
 ### P-066 — Rank all Pending items by impact and execution priority
 - Source: Backlog prioritization and focus discipline
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Rank all current Pending items according to defined evaluation metrics
   to ensure execution focus aligns with revenue generation, risk mitigation,
@@ -858,12 +1037,14 @@ No action is taken until explicitly promoted.
 ### P-067 — Identify unrecognized costs, bottleneck thresholds, and mitigation process
 - Source: Financial risk and sustainability planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify costs that have not yet been explicitly modeled across the
   Devotional Generator, OpenClaw integration, and future Church-facing
   systems, determine at what points those costs become bottlenecks,
   and define a mitigation process.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should consider:
     - LLM usage variability and spike scenarios
     - cloud infrastructure scaling costs
@@ -885,11 +1066,13 @@ No action is taken until explicitly promoted.
 ### P-068 — Identify top 3 most likely hidden cost spikes and mitigation strategy
 - Source: Financial risk foresight planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the three most likely hidden or underestimated cost spikes
   across the Devotional Generator, OpenClaw integration, and future
   Church-facing systems, and define mitigation strategies for each.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should:
     - prioritize realistic risk over theoretical edge cases
     - identify when each spike is likely to occur (e.g., usage growth,
@@ -906,11 +1089,13 @@ No action is taken until explicitly promoted.
 ### P-069 — Identify low-cost add-ons with strong revenue leverage
 - Source: Revenue optimization and margin strategy planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify optional add-ons that require minimal additional infrastructure
   or operational cost but can meaningfully increase revenue per user
   (Devotional Generator and future Church-facing systems).
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should:
     - prioritize high-margin, low-complexity features
     - avoid add-ons that significantly increase support burden
@@ -928,11 +1113,13 @@ No action is taken until explicitly promoted.
 ### P-070 — Evaluate Kickstarter or similar crowdfunding platforms as leverage strategy
 - Source: Funding, validation, and early adopter planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Evaluate whether Kickstarter or similar crowdfunding platforms are a
   viable strategy to validate demand, generate early revenue, or fund
   development for the Devotional Generator or future Church-facing systems.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should consider:
     - suitability of devotional or church-focused products for crowdfunding
     - audience alignment and discoverability
@@ -951,11 +1138,13 @@ No action is taken until explicitly promoted.
 ### P-071 — Identify non-equity funding options and suitability
 - Source: Capital strategy and founder control planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify funding options that do not require equity dilution and assess
   their suitability for the Devotional Generator and future Church-facing
   systems.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - crowdfunding (Kickstarter, preorders)
     - revenue-based financing
@@ -979,11 +1168,13 @@ No action is taken until explicitly promoted.
 ### P-072 — Determine most realistic non-equity funding path
 - Source: Capital strategy prioritization
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the single most realistic non-equity funding path for the
   Devotional Generator and future Church-facing systems, based on
   current stage, audience, and revenue trajectory.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should:
     - narrow P-071 options to the top 1–2 viable paths
     - evaluate likelihood of success within 6–12 months
@@ -1000,12 +1191,14 @@ No action is taken until explicitly promoted.
 ### P-073 — Develop solid business plan (internal and external versions)
 - Source: Strategic clarity and stakeholder communication planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Develop a structured business plan for the Devotional Generator and
   future Church-facing systems, with two aligned versions:
     (1) Internal strategic plan (detailed, candid, risk-aware)
     (2) External-facing plan (clear, concise, investor/partner-ready)
 - Notes:
+  - Deferred until: ChMS project activation
   Internal plan should include:
     - mission and long-term vision
     - phased product roadmap
@@ -1027,11 +1220,13 @@ No action is taken until explicitly promoted.
 ### P-074 — Define minimal viable structure for internal business plan
 - Source: Strategic clarity without over-engineering
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Define a minimal, high-leverage structure for the internal business
   plan to ensure strategic clarity without creating unnecessary
   documentation overhead.
 - Notes:
+  - Deferred until: ChMS project activation
   Structure should be concise (5–8 core sections max) and include:
     - mission and problem statement
     - target customer segments
@@ -1049,12 +1244,14 @@ No action is taken until explicitly promoted.
 ### P-075 — Define execution order map and fork decision points document
 - Source: Build sequencing and scope control planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Determine whether an additional lightweight document is needed to
   define execution order and major fork/decision points across the
   Devotional Generator, OpenClaw integration, and future Church-facing
   systems.
 - Notes:
+  - Deferred until: ChMS project activation
   Document (if created) should:
     - identify major phases in order of execution
     - highlight critical fork points (e.g., local vs hosted LLM,
@@ -1071,12 +1268,14 @@ No action is taken until explicitly promoted.
 ### P-076 — Create time and resource map with execution switch points
 - Source: Execution sequencing and capacity planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Create a visual or structured execution map that models time
   requirements, resource intensity, and key switch/fork points across
   the Devotional Generator, OpenClaw integration, and future Church-facing
   systems.
 - Notes:
+  - Deferred until: ChMS project activation
   Map should include:
     - phased timeline (e.g., 0–3 months, 3–6 months, 6–12 months)
     - estimated build time per major phase
@@ -1097,6 +1296,7 @@ No action is taken until explicitly promoted.
 ### P-077 — Identify clusterable or integrable Pending items for streamlined execution
 - Source: Backlog architecture and execution efficiency planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Review all current Pending items and identify which can be clustered,
   merged, or integrated to improve planning clarity and execution focus
@@ -1119,6 +1319,7 @@ No action is taken until explicitly promoted.
 ### P-078 — Define cadence for backlog re-evaluation and reorganization
 - Source: Sustainable governance and execution rhythm planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Define how often the Pending backlog should be re-evaluated,
   re-ranked, clustered, or reorganized to maintain clarity without
@@ -1139,6 +1340,7 @@ No action is taken until explicitly promoted.
 ### P-079 — Identify critical Pending items and define execution sequencing
 - Source: Focus discipline and v1 readiness planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Identify which Pending items are truly critical before Devotional
   Generator v1 release and define a clear execution sequence for them.
@@ -1159,11 +1361,13 @@ No action is taken until explicitly promoted.
 ### P-080 — Identify critical security edge points and protection requirements
 - Source: Security posture and risk boundary planning
 - Captured: 2026-02-11
+- Project: ChMS
 - Summary:
   Identify the most critical security edge points across the Devotional
   Generator, OpenClaw integration, local LLM execution, and future
   Church-facing systems, and define required protection controls at each boundary.
 - Notes:
+  - Deferred until: ChMS project activation
   Analysis should include:
     - external-facing interfaces (APIs, webhooks, payment processing)
     - OpenClaw skill execution boundaries and permission scopes
@@ -1183,6 +1387,7 @@ No action is taken until explicitly promoted.
 ### P-081 — Identify which Pending items can be executed in parallel
 - Source: Execution efficiency and capacity optimization planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Identify which Pending items can safely be executed in parallel without
   creating dependency conflicts, cognitive overload, or governance drift.
@@ -1203,6 +1408,7 @@ No action is taken until explicitly promoted.
 ### P-082 — Define maximum safe parallel execution lanes
 - Source: Founder bandwidth and execution sustainability planning
 - Captured: 2026-02-11
+- Project: Automated-builder
 - Summary:
   Determine the maximum number of parallel work lanes that can be safely
   executed without degrading quality, increasing rework, or causing
@@ -1224,6 +1430,7 @@ No action is taken until explicitly promoted.
 ### P-084 — run-create-project — create project directory + bootstrap required system docs
 - Source: Builder execution readiness for devotional-generator
 - Captured: 2026-02-12
+- Project: Automated-builder
 - Summary:
   Define and approve `run-create-project` as the prerequisite step before
   running Builder on `devotional-generator`. This capability must create the
@@ -1252,6 +1459,48 @@ No action is taken until explicitly promoted.
   - modify planner/builder prompt behavior beyond documenting requirements
   - create or migrate devotional-generator content in this item
 
+### P-085 — new-010 — Builder Project Templates: Define Where to Store `<slug>` Seed Files for `run-create-project`
+- Source: run-create-project template source-of-truth planning
+- Captured: 2026-02-12
+- Project: Automated-builder
+- Intent:
+  Define a canonical location and rules for storing project seed/template
+  files inside the automated-builder repo so `run-create-project` can
+  copy/modify them to bootstrap a new project.
+- Context:
+  We are introducing `run-create-project`. It must be able to create
+  `../<slug>/` and populate it with a deterministic baseline
+  (`index.md`/`prd.md`/`roadmap.md`/`iteration-log.md`/`phases` +
+  `docs/system/outputs/README.md` + project pending file). To do that
+  safely, the builder repo needs a clear template source-of-truth location.
+- Scope:
+  - choose and document the canonical template directory inside
+    automated-builder (example options):
+    - `docs/system/templates/project/`
+    - `templates/project/`
+    - `docs/system/bootstrap/project/`
+  - define what belongs in templates:
+    - root docs: `index.md`, `prd.md`, `roadmap.md`, `iteration-log.md`
+    - `phases/` scaffold (empty or starter file)
+    - `docs/system/outputs/README.md` (project-local rules)
+    - `docs/system/pending-items.md` (project-local header + namespace placeholder)
+  - define placeholder substitution rules:
+    - replace `<slug>`, `<Project Name>`, `<PREFIX>` (DG, HB, etc.)
+    - enforce `<PREFIX>-###` namespace in project pending file
+  - define authority rules:
+    - template files are system-controlled and changes require proposal/approval
+    - `run-create-project` may read templates and write only to `../<slug>/...`
+- Non-Goals:
+  - no implementation of `run-create-project` in this item
+  - no migration of existing projects
+  - no governance expansion beyond defining template location + substitution rules
+- Definition of Done:
+  - canonical template directory exists and is referenced from system docs
+    (run-create-project spec / system index)
+  - template contents cover the required project scaffold
+  - substitution rules are explicit and testable
+  - gatekeeper can verify a created project matches the template + substitutions
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
@@ -1276,6 +1525,18 @@ No action is taken until explicitly promoted.
 - Notes:
     Requires a diff/update pass, not in scope of current Issue loop.
 
+### P-012 — Automated builder — completion definition and guardrails
+- Source: System architecture clarification
+- Captured: 2026-02-10
+- Completed: 2026-02-12
+- Summary:
+  Define the completion criteria and non-negotiable guardrails for finishing
+  the automated builder, independent of any downstream generator.
+- Notes:
+    Completion authorized by PASS verification (`2026-02-12__03__system__p-012-verification.md`).
+    Content codified in `builder.md` v1.2 — Definition of Done (6 criteria),
+    Minimal Architecture Guardrails (6 invariants), and Builder Completion Non-Goals.
+
 ### P-015 — Verification template — add Pending item context (not inventory-only)
 - Source: Verification workflow gap
 - Captured: 2026-02-10
@@ -1295,17 +1556,24 @@ No action is taken until explicitly promoted.
     Completion authorized by PASS verification (`2026-02-10__23__system__p-016-re-verification.md`).
     Proposal/approval loop was not used; retroactive approval recorded (`2026-02-10__22__system__p-016-retroactive-approval.md`).
 
-### P-012 — Automated builder — completion definition and guardrails
-- Source: System architecture clarification
-- Captured: 2026-02-10
+### P-037 — Determine required availability date for Mac Mini (special configuration)
+- Source: Infrastructure planning for OpenClaw + local LLM development
+- Captured: 2026-02-11
 - Completed: 2026-02-12
 - Summary:
-  Define the completion criteria and non-negotiable guardrails for finishing
-  the automated builder, independent of any downstream generator.
+  Identify when the Mac Mini (special configuration; ~2-week lead time)
+  must be ordered to support local LLM experimentation, multi-agent
+  OpenClaw testing, and overnight verification loops.
 - Notes:
-    Completion authorized by PASS verification (`2026-02-12__03__system__p-012-verification.md`).
-    Content codified in `builder.md` v1.2 — Definition of Done (6 criteria),
-    Minimal Architecture Guardrails (6 invariants), and Builder Completion Non-Goals.
+  Decision complete: selected a used Mac Studio instead of proceeding with a
+  Mac Mini purchase path.
+
+### P-061 — Survey online Bible study platforms (APIs, BYO integration, and low-cost alternatives)
+- Status: Superseded
+- Superseded by: P-031 (expanded scope)
+- Notes:
+  Scope merged into expanded P-031 to eliminate duplication and
+  centralize Bible study platform integration analysis.
 
 ### P-083 — Relocate Planner output root to parent projects directory
 - Source: System architecture / project organization
@@ -1323,12 +1591,5 @@ No action is taken until explicitly promoted.
     Proposal artifact: `2026-02-12__04__system__p-083-planner-output-root-approved.md`.
     Implementation summary: `2026-02-12__06__system__p-083-implementation-summary.md`.
     All six authoritative documents updated with correct paths and version bumps.
-
-### P-061 — Survey online Bible study platforms (APIs, BYO integration, and low-cost alternatives)
-- Status: Superseded
-- Superseded by: P-031 (expanded scope)
-- Notes:
-  Scope merged into expanded P-031 to eliminate duplication and
-  centralize Bible study platform integration analysis.
 
 ---
