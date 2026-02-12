@@ -7,20 +7,21 @@ No action is taken until explicitly promoted.
 
 ## Rules
 
-1. Pending item IDs (`P-###`) are stable, never renumbered, and never reused.
-2. This file contains exactly two item-state sections: **Pending** (open items) and **Completed** (finished items).
-3. New pending items are assigned `max(existing P-###) + 1`.
+1. Pending item IDs (`P-###`) are unique and never reused after completion.
+2. This file contains exactly two item-state sections: **Pending Items** (open items) and **Completed Items** (finished items).
+3. New pending items are assigned using the lowest missing `P-###` in the current range first; if no gaps exist, assign `max(existing P-###) + 1`.
 4. Completed items are moved from Pending to Completed; they are never deleted.
 5. A completed item MUST include a completion date line formatted exactly: `- Completed: YYYY-MM-DD`.
 6. Pending items are capture-only and do not trigger work unless explicitly promoted.
 7. This file is not an Issue tracker and does not start Issue loops.
 8. If an instruction requires moving an item to Completed but the **Completed** section does not exist, STOP and report the error instead of partially applying changes.
+9. Deferred pending items MUST include a deferment line formatted as `- Deferred until: <condition>`. If the item has a `- Notes:` block, use `  - Deferred until: <condition>` inside that block.
 
 ---
 
-## Pending
+## Pending Items
 
-### P-003 — Add proposal-artifact reference requirement to Approval template in issues.md
+### P-003 — Add proposal-artifact reference requirement to Approval template in issue-resolution.md
 - Source: Output File System inventory session
 - Captured: 2026-02-10
 - Summary:
@@ -45,7 +46,7 @@ No action is taken until explicitly promoted.
   Capture updates and refinements to the devotional generator builder
   plan, including newly identified features or adjustments to the existing
   builder design.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-013 — Scan system for documentation inconsistencies
 - Source: Output File System pending items update
@@ -67,7 +68,7 @@ Deferred until: automated builder is complete
   Support a devotional series with 6 volumes (Vol 1 overview; Vol 2–6
   topic-specific), each 30 days (Mon–Sat). Generator completes Vol 1 and
   generates Vol 2–6 from a structured plan.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-007 — Devotional generator — series-level uniqueness (scripture + quotes)
 - Source: Devotional generator planning
@@ -76,7 +77,7 @@ Deferred until: automated builder is complete
   Enforce series-wide uniqueness: no scriptures or quotes used in Volume 1 may
   appear in Volumes 2–6. Track used scriptures/quotes in a registry and
   validate before generation/export.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-008 — Devotional generator — one-time spreadsheet import (Vol 1 mapping)
 - Source: Devotional generator planning
@@ -85,7 +86,7 @@ Deferred until: automated builder is complete
   One-time ingest of existing spreadsheet mapping (weeks 2–5 scripture + topics
   for Volume 1). Define import format, validation, and mapping into internal
   series plan model.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-009 — Devotional generator — one-time Scrivener import (existing draft)
 - Source: Devotional generator planning
@@ -94,7 +95,7 @@ Deferred until: automated builder is complete
   One-time ingest of already-written content from Scrivener (Week 1 of Volume 1).
   Define export format and parsing, and mark imported days as locked so
   generator fills only missing days.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-010 — Devotional generator — workflow to finish Volume 1 then generate Vol 2–6
 - Source: Devotional generator planning
@@ -102,7 +103,7 @@ Deferred until: automated builder is complete
 - Summary:
   Workflow: import spreadsheet + Scrivener → generate remaining days in Volume 1
   → generate Volumes 2–6 → enforce series-level uniqueness throughout.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
 ### P-011 — Devotional generator — per-volume KDP-ready export
 - Source: Devotional generator planning
@@ -110,9 +111,9 @@ Deferred until: automated builder is complete
 - Summary:
   Export separate KDP-ready PDFs per volume with consistent formatting and
   volume-specific front/back matter; optionally support a series bundle export.
-Deferred until: automated builder is complete
+- Deferred until: automated builder is complete
 
-### P-023 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
+### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
 - Summary:
@@ -122,14 +123,14 @@ Deferred until: automated builder is complete
   system (e.g., planner improvements, memory handling, output quality,
   cost/performance tradeoffs, tooling integrations).
 - Notes:
-  Deferred until: automated builder core is complete
+  - Deferred until: automated builder core is complete
   Evaluation should include:
     - a concise list of differences/new features in 4.6
     - potential impact areas for the builder
     - cost/benefit risks for adopting them
     - recommendations for what, if anything, to integrate
 
-### P-024 — Review OpenClaw 2026.2.9 release and assess impact
+### P-018 — Review OpenClaw 2026.2.9 release and assess impact
 - Source: OpenClaw release update
 - Captured: 2026-02-11
 - Summary:
@@ -137,13 +138,13 @@ Deferred until: automated builder is complete
   new capabilities, fixes, or breaking changes that could impact the
   automated builder, OpenClaw skill design, or devotional generator plans.
 - Notes:
-  Deferred until: automated builder core is complete
+  - Deferred until: automated builder core is complete
   Evaluation should flag any features that:
     - simplify builder or skill implementation
     - affect local LLM or Pocket AI strategies
     - introduce new integration or migration considerations
 
-### P-025 — Compare NanoClaw to OpenClaw
+### P-019 — Compare NanoClaw to OpenClaw
 - Source: OpenClaw ecosystem research
 - Captured: 2026-02-11
 - Summary:
@@ -152,13 +153,13 @@ Deferred until: automated builder is complete
   support, and suitability for use in the automated builder and devotional
   generator workflows.
 - Notes:
-  Deferred until: automated builder core is complete
+  - Deferred until: automated builder core is complete
   The evaluation should highlight:
     - strengths and weaknesses of each
     - integration considerations
     - where one may be preferable within your stack
 
-### P-026 — Compare Mac Mini vs VPS vs Cloudflare as deployment platform
+### P-020 — Compare Mac Mini vs VPS vs Cloudflare as deployment platform
 - Source: Infrastructure and cost optimization planning
 - Captured: 2026-02-11
 - Summary:
@@ -166,7 +167,7 @@ Deferred until: automated builder is complete
   Cloudflare-based infrastructure to determine the best platform for
   OpenClaw, the automated builder, and related workloads.
 - Notes:
-  Deferred until: automated builder core is complete
+  - Deferred until: automated builder core is complete
   Evaluation should consider:
     - cost (upfront and ongoing)
     - operational complexity and maintenance
@@ -174,7 +175,7 @@ Deferred until: automated builder is complete
     - suitability for local LLM or hybrid execution
     - security and access considerations
 
-### P-027 — Compare OpenClaw vs human VA for protecting devotionals from hallucinations
+### P-021 — Compare OpenClaw vs human VA for protecting devotionals from hallucinations
 - Source: Quality control and risk mitigation planning
 - Captured: 2026-02-11
 - Summary:
@@ -182,14 +183,14 @@ Deferred until: automated builder is complete
   (VA) to review and protect devotional content from hallucinations,
   factual errors, or theological inconsistencies.
 - Notes:
-  Deferred until: devotional generator is complete
+  - Deferred until: devotional generator is complete
   Evaluation should consider:
     - effectiveness at detecting hallucinations
     - cost and turnaround time
     - scalability and consistency
     - risk tolerance and failure modes
 
-### P-028 — Explore “VA in a box” for churches using OpenClaw + local LLMs
+### P-022 — Explore “VA in a box” for churches using OpenClaw + local LLMs
 - Source: Product expansion and ministry tooling ideation
 - Captured: 2026-02-11
 - Summary:
@@ -198,7 +199,7 @@ Deferred until: automated builder is complete
   low while providing content assistance, administration support, and
   ministry-facing automation.
 - Notes:
-  Deferred until: devotional generator and OpenClaw integration are complete
+  - Deferred until: devotional generator and OpenClaw integration are complete
   Exploration should consider:
     - target use cases for churches (content, admin, communication, study prep)
     - cost structure and sustainability with local inference
@@ -214,7 +215,7 @@ Deferred until: automated builder is complete
   with an Evangelical theological focus and guard against doctrinal drift
   or inappropriate sourcing.
 - Notes:
-  Deferred until: devotional generator and OpenClaw integration are complete
+  - Deferred until: devotional generator and OpenClaw integration are complete
   Evaluation should consider:
     - definition and encoding of Evangelical alignment criteria
     - effectiveness versus human theological review
@@ -229,7 +230,7 @@ Deferred until: automated builder is complete
   OpenClaw and the surrounding codebase that could concern or deter
   customers, especially churches or ministry organizations.
 - Notes:
-  Deferred until: automated builder and OpenClaw integration are complete
+  - Deferred until: automated builder and OpenClaw integration are complete
   Review should consider:
     - data handling and storage (content, prompts, user data)
     - model and agent execution boundaries
@@ -269,7 +270,7 @@ Deferred until: automated builder is complete
   reflect the distinctive “voice” of a specific Pastor (tone, language,
   emphasis, pastoral style) while avoiding impersonation risks or misuse.
 - Notes:
-  Deferred until: Church VA and OpenClaw architecture are defined
+  - Deferred until: Church VA and OpenClaw architecture are defined
   Evaluation should consider:
     - ethical and consent requirements
     - boundaries between stylistic guidance vs impersonation
@@ -286,7 +287,7 @@ Deferred until: automated builder is complete
   the design, development, operation, and long-term maintenance of a
   Church Management System (ChMS).
 - Notes:
-  Deferred until: ChMS scope and product direction are defined
+  - Deferred until: ChMS scope and product direction are defined
   Design should consider:
     - leadership and decision-making roles (product, technical, theological)
     - engineering roles (backend, frontend, platform, AI/automation)
@@ -1220,7 +1221,7 @@ Deferred until: automated builder is complete
     - reduction triggers when quality or velocity drops
   Goal is to maximize throughput while preserving clarity and stability.
 
-### P-083 — run-create-project — create project directory + bootstrap required system docs
+### P-084 — run-create-project — create project directory + bootstrap required system docs
 - Source: Builder execution readiness for devotional-generator
 - Captured: 2026-02-12
 - Summary:
@@ -1234,7 +1235,7 @@ Deferred until: automated builder is complete
   - include output file rules references from `docs/system/outputs/README.md`
     and any required supporting docs
   - include issues proposal template and issue-loop requirements from
-    `docs/system/issues.md`
+    `docs/system/issue-resolution.md`
   - include planner/builder runner docs only when required by the new
     architecture contracts
   - identify and include any "must exist in project" docs implied by
@@ -1251,7 +1252,7 @@ Deferred until: automated builder is complete
   - modify planner/builder prompt behavior beyond documenting requirements
   - create or migrate devotional-generator content in this item
 
-## Completed
+## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
 - Source: Output File System Issue loop
@@ -1263,11 +1264,11 @@ Deferred until: automated builder is complete
 - Notes:
     Identified while resolving Issue-001H.
 
-### P-002 — issues.md Requires Diff to Reflect Corrected Loop Semantics
+### P-002 — issue-resolution.md Requires Diff to Reflect Corrected Loop Semantics
 - Source: Output File System Issue loop
 - Captured: 2026-02-10
 - Summary:
-  issues.md does not currently reflect the clarified execution model:
+  issue-resolution.md does not currently reflect the clarified execution model:
   - proposals uncommitted
   - approval triggers execution
   - verification is separate
@@ -1305,6 +1306,23 @@ Deferred until: automated builder is complete
     Completion authorized by PASS verification (`2026-02-12__03__system__p-012-verification.md`).
     Content codified in `builder.md` v1.2 — Definition of Done (6 criteria),
     Minimal Architecture Guardrails (6 invariants), and Builder Completion Non-Goals.
+
+### P-083 — Relocate Planner output root to parent projects directory
+- Source: System architecture / project organization
+- Captured: 2026-02-12
+- Completed: 2026-02-12
+- Summary:
+  Move Planner project planning docs and workflow artifacts from
+  automated-builder to parent-level `../<slug>/`. Planning docs (index.md,
+  prd.md, roadmap.md, iteration-log.md, phases/) write to `../<slug>/`.
+  Workflow artifacts (proposals, approvals, verifications, implementation
+  summaries) write to `../<slug>/docs/system/outputs/`. Automated-builder
+  system artifacts remain in `docs/system/outputs/` inside automated-builder.
+- Notes:
+    Completion authorized by verification (this session).
+    Proposal artifact: `2026-02-12__04__system__p-083-planner-output-root-approved.md`.
+    Implementation summary: `2026-02-12__06__system__p-083-implementation-summary.md`.
+    All six authoritative documents updated with correct paths and version bumps.
 
 ### P-061 — Survey online Bible study platforms (APIs, BYO integration, and low-cost alternatives)
 - Status: Superseded

@@ -1,8 +1,8 @@
-# P-002 Implementation Summary — issues.md Corrected Loop Semantics
+# P-002 Implementation Summary — issue-resolution.md Corrected Loop Semantics
 
-**Pending item**: P-002 — issues.md Requires Diff to Reflect Corrected Loop Semantics
+**Pending item**: P-002 — issue-resolution.md Requires Diff to Reflect Corrected Loop Semantics
 **Approved artifact**: `2026-02-10__15__system__p-002-issues-loop-semantics-approved.md`
-**Target file**: `docs/system/issues.md`
+**Target file**: `docs/system/issue-resolution.md`
 **Version change**: 1.6 → 1.7
 
 ---
@@ -42,5 +42,5 @@
 ## Commits
 
 1. `c845b0c` — Approved artifact committed
-2. `431a824` — Implementation committed (issues.md v1.6 → v1.7)
+2. `431a824` — Implementation committed (issue-resolution.md v1.6 → v1.7)
 3. *(this file)* — Implementation summary

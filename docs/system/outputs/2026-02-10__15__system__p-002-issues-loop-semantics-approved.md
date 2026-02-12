@@ -1,7 +1,7 @@
-# P-002 Proposal — issues.md Corrected Loop Semantics
+# P-002 Proposal — issue-resolution.md Corrected Loop Semantics
 
-**Pending item**: P-002 — issues.md Requires Diff to Reflect Corrected Loop Semantics
-**Target file**: `docs/system/issues.md`
+**Pending item**: P-002 — issue-resolution.md Requires Diff to Reflect Corrected Loop Semantics
+**Target file**: `docs/system/issue-resolution.md`
 **Baseline version**: 1.6
 **Proposed version**: 1.7
 
@@ -9,7 +9,7 @@
 
 ## Context
 
-`issues.md` defines the issue resolution loop and its templates. After the
+`issue-resolution.md` defines the issue resolution loop and its templates. After the
 v1.4 approval-template rewrite, the loop diagram and surrounding text still
 used flat, undifferentiated step labels that obscured two critical semantics:
 
@@ -38,11 +38,11 @@ artifacts, which would undermine their role as the authoritative record.
 
 ---
 
-## Unified Diff (v1.6 → v1.7, issues.md only)
+## Unified Diff (v1.6 → v1.7, issue-resolution.md only)
 
 ```diff
---- a/docs/system/issues.md (v1.6)
-+++ b/docs/system/issues.md (v1.7)
+--- a/docs/system/issue-resolution.md (v1.6)
++++ b/docs/system/issue-resolution.md (v1.7)
 @@ -1,6 +1,6 @@
  # Issue Numbering and Severity Scheme
 

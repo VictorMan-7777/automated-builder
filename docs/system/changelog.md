@@ -15,17 +15,17 @@
 **Status**: Complete
 
 **Description**:
-Codified the approved loop templates into `docs/system/issues.md`: Proposal
+Codified the approved loop templates into `docs/system/issue-resolution.md`: Proposal
 (commit inventory, produce proposal, no implementation, no commit), Approval
 (same-session human text, scope definition, unlocks commits), and combined
 Deferred / Unapproved + Verification (produce register if applicable, produce
 verification, commit, stop).
 
 **Files Affected**:
-- `docs/system/issues.md` (v1.1 → v1.2)
+- `docs/system/issue-resolution.md` (v1.1 → v1.2)
 - `docs/system/changelog.md` (this entry)
 
-**See**: `docs/system/issues.md`, Loop Templates section
+**See**: `docs/system/issue-resolution.md`, Loop Templates section
 
 ---
 
@@ -36,17 +36,17 @@ verification, commit, stop).
 **Status**: Complete
 
 **Description**:
-Codified the approved issue resolution loop into `docs/system/issues.md`.
+Codified the approved issue resolution loop into `docs/system/issue-resolution.md`.
 Defines the Inventory → Proposal → Approval → Change → Summary per-issue
 cycle, termination conditions, end-of-loop artifact requirements (Deferred /
 Unapproved register and Verification), and the post-verification constraint
 against new proposals without a new inventory.
 
 **Files Affected**:
-- `docs/system/issues.md` (v1.0 → v1.1)
+- `docs/system/issue-resolution.md` (v1.0 → v1.1)
 - `docs/system/changelog.md` (this entry)
 
-**See**: `docs/system/issues.md`, Issue Resolution Loop section
+**See**: `docs/system/issue-resolution.md`, Issue Resolution Loop section
 
 ---
 
@@ -63,11 +63,11 @@ H for HIGH, none for MEDIUM/LOW), placement rules for issue identifiers in
 output artifacts, and changelog entry format.
 
 **Files Affected**:
-- `docs/system/issues.md` (new)
+- `docs/system/issue-resolution.md` (new)
 - `docs/system/README.md` (directory structure updated)
 - `docs/system/changelog.md` (this entry)
 
-**See**: `docs/system/issues.md` for full specification
+**See**: `docs/system/issue-resolution.md` for full specification
 
 ---
 

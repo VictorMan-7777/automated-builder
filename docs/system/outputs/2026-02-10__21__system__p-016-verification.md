@@ -141,7 +141,7 @@ obligation.
 
 The P-016 execution output acknowledges this file under "Files NOT Modified"
 but does not list `README.md` — it only lists `run-planner.md`, `run-builder.md`,
-`issues.md`, and `pending-items.md`. The README.md omission appears unintentional.
+`issue-resolution.md`, and `pending-items.md`. The README.md omission appears unintentional.
 
 ### Gap 2 (MEDIUM): No approval artifact trail
 
@@ -201,7 +201,7 @@ enforceability.
 | `docs/system/initial-prompt.md` | Updated authority header (verified) |
 | `docs/system/prompt-template.md` | Updated prompt template (verified) |
 | `docs/system/outputs/README.md` | Outputs directory governance (**not updated — gap**) |
-| `docs/system/issues.md` | Loop templates and approval semantics |
+| `docs/system/issue-resolution.md` | Loop templates and approval semantics |
 | `docs/system/outputs/2026-02-10__18__system__continue-repo-scan-summary.md` | Pre-execution scan |
 | `docs/system/outputs/2026-02-10__19__system__output-artifact-repo-scan.md` | Pre-execution scan |
 | Git commit `09799f2` | P-016 implementation commit |

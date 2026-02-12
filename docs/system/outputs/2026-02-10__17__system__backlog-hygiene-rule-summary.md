@@ -1,6 +1,6 @@
 # Implementation Summary — Backlog Hygiene Rule
 
-**Target file**: `docs/system/issues.md`
+**Target file**: `docs/system/issue-resolution.md`
 **Version change**: 1.7 → 1.8
 
 ---
@@ -32,4 +32,4 @@ Version bumped to 1.8 with corresponding Document History entry.
 
 ## Commits
 
-1. *(pending human approval)* — issues.md v1.7 → v1.8 + this summary
+1. *(pending human approval)* — issue-resolution.md v1.7 → v1.8 + this summary

@@ -3,13 +3,13 @@
 **Date**: 2026-02-10
 **Context**: system
 **Pending Item**: P-015
-**Target File**: `docs/system/issues.md` (v1.8 → v1.9)
+**Target File**: `docs/system/issue-resolution.md` (v1.8 → v1.9)
 
 ---
 
 ## Summary
 
-Updated the Verification template in `docs/system/issues.md` to:
+Updated the Verification template in `docs/system/issue-resolution.md` to:
 
 1. Add Pending-item context fields so verification works for non-inventory
    changes (individual P-### items).
@@ -65,7 +65,7 @@ verification commit. Completion date = verification artifact date.
 
 | File | Change |
 |------|--------|
-| `docs/system/issues.md` | Backlog hygiene rewritten; verification content requirements added; version 1.8 → 1.9 |
+| `docs/system/issue-resolution.md` | Backlog hygiene rewritten; verification content requirements added; version 1.8 → 1.9 |
 
 ## Files NOT Modified
 

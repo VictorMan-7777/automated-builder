@@ -10,7 +10,7 @@
 ## Pending-Item Context (P-015)
 
 - **Pending item ID**: P-015
-- **Intent and scope**: Update the verification template in `docs/system/issues.md`
+- **Intent and scope**: Update the verification template in `docs/system/issue-resolution.md`
   to include Pending-item context fields (P-###, target file(s), proposal artifact,
   acceptance checks) so verification works for non-inventory changes as well.
 - **Acceptance criteria**:
@@ -77,7 +77,7 @@ the decision at verification, not approval.**
 
 **Result: PASS**
 
-`docs/system/issues.md` lines 261-264 now require:
+`docs/system/issue-resolution.md` lines 261-264 now require:
 - Pending item ID (P-###)
 - Intent and scope (from the item's Summary in `pending-items.md`)
 - Acceptance criteria: what constitutes "done" for this item
@@ -88,7 +88,7 @@ The dogfood test above confirms all three fields are fillable for P-016.
 
 **Result: PASS**
 
-Grep for `Completed`, `completion`, and `move.*Pending` in `issues.md` found
+Grep for `Completed`, `completion`, and `move.*Pending` in `issue-resolution.md` found
 these occurrences in active template language:
 
 | Line | Text | Assessment |
@@ -147,7 +147,7 @@ No status changes applied in this artifact per instructions.
 
 | File | Purpose |
 |------|---------|
-| `docs/system/issues.md` (v1.9) | Updated verification template — target of P-015 |
+| `docs/system/issue-resolution.md` (v1.9) | Updated verification template — target of P-015 |
 | `docs/system/pending-items.md` | P-015 and P-016 definitions |
 | `docs/system/outputs/2026-02-10__20__system__p-016-execution-output-artifact-every-iteration.md` | P-016 execution artifact |
 | `docs/system/outputs/2026-02-10__21__system__p-016-verification.md` | P-016 first verification (FAIL) |

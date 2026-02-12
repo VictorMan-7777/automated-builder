@@ -63,7 +63,7 @@ Preserved: interrupted-session exception, iterator rule, restriction list.
 |------|--------|
 | `prompts/planner/run-planner.md` | Already enforces output every iteration |
 | `prompts/builder/run-builder.md` | Already enforces output every iteration |
-| `docs/system/issues.md` | Not a target; verification template excluded per instructions |
+| `docs/system/issue-resolution.md` | Not a target; verification template excluded per instructions |
 | `docs/system/pending-items.md` | P-016 remains in Pending per instructions |
 
 ---
