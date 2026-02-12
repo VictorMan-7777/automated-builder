@@ -50,7 +50,7 @@ A **plan-first, gated-phase framework** for software project development using e
 - ❌ No code execution
 - ❌ No automation setup
 - ✅ Markdown documentation only
-- ✅ Outputs to `docs/projects/<slug>/`
+- ✅ Outputs to `../<slug>/` (per P-083)
 
 **System Prompt**: [prompts/planner/planner-base.md](prompts/planner/planner-base.md)
 
@@ -108,9 +108,9 @@ A **plan-first, gated-phase framework** for software project development using e
 
 **Key Rules**:
 - Docs-only (no execution during planning)
-- All projects under `docs/projects/<slug>/`
+- All projects under `../<slug>/` (per P-083)
 - Commit points must be explicitly identified
-- Long outputs saved to `docs/system/outputs/`
+- Long outputs saved to `docs/system/outputs/` (system) or `../<slug>/docs/system/outputs/` (project-specific)
 
 **Read**: [planning.md](planning.md)
 
@@ -165,22 +165,27 @@ This rule applies globally unless a more specific rule exists for a particular a
 
 ### Project Artifacts
 
-**Location**: `docs/projects/<project-slug>/`
+**Location**: `../<project-slug>/` (parent directory, per P-083)
 
 **Structure**:
 ```
-docs/projects/<project-slug>/
-├── index.md           # Navigation and overview
-├── prd.md             # Product requirements
-├── roadmap.md         # Milestones and timeline
-├── iteration-log.md   # Planning evolution
-└── phases/            # Phase plans
-    ├── 001-phase-one.md
-    ├── 002-phase-two.md
-    └── ...
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── <project-slug>/
+    ├── index.md           # Navigation and overview
+    ├── prd.md             # Product requirements
+    ├── roadmap.md         # Milestones and timeline
+    ├── iteration-log.md   # Planning evolution
+    ├── phases/            # Phase plans
+    │   ├── 001-phase-one.md
+    │   ├── 002-phase-two.md
+    │   └── ...
+    └── docs/
+        └── system/
+            └── outputs/   # Project workflow artifacts
 ```
 
-**Example**: [docs/projects/devotional-generator/](docs/projects/devotional-generator/)
+_Note: Previously stored in `docs/projects/<slug>/` before P-083 relocation._
 
 ---
 
@@ -229,12 +234,12 @@ System prompts should follow the canonical prompt template: [docs/system/prompt-
 **Input**: Project requirements, scope, constraints
 
 **Process**:
-- Create `docs/projects/<slug>/` directory
+- Create `../<slug>/` directory (parent directory, per P-083)
 - Generate PRD, roadmap, iteration-log
 - Write phase plans (001, 002, 003, ...)
 - Identify commit points (CP1, CP2, ...)
 - Document rollback and verification procedures
-- Save planning summary to `docs/system/outputs/`
+- Save planning summary to `../<slug>/docs/system/outputs/` (project-specific) or `docs/system/outputs/` (system-level)
 
 **Output**: Complete planning artifacts ready for review
 
@@ -340,16 +345,16 @@ System prompts should follow the canonical prompt template: [docs/system/prompt-
 - [CLAUDE.md](CLAUDE.md) - Learn project conventions
 - [gateway.md](gateway.md) - Understand approval criteria
 
-**2. Review Example Project**:
-- [docs/projects/devotional-generator/](docs/projects/devotional-generator/) - Complete planning example
+**2. Read Planning Guide**:
+- [docs/system/run-planner.md](run-planner.md) - Detailed planning workflow
 
 **3. Use Planner Prompt**:
 - [prompts/planner/planner-base.md](prompts/planner/planner-base.md) - Planner system prompt
 
 **4. Create Project Plan**:
 ```bash
-# 1. Create project directory
-mkdir -p docs/projects/<your-project-slug>
+# 1. Create project directory (parent directory)
+mkdir -p ../<your-project-slug>
 
 # 2. Generate planning artifacts
 # (Use Planner with planner-base.md prompt)
@@ -368,7 +373,7 @@ mkdir -p docs/projects/<your-project-slug>
 - [prompts/gatekeeper/gatekeeper-checklist.md](prompts/gatekeeper/gatekeeper-checklist.md) - Review template
 
 **3. Review Project Artifacts**:
-- Start with `docs/projects/<slug>/index.md`
+- Start with `../<slug>/index.md` (per P-083)
 - Check PRD, roadmap, phases
 - Validate commit points, acceptance criteria
 - Complete gatekeeper checklist
@@ -414,8 +419,8 @@ mkdir -p docs/projects/<your-project-slug>
 - [prompts/builder/builder-base.md](prompts/builder/builder-base.md)
 - [prompts/gatekeeper/gatekeeper-checklist.md](prompts/gatekeeper/gatekeeper-checklist.md)
 
-**Example Project**:
-- [docs/projects/devotional-generator/](docs/projects/devotional-generator/) - Complete planning example
+**Planning Guide**:
+- [docs/system/run-planner.md](run-planner.md) - Complete planning workflow guide
 
 ---
 

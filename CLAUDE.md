@@ -17,15 +17,23 @@ This document defines conventions, workflows, and standards for the automated-bu
 
 ## Standard Directory Structure
 
+**Implemented now:**
 ```
 automated-builder/
+├── docs/           # Documentation and guides
+│   ├── system/     #   System-level docs and outputs
+│   ├── global/     #   Cross-cutting references
+│   └── implementation/  # Approved operational contracts
+├── prompts/        # System prompts for roles (planner, builder, gatekeeper)
+└── CLAUDE.md       # This file
+```
+
+**Planned / future:**
+```
 ├── commands/       # Command definitions and specifications
-├── prompts/        # Numbered prompt templates (NNN format)
 ├── tasks/          # Task definitions and tracking
 ├── reports/        # Output reports and logs
-├── docs/           # Documentation and guides
-├── scripts/        # Utility scripts (manual execution only)
-└── CLAUDE.md       # This file
+└── scripts/        # Utility scripts (manual execution only)
 ```
 
 ---

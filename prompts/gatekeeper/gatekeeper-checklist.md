@@ -229,7 +229,7 @@ Return clear decisions:
 **Decision**: 🔄 REVISE
 
 **Issues**:
-1. Missing rollback procedure in phase 003 (docs/projects/X/phases/003-X.md)
+1. Missing rollback procedure in phase 003 (../X/phases/003-X.md)
 2. Commit point CP4 doesn't specify files to stage
 3. Typo in acceptance criteria: "teh" → "the"
 
@@ -246,7 +246,7 @@ Return clear decisions:
 **Decision**: ❌ REJECT
 
 **Critical Issues**:
-1. Files placed in wrong location (prompts/ instead of docs/projects/)
+1. Files placed in wrong location (prompts/ instead of ../<slug>/)
 2. No commit points identified in any phase plan
 3. Acceptance criteria all vague ("works well", "is good")
 

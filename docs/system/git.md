@@ -22,7 +22,7 @@ This is the **single source of truth** for commit rules. Other documents referen
 **Allowed during**: Planning stage
 
 **Scope**:
-- Planning documents (`docs/projects/<slug>/`)
+- Planning documents (`../<slug>/`, per P-083)
 - System documentation (`docs/system/`)
 - Prompts and guidelines (`prompts/`)
 - Root documentation (`planning.md`, `CLAUDE.md`, etc.)

@@ -28,14 +28,20 @@ This directory contains system-level documentation that applies to the entire au
 ## Directory Structure
 
 ```
-docs/system/
-├── index.md            # System Overview (START HERE)
-├── README.md           # This file (directory index)
-├── changelog.md        # System documentation changes
-├── issue-resolution.md # Issue numbering and severity scheme
-└── outputs/            # Long output capture directory
-    ├── README.md       # Output capture rules
-    └── YYYY-MM-DD__NN__<context>__*.md  # Dated output files
+docs/
+├── system/                 # System-level documentation
+│   ├── index.md            # System Overview (START HERE)
+│   ├── README.md           # This file (directory index)
+│   ├── changelog.md        # System documentation changes
+│   ├── issue-resolution.md # Issue numbering and severity scheme
+│   └── outputs/            # Long output capture directory
+│       ├── README.md       # Output capture rules
+│       └── YYYY-MM-DD__NN__<context>__*.md
+├── global/                 # Cross-cutting references
+│   └── tooling-locations.md
+└── implementation/         # Approved operational contracts
+    └── system/
+        └── checkpoint-taxonomy.md  (APPROVED)
 ```
 
 ---
@@ -56,6 +62,18 @@ Long outputs (summaries, reports, file trees) that exceed comfortable chat reada
 - Gatekeeper review decisions
 - Reorganization summaries
 - Project file trees
+
+### ../global/
+
+**Purpose**: Cross-cutting references that apply outside any single role or project
+
+- **[tooling-locations.md](../global/tooling-locations.md)** — Clawdbot CLI install paths and runtime details
+
+### ../implementation/
+
+**Purpose**: Approved operational contracts governing session behaviour
+
+- **[system/checkpoint-taxonomy.md](../implementation/system/checkpoint-taxonomy.md)** — Checkpoint taxonomy and execution contract (APPROVED)
 
 ---
 
@@ -80,18 +98,26 @@ Long outputs (summaries, reports, file trees) that exceed comfortable chat reada
 
 ### Project Documentation
 
-**Location**: `docs/projects/<project-slug>/`
+**Location**: `../<project-slug>/` (parent directory, per P-083)
 
 **Purpose**: Individual project planning artifacts
 
 **Contains**:
 - Project PRD, roadmap, iteration logs
 - Phase plans
-- Project-specific outputs
+- Project-specific workflow outputs
 
-**Examples**:
-- `docs/projects/devotional-generator/prd.md`
-- `docs/projects/devotional-generator/phases/001-project-scaffold.md`
+**Structure**:
+```
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── <project-slug>/
+    ├── prd.md
+    ├── phases/001-phase-name.md
+    └── docs/system/outputs/  # Project workflow artifacts
+```
+
+_Note: Previously stored in `docs/projects/<slug>/` before P-083 relocation._
 
 ---
 
@@ -118,7 +144,7 @@ Add documentation to `docs/system/` when:
 4. **System evolution** - Tracking framework changes over time
 
 Do NOT add:
-- Project-specific planning (goes to `docs/projects/<slug>/`)
+- Project-specific planning (goes to `../<slug>/`, per P-083)
 - Role requirements (goes to root level: planning.md, builder.md, gateway.md)
 - System prompts (goes to `prompts/planner/`, `prompts/builder/`, `prompts/gatekeeper/`)
 

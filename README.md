@@ -55,21 +55,11 @@ automated-builder/
 │       └── gatekeeper-checklist.md
 │
 ├── docs/
-│   ├── system/              # System documentation and outputs
-│   │   ├── README.md        # System docs index
-│   │   └── outputs/         # Long output captures (permanent records)
-│   │       ├── README.md    # Output capture rules
-│   │       └── YYYY-MM-DD-*.md  # Dated output files
-│   └── projects/            # Project planning artifacts
-│       └── <project-slug>/
-│           ├── index.md
-│           ├── prd.md
-│           ├── roadmap.md
-│           ├── iteration-log.md
-│           └── phases/
-│               ├── 001-phase-one.md
-│               ├── 002-phase-two.md
-│               └── ...
+│   └── system/              # System documentation and outputs
+│       ├── README.md        # System docs index
+│       └── outputs/         # Long output captures (permanent records)
+│           ├── README.md    # Output capture rules
+│           └── YYYY-MM-DD-*.md  # Dated output files
 │
 ├── commands/                # Command definitions (future)
 ├── tasks/                   # Task tracking (future)
@@ -79,30 +69,28 @@ automated-builder/
 
 ---
 
-## Current Projects
+## Project Planning Output Location
 
-### Devotional Generator
+Per P-083, all project planning artifacts are written to `../<slug>/` (parent directory alongside automated-builder), not inside the automated-builder repository.
 
-**Status**: Planning Complete, Ready for Gatekeeper Review
-**Project Slug**: `devotional-generator`
-**Location**: [docs/projects/devotional-generator/](docs/projects/devotional-generator/)
+**Structure**:
+```
+<parent-projects-dir>/
+├── automated-builder/   (this repo)
+└── <project-slug>/      (planning outputs)
+    ├── index.md
+    ├── prd.md
+    ├── roadmap.md
+    ├── iteration-log.md
+    ├── phases/
+    │   ├── 001-phase-one.md
+    │   └── ...
+    └── docs/
+        └── system/
+            └── outputs/  # Project workflow artifacts
+```
 
-A devotional content generation system with template-based workflow.
-
-**Entry Point**: [docs/projects/devotional-generator/index.md](docs/projects/devotional-generator/index.md)
-
-**Quick Links**:
-- [PRD](docs/projects/devotional-generator/prd.md) - Product requirements
-- [Roadmap](docs/projects/devotional-generator/roadmap.md) - 5 phases, 11 commit points
-- [Phases](docs/projects/devotional-generator/phases/) - Detailed phase plans (001-005)
-- [Iteration Log](docs/projects/devotional-generator/iteration-log.md) - Planning evolution
-
-**Phase Structure**:
-- Phase 001: Project Scaffold (CP1, CP2)
-- Phase 002: Template System (CP3, CP4, CP5)
-- Phase 003: Content Library (CP6, CP7)
-- Phase 004: Validation & Preview (CP8, CP9)
-- Phase 005: Export & Distribution (CP10, CP11)
+_Note: The `docs/projects/` directory was previously used but has been relocated per P-083. Historical planning content for devotional-generator has been moved to its own project directory._
 
 ---
 
@@ -111,7 +99,7 @@ A devotional content generation system with template-based workflow.
 ### For Planners
 
 1. Read [planning.md](planning.md) completely
-2. Create project directory: `docs/projects/<project-slug>/`
+2. Create project directory: `../<project-slug>/` (parent directory)
 3. Generate required documents (index, PRD, roadmap, iteration-log)
 4. Write phase plans in `phases/` subdirectory (001, 002, etc.)
 5. Ensure all commit points explicitly identified
@@ -153,7 +141,7 @@ A devotional content generation system with template-based workflow.
 
 **Planning Stage**:
 - Docs-only (no execution)
-- All projects under `docs/projects/<slug>/`
+- All projects under `../<slug>/` (per P-083)
 - Commit points explicitly identified
 - Gatekeeper checks apply to plans
 
@@ -230,8 +218,8 @@ Full details: docs/system/outputs/2026-02-05__01__planner__planning-complete.md
 
 ### To Create a New Project Plan
 
-1. Review [devotional-generator](docs/projects/devotional-generator/) as example
-2. Create directory: `docs/projects/<your-project-slug>/`
+1. Read [planning.md](planning.md) and [docs/system/run-planner.md](docs/system/run-planner.md)
+2. Create directory: `../<your-project-slug>/` (parent directory)
 3. Use [prompts/planner/planner-base.md](prompts/planner/planner-base.md) as guide
 4. Generate: index.md, prd.md, roadmap.md, iteration-log.md
 5. Write phase plans in `phases/` subdirectory
@@ -253,15 +241,6 @@ Full details: docs/system/outputs/2026-02-05__01__planner__planning-complete.md
 3. Complete checklist honestly
 4. Make explicit decision
 5. Provide clear, actionable feedback
-
----
-
-## Status: Devotional Generator
-
-- **Planning**: ✅ Iteration 0 Complete (awaiting Gatekeeper review)
-- **Implementation**: ⏸️ Not Started
-- **Phases Completed**: 0/5
-- **Commit Points Completed**: 0/11
 
 ---
 
