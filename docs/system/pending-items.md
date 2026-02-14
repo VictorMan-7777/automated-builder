@@ -8,7 +8,9 @@ No action is taken until explicitly promoted.
 ## Rules
 
 1. Pending item IDs (`P-###`) are unique and never reused after completion.
-2. This file contains exactly two item-state sections: **Pending Items** (open items) and **Completed Items** (finished items).
+2. This file contains exactly three item-state sections: **Pending Items**
+   (open items), **Completed Items** (finished items), and
+   **Dependencies** (ordering model only; NOT a status signal).
 3. New pending items are assigned using the lowest missing `P-###` in the current range first; if no gaps exist, assign `max(existing P-###) + 1`.
 4. New pending items MUST be inserted in numeric order within the **Pending Items** section (ascending by `P-###`).
 5. Completed items are moved from Pending to Completed; they are never deleted.
@@ -119,12 +121,53 @@ No action is taken until explicitly promoted.
   Add a pending item for scanning the repository and docs to identify
   inconsistencies or missing documentation.
 
-### P-014 — Add agents to planner
-- Source: Output File System pending items update
-- Captured: 2026-02-10
-- Project: Automated-builder
-- Summary:
-  Add a pending item to integrate agent support into the planner component.
+### P-014 — Expand Planner with Q&A PRD Generation Mode (CMS-002) + Agentic/RAG Planning Awareness
+- Objective:
+  Expand the Planner to support a guided Q&A-style intake flow that can agentically
+  produce an implementation-grade PRD that the Planner can implement, so the Builder
+  receives a strong, consistent foundation. PRD becomes a required planning artifact.
+- Scope (In):
+  - Q&A intake flow (interactive prompts + structured answers)
+  - PRD synthesis from answers:
+    - tight scope
+    - numbered requirements
+    - measurable acceptance criteria
+    - explicit non-goals
+    - verification plan
+  - Consistency checks:
+    - missing sections
+    - vague language flags
+    - terminology consistency
+    - dependency coherence
+  - Gap detection prompts (follow-up questions when info is missing/ambiguous)
+  - Trust-first guardrails (explicit constraints, auditability requirements, safe defaults)
+  - Output artifacts:
+    - PRD at prd/prd.md
+    - capability map
+    - open questions list
+    - "Builder Handoff" section (what to build, what not to change, verification plan)
+  - Agentic planning awareness:
+    - classify components as deterministic vs agentic vs creation-layer vs production-layer
+    - apply stricter guardrails for agentic components
+  - RAG consideration:
+    - when retrieval is appropriate, Planner must specify corpus, ingestion, determinism/traceability,
+      provenance tracking, evaluation criteria, and safe fallbacks
+    - Planner must not assume RAG without justification
+- Scope (Out):
+  - Implementing Church MS features directly
+  - Automated web scraping (can accept competitor/pain-point notes as inputs)
+  - UI beyond CLI/Markdown outputs (unless later requested)
+- Acceptance Criteria:
+  - Planner can run a Q&A session that outputs a structured PRD at prd/prd.md from user inputs
+  - System detects missing required PRD fields and generates follow-up questions until resolved or deferred
+  - PRD enforces "tightness": numbered requirements + measurable acceptance criteria + explicit non-goals
+  - Trust-first section is always present and populated
+  - Output includes "Builder Handoff" (what to build, what not to change, verification plan)
+- Dependencies:
+  - PRD template + lint/check rules (internal validation is fine)
+  - Alignment with existing planner/builder governance rules (outputs, approvals, allowed modifications)
+- Notes:
+  2026-02-12: Add Q&A mode to Planner to generate a builder-ready PRD agentically; reduce ambiguity and improve handoff quality.
 
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
@@ -1431,32 +1474,39 @@ No action is taken until explicitly promoted.
 - Source: Builder execution readiness for devotional-generator
 - Captured: 2026-02-12
 - Project: Automated-builder
+- Inventory: docs/system/outputs/2026-02-13__01__system__p-084-inventory-proposal-approved.md
 - Summary:
-  Define and approve `run-create-project` as the prerequisite step before
-  running Builder on `devotional-generator`. This capability must create the
-  target project directory and bootstrap the minimum required system docs so
-  planner/builder loops can run without manual setup.
-- Scope:
-  - create project root directory for a new project slug
-  - scaffold required docs/contracts needed by run-planner and run-builder
-  - include output file rules references from `docs/system/outputs/README.md`
-    and any required supporting docs
-  - include issues proposal template and issue-loop requirements from
-    `docs/system/issue-resolution.md`
-  - include planner/builder runner docs only when required by the new
-    architecture contracts
-  - identify and include any "must exist in project" docs implied by
-    `run-planner` and `run-builder` contracts
-- Definition of Done:
-  - explicit list of files/directories `run-create-project` must create
-  - each required file mapped to the contract/rule that requires it
-  - no manual bootstrap steps required before first planner run
-  - prerequisite is documented: Builder must not run on
-    `devotional-generator` until `run-create-project` is implemented
-    and validated
-- Non-goals:
-  - implement `run-create-project`
-  - modify planner/builder prompt behavior beyond documenting requirements
+  Implement `run-create-project` command to bootstrap new projects with all
+  required system documentation. Command creates project directory structure,
+  deploys 9 required files from canonical templates (project.yaml, index.md,
+  prd.md, roadmap.md, iteration-log.md, builder-manifest.yaml, ai-process.md,
+  and .gitkeep files), enforces governance protection rules, and validates
+  17-point contract. Project becomes ready for planner/builder execution with
+  zero manual setup. Prefix determination required by default; derivation
+  available via explicit flag. Templates stored in automated-builder repository;
+  project files deployed to sibling directory.
+- Inventory Scope (11 Issue-### execution slices):
+  - Issue-001: Create template directory and base templates (7 .tmpl files)
+  - Issue-002: Implement command scaffolding with parameter parsing/normalization
+  - Issue-003: Implement path resolution and sibling validation
+  - Issue-004: Implement prefix determination (required by default, derivation opt-in)
+  - Issue-005: Create project.yaml identity file FIRST
+  - Issue-006: Deploy remaining files with placeholder substitution
+  - Issue-007: Implement governance protection validation
+  - Issue-008: Deploy project rules pack template
+  - Issue-009: End-to-end validation (17 checks) and cleanup
+  - Issue-010: Introduce inventory-proposal artifact type (governance)
+  - Issue-011: Validate ai-process.md deployment and AI Process Contract
+- Validation Requirements:
+  - Primary: Confirm all 11 Issue-### items match approved inventory specification
+  - Secondary: Confirm run-create-project produces valid project structure
+  - All 17 validation checks pass (identity file, governance protection, path invariants)
+  - Template deployment successful, no unresolved placeholders
+  - Sibling relationship to automated-builder verified
+- Notes:
+  - Execution proceeds through issue-resolution loop (Issue-### proposal -> approval -> implementation -> summary)
+  - Issue-### items are execution slices only (not inserted into pending-items.md)
+  - P-084 completion requires successful two-stage validation
   - create or migrate devotional-generator content in this item
 
 ### P-085 — new-010 — Builder Project Templates: Define Where to Store `<slug>` Seed Files for `run-create-project`
@@ -1500,6 +1550,13 @@ No action is taken until explicitly promoted.
   - template contents cover the required project scaffold
   - substitution rules are explicit and testable
   - gatekeeper can verify a created project matches the template + substitutions
+
+### P-086 — Update Issues approval template to enforce pending-items sync
+- Project: automated-builder
+- Summary:
+  When a proposal revision is approved, the corresponding P-### entry in
+  pending-items.md must be updated to reflect the approved revision text.
+  Validation may reference P-### and must be able to trust it is current.
 
 ## Completed Items
 
@@ -1591,5 +1648,39 @@ No action is taken until explicitly promoted.
     Proposal artifact: `2026-02-12__04__system__p-083-planner-output-root-approved.md`.
     Implementation summary: `2026-02-12__06__system__p-083-implementation-summary.md`.
     All six authoritative documents updated with correct paths and version bumps.
+
+## Dependencies
+
+### Dependency model through P-086
+
+Legend:
+A -> B means A must be completed before B can be meaningfully executed.
+(A) means cluster / umbrella dependency
+[D] means deferred until <condition>
+
+Core builder readiness
+P-012 (Builder completion criteria) -> P-084 (run-create-project spec)
+P-083 (Planner output root -> ../<slug>/) -> P-084 (run-create-project spec)
+
+Project bootstrapping
+P-084 (run-create-project spec) -> P-085 (template source-of-truth location)
+P-085 (templates) -> (run-create-project implemented) -> first planner run
+
+Devotional-generator (all currently [D] until automated builder complete)
+P-084 + P-085 + (run-create-project implemented) -> P-005 [D]
+P-084 + P-085 + (run-create-project implemented) -> P-006 [D]
+P-006 -> P-007 [D] (uniqueness depends on series support)
+P-006 -> P-008 [D] (spreadsheet import depends on series plan model)
+P-006 -> P-009 [D] (scrivener import depends on series plan model + locking)
+P-008 + P-009 -> P-010 [D] (imports + generation workflow)
+P-010 -> P-011 [D] (export depends on generated volumes)
+
+Research / comparisons (mostly [D] until automated builder core complete)
+(automated builder core complete) -> P-017 [D]
+(automated builder core complete) -> P-018 [D]
+(automated builder core complete) -> P-019 [D]
+(automated builder core complete) -> P-020 [D]
+(devotional generator complete) -> P-021 [D]
+(devotional generator + openclaw integration complete) -> P-022 [D]
 
 ---
