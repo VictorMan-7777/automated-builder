@@ -133,6 +133,27 @@ without a new inventory.
 
 ---
 
+## Output Formatting Rule
+
+All direct human prompts (requests, required responses, or STOP conditions)
+MUST be visually separated from surrounding text by at least one blank line
+above and below.
+
+Prompts MUST be either:
+- in a fenced code block, OR
+- on their own line with no trailing instructional text.
+
+No instructional sentence may share a line with a human request.
+
+This rule applies to:
+- "Approved"
+- "Update the proposal..."
+- "Next Issue-###? OR Validation?"
+- STOP instructions
+- Any required human input trigger
+
+---
+
 ## Loop Templates
 
 ### Proposal
