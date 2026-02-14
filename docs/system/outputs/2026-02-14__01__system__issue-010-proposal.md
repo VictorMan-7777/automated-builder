@@ -3,6 +3,7 @@
 **Issue**: Issue-010 (from P-084 Inventory)
 **Type**: Governance
 **Date**: 2026-02-14
+**Version**: 1.1
 **Status**: Proposed
 **Parent**: P-084 — run-create-project bootstrap specification
 **Inventory**: docs/system/outputs/2026-02-13__01__system__p-084-inventory-proposal-approved.md
@@ -92,24 +93,55 @@ Add inventory-proposal artifact type documentation to governance, defining namin
 
 When an Inventory-Proposal is approved:
 
-1. **P-### Entry Update**: The corresponding P-### entry in `pending-items.md` MUST be updated to reflect the approved inventory scope in descriptive form.
+#### Approval Sequence (Operational Steps)
 
-2. **Execution Slices Only**: Issue-### items defined in the inventory are execution slices only.
+1. **Rename Artifact**: Rename `*-proposal.md` → `*-approved.md`
+   - Example: `p-084-inventory-proposal.md` → `p-084-inventory-proposal-approved.md`
+   - This marks the artifact as approved
 
-3. **No Insertion**: Issue-### items MUST NOT be inserted into `pending-items.md`.
+2. **Commit Approved Artifact**: Commit the renamed artifact BEFORE modifying `pending-items.md`
+   - Ensures approved artifact is immutable and version-controlled
+   - Commit message documents approval
 
-4. **Issue-Resolution Loop**: Execution proceeds through the issue-resolution loop using:
+3. **Update P-### Descriptive Scope**: Update the corresponding P-### entry in `pending-items.md` immediately at approval
+   - Reflect approved inventory scope in descriptive form
+   - Add inventory artifact reference
+   - Expand summary, scope, and validation requirements
+   - Do NOT add "approved" marker to P-###
+   - Do NOT mark P-### complete
+
+4. **Commit pending-items Separately**: Commit the updated `pending-items.md` in a separate commit
+   - Keeps approval and scope update as distinct operations
+   - Clear audit trail
+
+5. **Approved Artifacts Are Immutable**: Once committed as `*-approved.md`, the artifact MUST NOT be modified
+   - Any changes require a new inventory proposal with incremented sequence number
+   - Validation always references the immutable approved artifact
+
+#### Execution Lifecycle
+
+6. **Execution Slices Only**: Issue-### items defined in the inventory are execution slices only
+   - Issue-### items MUST NOT be inserted into `pending-items.md`
+   - Each Issue-### follows: `proposal → approval → implementation → summary`
+
+7. **Issue-Resolution Loop**: Execution proceeds through the issue-resolution loop:
    ```
    Issue-### proposal → approval → implementation → summary
    ```
 
-5. **Two-Stage Validation**:
+#### Validation Contract
+
+8. **Validation Assumes P-### Already Synchronized**: Validation operations assume the P-### entry in `pending-items.md` already reflects the approved inventory scope
+   - Validators reference the approved artifact directly
+   - P-### descriptive scope matches inventory scope
+
+9. **Two-Stage Validation**:
    - **Primary**: Confirm implemented Issue-### items match the Inventory-Proposal specification
    - **Secondary**: Confirm resulting system state satisfies P-### descriptive requirements
 
-6. **Deferred Issues**: If a deferred Issue-### is required to satisfy P-### requirements, validation MUST fail and P-### cannot be marked complete.
+10. **Deferred Issues**: If a deferred Issue-### is required to satisfy P-### requirements, validation MUST fail and P-### cannot be marked complete.
 
-7. **Completion Authorization**: P-### completion is authorized only by successful validation, not by inventory approval.
+11. **Completion Authorization**: P-### completion is authorized only by successful validation, not by inventory approval.
 
 ### 4. Validation Lookup Behavior
 
@@ -264,4 +296,5 @@ This proposal is complete when:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-14 | Expand Section 3 Inventory Lifecycle Contract with explicit approval sequence (rename, commit artifact, update P-###, commit pending-items, immutability rule); add operational sequencing for validation synchronization; reorganize into Approval Sequence, Execution Lifecycle, and Validation Contract subsections |
 | 1.0 | 2026-02-14 | Initial proposal for Issue-010 |
