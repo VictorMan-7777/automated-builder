@@ -306,6 +306,119 @@ defined in the Deferred / Unapproved + Verification section.
 
 ---
 
+### Inventory-Proposal Lifecycle
+
+This section defines the lifecycle contract for inventory-proposal artifacts.
+
+**Artifact Type Definition:**
+
+- **Name**: `inventory-proposal`
+- **Purpose**: Specification/inventory for implementation; does not execute
+- **Format**: `YYYY-MM-DD__NN__system__<item-id>-inventory-proposal[-approved].md`
+- **Documentation**: See [docs/system/outputs/README.md](./outputs/README.md)
+
+#### Approval Sequence (Operational Steps)
+
+When an Inventory-Proposal is approved:
+
+1. **Rename Artifact**: Rename `*-proposal.md` → `*-approved.md`
+   - Example: `p-084-inventory-proposal.md` → `p-084-inventory-proposal-approved.md`
+   - This marks the artifact as approved
+
+2. **Commit Approved Artifact**: Commit the renamed artifact BEFORE modifying `pending-items.md`
+   - Ensures approved artifact is immutable and version-controlled
+   - Commit message documents approval
+
+3. **Update P-### Descriptive Scope**: Update the corresponding P-### entry in `pending-items.md` immediately at approval
+   - Reflect approved inventory scope in descriptive form
+   - Add inventory artifact reference
+   - Expand summary, scope, and validation requirements
+   - Do NOT add "approved" marker to P-###
+   - Do NOT mark P-### complete
+
+4. **Commit pending-items Separately**: Commit the updated `pending-items.md` in a separate commit
+   - Keeps approval and scope update as distinct operations
+   - Clear audit trail
+
+5. **Approved Artifacts Are Immutable**: Once committed as `*-approved.md`, the artifact MUST NOT be modified
+   - Any changes require a new inventory proposal with incremented sequence number
+   - Validation always references the immutable approved artifact
+
+#### Execution Lifecycle
+
+6. **Execution Slices Only**: Issue-### items defined in the inventory are execution slices only
+   - Issue-### items MUST NOT be inserted into `pending-items.md`
+   - Each Issue-### follows: `proposal → approval → implementation → summary`
+
+7. **Issue-Resolution Loop**: Execution proceeds through the issue-resolution loop:
+   ```
+   Issue-### proposal → approval → implementation → summary
+   ```
+
+#### Validation Contract
+
+8. **Validation Assumes P-### Already Synchronized**: Validation operations assume the P-### entry in `pending-items.md` already reflects the approved inventory scope
+   - Validators reference the approved artifact directly
+   - P-### descriptive scope matches inventory scope
+
+9. **Two-Stage Validation**:
+   - **Primary**: Confirm implemented Issue-### items match the Inventory-Proposal specification
+   - **Secondary**: Confirm resulting system state satisfies P-### descriptive requirements
+
+10. **Deferred Issues**: If a deferred Issue-### is required to satisfy P-### requirements, validation MUST fail and P-### cannot be marked complete.
+
+11. **Completion Authorization**: P-### completion is authorized only by successful validation, not by inventory approval.
+
+---
+
+### Validation Lookup Behavior
+
+**Rule**: Tools and processes MUST reference the most recent inventory-proposal artifact in `docs/system/outputs/` for a given item ID.
+
+**Selection Algorithm**:
+
+1. Scan `docs/system/outputs/` for files matching pattern: `*__system__<item-id>-inventory-proposal-approved.md`
+2. Select artifact with highest date (YYYY-MM-DD)
+3. If multiple artifacts have same date, select highest sequence number (NN)
+4. If no approved inventory found, HALT: "No approved inventory-proposal found for {item-id}"
+
+**Example**:
+- For P-084, locate: `*__system__p-084-inventory-proposal-approved.md`
+- Most recent: `2026-02-13__01__system__p-084-inventory-proposal-approved.md`
+
+---
+
+### Input Normalization vs Artifact Enforcement
+
+**Governing Principle**: Rule files enforce deterministic structure and invariants on **system artifacts**, not on **human input**.
+
+#### Human Input (Flexible)
+
+Human-provided parameters, instructions, and requests are normalized, not rejected:
+
+- Input parsing is interpretive — if intent is understood, proceed
+- Format variations are accepted and normalized to canonical form
+- Examples:
+  - "My Project" → "my-project"
+  - "dg" → "DG"
+  - "make a new project called foo" → project-slug: "foo"
+
+#### System Artifacts (Deterministic)
+
+Enforcement rules apply at **artifact-write time** (not input time):
+
+- Files written to disk MUST conform to strict formats
+- Validation failures HALT execution only when writing to artifacts
+- Rule files enforce: structure, IDs, ordering, invariants **after artifact write**
+
+#### Ambiguity Handling
+
+- If input is ambiguous or intent cannot be determined, ask clarifying questions
+- Do NOT guess or auto-fix ambiguous input
+- Do NOT reject input for minor format variations if intent is clear
+
+---
+
 ### Deferred / Unapproved + Verification
 
 This template runs once at loop end, after all issues have been resolved,

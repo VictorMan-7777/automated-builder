@@ -160,6 +160,50 @@ following this algorithm," not "provided by an external source."
 
 ---
 
+## Artifact Types
+
+### Inventory-Proposal Artifacts
+
+**Name**: `inventory-proposal`
+
+**Purpose**: Specification/inventory for implementation; does not execute.
+
+**Characteristics**:
+- Definition-only artifacts that specify implementation scope
+- Contain Issue-### execution slices (implementation plans)
+- Do not execute directly — implementation happens through Issue-### resolution loop
+- Approved via rename to `*-approved.md`
+- Referenced by parent P-### item in `pending-items.md`
+
+**Naming Convention**:
+
+```
+YYYY-MM-DD__NN__system__<item-id>-inventory-proposal.md        (proposed)
+YYYY-MM-DD__NN__system__<item-id>-inventory-proposal-approved.md  (approved)
+```
+
+**Components**:
+- `YYYY-MM-DD`: Date of creation (ISO format)
+- `NN`: Sequence number (01, 02, etc.) for same-day artifacts
+- `system`: Context identifier
+- `<item-id>`: Parent pending item ID (e.g., `p-084`)
+- `-inventory-proposal`: Type identifier
+- `-approved`: Approval suffix (added after approval)
+
+**Examples**:
+- `2026-02-13__01__system__p-084-inventory-proposal.md` (proposed)
+- `2026-02-13__01__system__p-084-inventory-proposal-approved.md` (approved)
+
+**Distinction from Regular Proposals**:
+- **Regular proposals**: Single-issue implementation plans (Issue-###)
+- **Inventory-proposals**: Multi-issue execution inventories with slice breakdown for P-### items
+
+**Lifecycle**:
+
+See [docs/system/issue-resolution.md](../issue-resolution.md) for the complete Inventory-Proposal Lifecycle Contract.
+
+---
+
 ## Chat vs Repository Relationship
 
 ### Chat Output (Ephemeral)
