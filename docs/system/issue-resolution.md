@@ -1,7 +1,7 @@
 # Issue Numbering and Severity Scheme
 
-**Version**: 1.9
-**Last Updated**: 2026-02-10
+**Version**: 2.0
+**Last Updated**: 2026-02-13
 
 ---
 
@@ -101,6 +101,13 @@ Inventory
 → Deferred / Unapproved + Verification
 → STOP
 ```
+
+### Inventory Branch Rule
+
+The system always starts by creating a proposal for a P-### item. When the
+system reads P-### from `pending-items.md` and the item includes an inventory
+flag, the system uses the Inventory branch behavior defined in the Approval
+and Inventory Validation sections below.
 
 ### Termination Conditions
 
@@ -205,6 +212,25 @@ unapproved and in draft. Claude revises the proposal artifact per the
 instruction. The proposal remains uncommitted and awaits a subsequent
 approval instruction.
 
+**Inventory branch — approved proposal:**
+
+When the user approves a proposal for an inventory item (P-### with inventory
+flag):
+
+1. Apply any approved updates to the proposal.
+2. Rename the proposal artifact from `*-proposal.md` to `*-approved.md`.
+3. Commit the approved inventory proposal artifact.
+4. Update `pending-items.md` for that same P-### to reflect the approved
+   inventory proposal scope in descriptive form (P-### style).
+   - Do NOT add any "approved" marker to the P-### item.
+   - This is a scope sync only.
+5. Commit the updated `pending-items.md`.
+6. Ask the user which Issue-### to generate a proposal for next.
+7. Do NOT mark P-### complete at this stage.
+
+The P-### item remains in Pending until Inventory Validation authorizes
+completion.
+
 **Artifact requirement.** All approvals MUST be saved as approved artifacts
 (the renamed `*-approved.md` file). The approved artifact is the
 authoritative record of what was approved.
@@ -212,6 +238,50 @@ authoritative record of what was approved.
 **Approved artifact immutability.** Once an approved artifact is committed,
 it MUST NOT be modified. The committed artifact is the permanent record of
 what was authorized.
+
+---
+
+### Inventory Validation
+
+This template applies to P-### items with an inventory flag. After an
+Issue-### within the inventory is completed (implementation and summary are
+committed), the system MUST ask:
+
+```
+Next Issue-###? OR Validation?
+```
+
+**Validation behavior:**
+
+When the user selects Validation, the P-### descriptive scope is already
+synchronized with the approved inventory proposal. Validation proceeds as
+follows:
+
+1. **Primary validation.** Validate that the implemented Issue-### work
+   matches the approved inventory proposal.
+
+2. **Deferred analysis.** For each deferred Issue-### item:
+   - Evaluate whether it is required to satisfy the descriptive requirements
+     of the P-### item.
+   - If a deferred Issue-### is required to meet P-### requirements,
+     validation MUST fail.
+   - P-### cannot be marked Completed until all required Issue-### work is
+     implemented.
+
+3. **Deferred handling.** Create NEW pending items in `pending-items.md`
+   from deferred Issue-### items that are NOT required to satisfy P-###
+   requirements, so they are tracked in the canonical backlog.
+
+4. **Secondary validation.** Validate that the final system state satisfies
+   the descriptive requirements in the P-### entry.
+
+5. **Completion authority.** Only after both primary and secondary validation
+   pass AND all required Issue-### work is implemented may the P-### item
+   be marked Completed in `pending-items.md`.
+
+**Artifact requirement.** The validation artifact for an inventory item
+follows the same content requirements as the standard Verification artifact
+defined in the Deferred / Unapproved + Verification section.
 
 ---
 
@@ -287,6 +357,7 @@ artifact.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0 | 2026-02-13 | Add Inventory branch rule, Inventory-specific approval behavior, and Inventory Validation section to support full-loop inventory items with inventory flag on P-### |
 | 1.9 | 2026-02-10 | Add Pending-item context to verification template; shift completion authority from approval to verification (P-015) |
 | 1.8 | 2026-02-10 | Add backlog hygiene rule: move completed P-### items to Completed during execution |
 | 1.7 | 2026-02-10 | Correct loop diagram to show pause-for-review and execution-trigger semantics; add approved artifact immutability rule |
