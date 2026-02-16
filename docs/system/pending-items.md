@@ -1657,6 +1657,50 @@ No action is taken until explicitly promoted.
   - It does not prohibit true parallel execution.
   - It preserves audit clarity and deterministic validation.
 
+### P-089 — Inventory Approval Must Declare Issue Sequence Status
+- Source: Inventory governance clarification
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Require explicit declaration of Issue-### sequence status when an
+  inventory artifact is approved so downstream verification can rely on
+  deterministic ordering. Preserve existing lifecycle, approval triggers,
+  and inventory authority while eliminating implicit ordering assumptions.
+- Objective:
+  Require explicit declaration of Issue-### sequence status at the time an
+  inventory artifact is approved.
+- Problem:
+  Currently, when an inventory is approved:
+  - The artifact is renamed and committed.
+  - Descriptive scope in pending-items is synchronized.
+  - The Issue-### execution loop begins.
+  However, there is no explicit declaration whether:
+  - The Issue-### ordering is approved exactly as written in the inventory artifact, or
+  - The Issue-### ordering was modified during approval.
+  This creates ambiguity for later Stage-1 and Stage-2 verification.
+- Rule Definition:
+  When approving an inventory artifact, the approval record MUST explicitly
+  state one of:
+  - "Issue sequence approved as written."
+  - "Issue sequence modified during approval."
+  If modified:
+  - The modification must be described.
+  - The inventory-approved artifact must reflect the updated sequence before rename/commit.
+- Acceptance Criteria:
+  - Inventory approval commit message includes sequence status.
+  - Implementation summary references sequence status.
+  - Stage-1 verification can rely on a deterministic Issue ordering.
+  - No implicit ordering assumptions remain.
+- Scope:
+  - Applies only to Inventory P-### items.
+  - Does not alter Issue-### lifecycle.
+  - Does not change Stage-1 or Stage-2 authority.
+  - Governance-only clarification.
+- Notes:
+  - Prevents silent reordering.
+  - Preserves deterministic validation.
+  - Supports session-independent execution.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
