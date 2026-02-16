@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# run-create-project — Command scaffolding for project creation
+# Issue-002 implementation: parameter parsing and normalization only
+# Does NOT create files (deferred to Issue-005, Issue-006, Issue-011)
+
+# BUILDER_ROOT definition
+# BUILDER_ROOT = absolute path to the automated-builder repository root
+# (the directory containing .git/, templates/, prompts/, etc.)
+# NOT the umbrella projects directory that contains multiple project repositories
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILDER_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Default parent directory (umbrella projects directory)
+DEFAULT_PARENT_DIR="$(dirname "${BUILDER_ROOT}")"
+
+# Usage text
+usage() {
+  cat <<EOF
+Usage: run-create-project --slug <project-slug> --name "<Project Name>" --prefix <PREFIX> [--parent-dir <path>]
+
+Creates a new project with normalized parameters.
+
+Required Parameters:
+  --slug <project-slug>     Project identifier (normalized to lowercase-hyphen format)
+  --name "<Project Name>"   Human-readable project name
+  --prefix <PREFIX>         Project prefix (1-4 uppercase letters)
+
+Optional Parameters:
+  --parent-dir <path>       Parent directory for project (default: ${DEFAULT_PARENT_DIR})
+
+Examples:
+  run-create-project --slug my-project --name "My Project" --prefix MP
+  run-create-project --slug "My_Cool-App" --name "My Cool App" --prefix "dg"
+
+Normalization:
+  - Slug: Converts to lowercase, replaces underscores/spaces with hyphens
+  - Name: Trims whitespace, normalizes internal whitespace
+  - Prefix: Converts to uppercase, validates 1-4 letter format
+
+Note: Prefix derivation is not supported (deferred to Issue-004).
+      This command validates parameters but does NOT create files yet.
+
+BUILDER_ROOT: ${BUILDER_ROOT}
+Default parent-dir: ${DEFAULT_PARENT_DIR}
+EOF
+  exit "${1:-0}"
+}
+
+# Error handling
+error() {
+  echo "Error: $1" >&2
+  exit 1
+}
+
+validation_error() {
+  echo "Validation Error: $1" >&2
+  exit 1
+}
+
+usage_error() {
+  echo "Usage Error: $1" >&2
+  echo "Run 'run-create-project --help' for usage information." >&2
+  exit 2
+}
+
+# Parameter parsing
+SLUG=""
+NAME=""
+PREFIX=""
+PARENT_DIR="${DEFAULT_PARENT_DIR}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --slug)
+      SLUG="$2"
+      shift 2
+      ;;
+    --name)
+      NAME="$2"
+      shift 2
+      ;;
+    --prefix)
+      PREFIX="$2"
+      shift 2
+      ;;
+    --parent-dir)
+      PARENT_DIR="$2"
+      shift 2
+      ;;
+    --help|-h)
+      usage 0
+      ;;
+    *)
+      usage_error "Unknown parameter: $1"
+      ;;
+  esac
+done
+
+# Validate required parameters
+[[ -z "${SLUG}" ]] && usage_error "Missing required parameter: --slug"
+[[ -z "${NAME}" ]] && usage_error "Missing required parameter: --name"
+[[ -z "${PREFIX}" ]] && usage_error "Missing required parameter: --prefix"
+
+# Normalization functions
+
+normalize_slug() {
+  local input="$1"
+  # Convert to lowercase
+  local normalized="${input,,}"
+  # Replace underscores and spaces with hyphens
+  normalized="${normalized//_/-}"
+  normalized="${normalized// /-}"
+  # Remove leading hyphens
+  normalized="${normalized#"${normalized%%[!-]*}"}"
+  # Remove trailing hyphens
+  normalized="${normalized%"${normalized##*[!-]}"}"
+  echo "${normalized}"
+}
+
+normalize_name() {
+  local input="$1"
+  # Trim leading/trailing whitespace
+  local normalized="${input#"${input%%[![:space:]]*}"}"
+  normalized="${normalized%"${normalized##*[![:space:]]}"}"
+  # Normalize internal whitespace to single spaces
+  normalized="$(echo "${normalized}" | tr -s '[:space:]' ' ')"
+  echo "${normalized}"
+}
+
+normalize_prefix() {
+  local input="$1"
+  # Trim whitespace
+  local normalized="${input#"${input%%[![:space:]]*}"}"
+  normalized="${normalized%"${normalized##*[![:space:]]}"}"
+  # Convert to uppercase
+  normalized="${normalized^^}"
+  echo "${normalized}"
+}
+
+normalize_parent_dir() {
+  local input="$1"
+  # Expand to absolute path
+  if [[ "${input:0:1}" != "/" ]]; then
+    input="$(cd "${input}" 2>/dev/null && pwd)" || validation_error "Parent directory does not exist: ${input}"
+  fi
+  echo "${input}"
+}
+
+# Apply normalization
+NORMALIZED_SLUG="$(normalize_slug "${SLUG}")"
+NORMALIZED_NAME="$(normalize_name "${NAME}")"
+NORMALIZED_PREFIX="$(normalize_prefix "${PREFIX}")"
+NORMALIZED_PARENT_DIR="$(normalize_parent_dir "${PARENT_DIR}")"
+
+# Validation (basic sanity checks only, strict validation deferred to artifact-write time)
+
+# Slug validation: ^[a-z][a-z0-9-]*[a-z0-9]$
+if [[ ! "${NORMALIZED_SLUG}" =~ ^[a-z][a-z0-9-]*[a-z0-9]$ ]]; then
+  validation_error "Invalid slug format after normalization: '${NORMALIZED_SLUG}' (expected: lowercase letters, numbers, hyphens; must start with letter, end with letter or number)"
+fi
+
+# Name validation: non-empty
+if [[ -z "${NORMALIZED_NAME}" ]]; then
+  validation_error "Project name cannot be empty after normalization"
+fi
+
+# Prefix validation: ^[A-Z]{1,4}$
+if [[ ! "${NORMALIZED_PREFIX}" =~ ^[A-Z]{1,4}$ ]]; then
+  validation_error "Invalid prefix format after normalization: '${NORMALIZED_PREFIX}' (expected: 1-4 uppercase letters, got '${PREFIX}' → '${NORMALIZED_PREFIX}')"
+fi
+
+# Parent-dir validation: exists (basic check)
+if [[ ! -d "${NORMALIZED_PARENT_DIR}" ]]; then
+  validation_error "Parent directory does not exist: ${NORMALIZED_PARENT_DIR}"
+fi
+
+# Success: print normalized values
+echo "✅ Parameter validation successful"
+echo ""
+echo "Normalized Parameters:"
+echo "  project-slug: ${NORMALIZED_SLUG}"
+echo "  project-name: ${NORMALIZED_NAME}"
+echo "  prefix:       ${NORMALIZED_PREFIX}"
+echo "  parent-dir:   ${NORMALIZED_PARENT_DIR}"
+echo ""
+echo "BUILDER_ROOT:   ${BUILDER_ROOT}"
+echo ""
+echo "Note: File creation is deferred to Issue-005, Issue-006, Issue-011"
+echo "      This command performs parameter validation only."
+
+exit 0
