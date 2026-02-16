@@ -1558,6 +1558,50 @@ No action is taken until explicitly promoted.
   pending-items.md must be updated to reflect the approved revision text.
   Validation may reference P-### and must be able to trust it is current.
 
+### P-087 — Pending Items "Current Status" Field (Session Reorientation Removal)
+- Source: Session continuity and governance update
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Add a descriptive "Current Status" field to pending items so sessions
+  can resume from file state rather than prior chat context. Keep lifecycle
+  logic unchanged while making the next action and stage visibility explicit
+  for standard and inventory P-### workflows.
+- Objective:
+  Add a "Current Status" field to pending items so the system can reliably
+  resume work across sessions without requiring large reorientation prompts.
+- Scope:
+  - Update docs/system/pending-items.md format to include a Current Status block for:
+    - Standard P-### items
+    - Inventory P-### items
+  - Define allowed status fields and minimal required fields for each type.
+  - Define update authority rules:
+    - Which lifecycle step updates Current Status (approval, issue execution, verification,
+      inventory verification stage 1/2).
+    - Ensure Current Status is descriptive and does not become a second source of truth.
+  - Update issue-resolution governance to reference Current Status as the canonical resume point:
+    - docs/system/issue-resolution.md
+    - docs/system/issue-resolution-rules.md
+    - docs/system/issue-resolution-templates.md
+  - Do not redesign workflows; only add status surfacing and update instructions.
+- Acceptance Criteria:
+  - pending-items.md includes a clearly defined Current Status block for both standard
+    and inventory P-### items.
+  - Issue-resolution templates explicitly instruct updating Current Status at the correct
+    lifecycle steps.
+  - A fresh session can identify the next action for a P-### by reading:
+    1) the P-### entry (Current Status + descriptive scope), and
+    2) the relevant approved/summary artifacts as needed,
+    without relying on prior chat context.
+- Dependencies:
+  - Issue-resolution components are the authority for lifecycle steps and must remain consistent:
+    - docs/system/issue-resolution.md
+    - docs/system/issue-resolution-rules.md
+    - docs/system/issue-resolution-templates.md
+- Notes:
+  - Current Status must remain descriptive, not a second approval/validation mechanism.
+  - Inventory must support "Issue Loop in progress" and "Inventory Verification Stage 1/2" states.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
