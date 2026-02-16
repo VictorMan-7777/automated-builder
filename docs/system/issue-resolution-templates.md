@@ -301,7 +301,9 @@ You are in BOUNDED mode. No scope expansion.
 
 Stage-1 Dependency Gate:
 
-Stage-2 MUST fail if a Stage-1 PASS artifact does not exist.
+Stage-2 MUST search docs/system/outputs/ for Stage-1 artifacts in reverse chronological order (newest first).
+Stage-2 MUST choose the newest artifact containing 'Verdict: PASS'.
+If no PASS artifact is found, Stage-2 MUST fail immediately.
 Stage-2 MUST explicitly cite the Stage-1 PASS artifact filename.
 Stage-2 MUST fail if the cited Stage-1 artifact does not contain "Verdict: PASS".
 

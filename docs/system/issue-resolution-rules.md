@@ -217,6 +217,8 @@ Inventory Verification Stage-1 Hardening Rules
 
 6. Machine-Verifiable Requirement: Stage-1 PASS must be determinable solely by reading the Stage-1 artifact. External inference or memory is not permitted.
 
+7. Newest Valid Artifact Selection Rule: When locating Stage-1 artifacts (or other verification prerequisites), the system MUST prefer the most recent artifact that satisfies the required condition (e.g., contains 'Verdict: PASS'). The system MUST NOT stop at the first matching filename if it fails the gate condition. If multiple candidates exist, select the newest candidate that satisfies the condition.
+
 Proposal Self-Review Rule
 
 After producing a proposal artifact, the system MUST immediately review the proposal against:
