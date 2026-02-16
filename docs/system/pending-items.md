@@ -1975,6 +1975,38 @@ No action is taken until explicitly promoted.
 - Notes:
   - This is a structural validation run, not a content-generation milestone.
 
+### P-096 — Define When Issue-Resolution Requires a New Session
+- Source: Session-boundary governance clarification
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Codify deterministic session-boundary rules for issue-resolution so
+  workflows can continue safely without context drift or indexing
+  ambiguity. Define when a new session is required versus when in-session
+  continuation is allowed, without changing lifecycle gate authority.
+- Objective:
+  Codify a deterministic rule for when an Issue-Resolution workflow must
+  start a new session versus continuing in the current session.
+- Problem:
+  Manual governance updates and multi-issue execution can span long
+  sessions. Without explicit session-boundary rules, context drift and
+  session indexing ambiguity increase, especially as automation expands.
+- Scope:
+  Define session-boundary requirements for:
+  - Inventory verification stages
+  - Proposal -> self-review -> approval -> implementation loops
+  - Parallel issue execution (if allowed)
+  - Large governance edits (rules/templates changes)
+  - Renumbering / artifact renames / admin clarifications
+- Acceptance Criteria:
+  - A clear rule defining when a new session is REQUIRED.
+  - A clear rule defining when continuing in-session is permitted.
+  - A deterministic session start prompt header convention is referenced.
+  - No impact to lifecycle authority (approval/verification gates unchanged).
+- Notes:
+  - This is governance-only.
+  - No changes to existing approved artifacts.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
