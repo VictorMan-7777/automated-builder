@@ -107,8 +107,8 @@ done
 
 normalize_slug() {
   local input="$1"
-  # Convert to lowercase
-  local normalized="${input,,}"
+  # Convert to lowercase (bash 3.2 compatible)
+  local normalized="$(echo "$input" | tr '[:upper:]' '[:lower:]')"
   # Replace underscores and spaces with hyphens
   normalized="${normalized//_/-}"
   normalized="${normalized// /-}"
@@ -134,8 +134,8 @@ normalize_prefix() {
   # Trim whitespace
   local normalized="${input#"${input%%[![:space:]]*}"}"
   normalized="${normalized%"${normalized##*[![:space:]]}"}"
-  # Convert to uppercase
-  normalized="${normalized^^}"
+  # Convert to uppercase (bash 3.2 compatible)
+  normalized="$(echo "$normalized" | tr '[:lower:]' '[:upper:]')"
   echo "${normalized}"
 }
 
