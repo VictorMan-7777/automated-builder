@@ -31,7 +31,8 @@ Implement P-084 Section 2.3 placeholder substitution from project.yaml as source
 - ❌ ai-process.md deployment (handled by Issue-011)
 - ❌ Governance file copying (prohibited by Section 4.1)
 - ❌ Git initialization (explicit non-goal per P-084 Section 7)
-- ❌ YAML parsing for project.yaml (already validated in Issue-005)
+- ❌ YAML syntax and semantic validation (explicitly deferred to Issue-009)
+- ❌ Full YAML parsing for project.yaml (Issue-006 uses simple field extraction only)
 
 ---
 
@@ -57,10 +58,11 @@ Implement P-084 Section 2.3 placeholder substitution from project.yaml as source
 - [ ] Directory permissions allow read/write/execute (755 or better)
 
 **Validation**:
-- [ ] HALT: "Unresolved token in {file}" if any `{...}` patterns remain (except code blocks)
+- [ ] HALT: "Unresolved token in {file}" if allowed token patterns remain (`{project-slug}`, `{Project Slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}`)
 - [ ] HALT: "Empty value for token" if any token replaced with empty string
 - [ ] HALT: "Inconsistency detected" if any file contains values not matching project.yaml
 - [ ] All 8 non-ai-process bootstrap files exist after completion (project.yaml + 5 files + 2 .gitkeep files)
+- [ ] Full YAML syntax and semantic validation explicitly deferred to Issue-009
 
 **Token Substitution Safety**:
 - [ ] Reuses escape_sed() function from Issue-005
@@ -91,9 +93,11 @@ Implement P-084 Section 2.3 placeholder substitution from project.yaml as source
 
 | Check | Acceptance Criteria | Failure Behavior |
 |-------|---------------------|------------------|
-| No unreplaced tokens | No `{...}` patterns remain except in code blocks or examples | HALT: "Unresolved token in {filename}: {token}" |
+| No unreplaced tokens | No allowed token patterns remain: `{project-slug}`, `{Project Slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}` | HALT: "Unresolved token in {filename}: {token}" |
 | No empty values | No tokens replaced with empty strings | HALT: "Empty value for token: {token}" |
 | Date format valid | `{YYYY-MM-DD}` is valid ISO 8601 date | HALT: "Invalid date format: {value}" |
+
+**Token Detection Strategy**: Explicit pattern matching for allowed tokens only. Other brace patterns (e.g., code examples, JSON snippets) in generated files are not validated.
 
 ### Section 3 — Bootstrap File Specifications
 
@@ -123,8 +127,10 @@ Extend `scripts/run-create-project` to read identity values from deployed projec
 read_yaml_field() {
   local file="$1"
   local field="$2"
-  # Extract value after "field: " (handles quoted and unquoted values)
-  local value="$(grep "^  ${field}:" "${file}" | sed 's/^  [^:]*: *//' | sed 's/^"\(.*\)"$/\1/' | sed "s/^'\(.*\)'$/\1/")"
+  # Extract value from identity: block only using bounded awk extraction
+  # awk extracts lines BETWEEN "identity:" and next top-level key (exclusive of both endpoints)
+  # then grep searches only within that extracted block
+  local value="$(awk '/^identity:/ {in_identity=1; next} /^[a-z_]+:/ {if (in_identity) exit} in_identity {print}' "${file}" | grep "^  ${field}:" | head -1 | sed 's/^  [^:]*: *//' | sed 's/^"\(.*\)"$/\1/' | sed "s/^'\(.*\)'$/\1/")"
   echo "${value}"
 }
 
@@ -138,7 +144,12 @@ if [[ ! -r "${PROJECT_YAML}" ]]; then
   validation_error "Cannot read project.yaml: file not readable"
 fi
 
-# Extract identity values (source-of-truth)
+# Verify identity: block exists (scoped extraction)
+if ! grep -q "^identity:" "${PROJECT_YAML}"; then
+  validation_error "Invalid project.yaml structure: missing identity: block"
+fi
+
+# Extract identity values from identity: block (source-of-truth)
 IDENTITY_SLUG="$(read_yaml_field "${PROJECT_YAML}" "slug")"
 IDENTITY_NAME="$(read_yaml_field "${PROJECT_YAML}" "name")"
 IDENTITY_PREFIX="$(read_yaml_field "${PROJECT_YAML}" "prefix")"
@@ -200,9 +211,9 @@ render_template() {
     validation_error "Failed to create ${output_file}"
   fi
 
-  # Check for unresolved tokens (excluding code blocks - basic check)
-  if grep -q '{.*}' "${output_file}"; then
-    UNRESOLVED=$(grep -o '{[^}]*}' "${output_file}" | head -1)
+  # Check for unresolved allowed tokens (explicit pattern matching)
+  if grep -E '\{(project-slug|Project Slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${output_file}" >/dev/null 2>&1; then
+    UNRESOLVED=$(grep -oE '\{(project-slug|Project Slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${output_file}" | head -1)
     validation_error "Unresolved token in ${output_file}: ${UNRESOLVED}"
   fi
 
@@ -268,7 +279,7 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 1. **Template existence**: Check template file before rendering
 2. **File creation**: Verify output file exists after rendering
-3. **Unresolved tokens**: grep for `{...}` patterns (basic check)
+3. **Unresolved tokens**: Explicit grep for allowed token patterns only (`{project-slug}`, `{Project Slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}`)
 4. **File readability**: Check file permissions
 
 ### Source-of-Truth Validation
@@ -281,9 +292,9 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 1. **All files exist**: 8 required files present
 2. **Directories created**: phases/ and docs/system/outputs/ exist
-3. **No unresolved tokens**: No `{...}` patterns remain (basic check)
+3. **No unresolved tokens**: Explicit check for allowed token patterns (`{project-slug}`, `{Project Slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}`)
 
-**Note**: Code block handling (excluding `{...}` in markdown code blocks) is a basic grep check. Full AST-based parsing is deferred.
+**YAML Validation Scope**: Issue-006 performs simple field extraction from project.yaml using grep/sed. Full YAML syntax and semantic validation (schema structure, field format patterns, type checking) is explicitly deferred to Issue-009.
 
 ---
 
@@ -316,8 +327,6 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
   - Mitigation: Reuse escape_sed() function and sed patterns from Issue-005
 - **Directory creation permissions issues**: Cannot create phases/ or docs/system/outputs/
   - Mitigation: Check mkdir success; validate directory exists after creation
-- **Code block tokens falsely detected**: Grep finds `{...}` in markdown code blocks
-  - Mitigation: Basic grep check; false positives acceptable for MVP (manual review catches them)
 
 ---
 
@@ -335,9 +344,9 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 2. **Token substitution verification**:
    ```bash
    run-create-project --slug token-test --name "Token Test App" --prefix TT
-   grep -r '{' ../token-test/
+   grep -Er '\{(project-slug|Project Slug|Project Name|PREFIX|YYYY-MM-DD)\}' ../token-test/
    ```
-   Expected: No unresolved `{...}` tokens (except in code blocks)
+   Expected: No unresolved allowed token patterns found
 
 3. **Source-of-truth reading**:
    ```bash
