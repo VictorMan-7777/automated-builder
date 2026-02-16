@@ -457,13 +457,67 @@ for file in "${ALL_REQUIRED_FILES[@]}"; do
   fi
 done
 
+# === Issue-008: Deploy pending-items-rules.md ===
+
+# Template path and output path
+PENDING_ITEMS_TEMPLATE="${BUILDER_ROOT}/templates/project/pending-items-rules.md.tmpl"
+PENDING_ITEMS_OUTPUT="${PROJECT_PATH}/docs/system/pending-items-rules.md"
+
+# Verify template exists
+if [[ ! -f "${PENDING_ITEMS_TEMPLATE}" ]]; then
+  validation_error "Template not found: ${PENDING_ITEMS_TEMPLATE}"
+fi
+
+# Verify docs/system/outputs/ directory exists (created in Issue-006)
+# This implicitly confirms docs/system/ exists (parent of outputs/)
+if [[ ! -d "${PROJECT_PATH}/docs/system/outputs" ]]; then
+  validation_error "docs/system/outputs/ directory missing (should have been created in Issue-006)"
+fi
+
+# Render template with safe token substitution (reuse escaped values from Issue-006/011)
+cat "${PENDING_ITEMS_TEMPLATE}" \
+  | sed "s|{project-slug}|${ESCAPED_SLUG}|g" \
+  | sed "s|{Project Name}|${ESCAPED_NAME}|g" \
+  | sed "s|{PREFIX}|${ESCAPED_PREFIX}|g" \
+  > "${PENDING_ITEMS_OUTPUT}"
+
+# Validate file created
+if [[ ! -f "${PENDING_ITEMS_OUTPUT}" ]]; then
+  validation_error "Failed to create docs/system/pending-items-rules.md"
+fi
+
+# Check for unresolved allowed tokens (explicit pattern matching)
+# Only 3 tokens for this template: project-slug, Project Name, PREFIX
+if grep -E '\{(project-slug|Project Name|PREFIX)\}' "${PENDING_ITEMS_OUTPUT}" >/dev/null 2>&1; then
+  UNRESOLVED=$(grep -oE '\{(project-slug|Project Name|PREFIX)\}' "${PENDING_ITEMS_OUTPUT}" | head -1)
+  validation_error "Unresolved token in pending-items-rules.md: ${UNRESOLVED}"
+fi
+
+# Validate file readable
+if [[ ! -r "${PENDING_ITEMS_OUTPUT}" ]]; then
+  validation_error "Cannot read: docs/system/pending-items-rules.md"
+fi
+
+# Verify required artifacts from dependencies exist (Issues 005, 006, 011)
+ISSUE_008_DEPENDENCIES=(
+  "project.yaml"                      # Issue-005
+  "docs/system/outputs/.gitkeep"      # Issue-006
+  "docs/system/ai-process.md"         # Issue-011
+)
+
+for file in "${ISSUE_008_DEPENDENCIES[@]}"; do
+  if [[ ! -f "${PROJECT_PATH}/${file}" ]]; then
+    validation_error "Dependency artifact missing: ${file}"
+  fi
+done
+
 # Success: print normalized values, path resolution, and project creation
 echo "✅ Parameter validation successful"
 echo "✅ Path resolution successful"
 echo "✅ project.yaml created (YAML validation deferred to Issue-009)"
 echo "✅ All bootstrap files created successfully"
 echo "✅ ai-process.md deployed successfully"
-echo "✅ All 9 required bootstrap files exist"
+echo "✅ pending-items-rules.md deployed successfully"
 echo ""
 echo "Normalized Parameters:"
 echo "  project-slug: ${NORMALIZED_SLUG}"
@@ -484,6 +538,7 @@ echo "  roadmap.md:           ${PROJECT_PATH}/roadmap.md"
 echo "  iteration-log.md:     ${PROJECT_PATH}/iteration-log.md"
 echo "  builder-manifest.yaml: ${PROJECT_PATH}/builder-manifest.yaml"
 echo "  ai-process.md:        ${PROJECT_PATH}/docs/system/ai-process.md"
+echo "  pending-items-rules.md: ${PROJECT_PATH}/docs/system/pending-items-rules.md"
 echo ""
 echo "Created Directories:"
 echo "  phases/:              ${PROJECT_PATH}/phases/"
@@ -495,8 +550,9 @@ echo "  ✅ No nesting detected"
 echo "  ✅ Relative path invariant satisfied"
 echo ""
 echo "Bootstrap Complete:"
-echo "  ✅ All 9 required files created"
+echo "  ✅ All bootstrap artifacts created"
 echo "  ✅ AI Process Contract deployed"
+echo "  ✅ Namespace mapping documented (P-### → ${NORMALIZED_PREFIX}-###)"
 echo "  ✅ Ready for project planning and building"
 echo ""
 echo "Note: YAML syntax and semantic validation deferred to Issue-009"
