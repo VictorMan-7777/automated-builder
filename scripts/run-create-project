@@ -276,10 +276,127 @@ if [[ ! -r "${PROJECT_PATH}/project.yaml" ]]; then
   validation_error "project.yaml is not readable"
 fi
 
+# === Issue-006: Create remaining bootstrap files from project.yaml ===
+
+# Read identity values from project.yaml (source-of-truth)
+read_yaml_field() {
+  local file="$1"
+  local field="$2"
+  # Extract value from identity: block only using bounded awk extraction
+  # awk extracts lines BETWEEN "identity:" and next top-level key (exclusive of both endpoints)
+  # then grep searches only within that extracted block
+  local value="$(awk '/^identity:/ {in_identity=1; next} /^[a-z_]+:/ {if (in_identity) exit} in_identity {print}' "${file}" | grep "^  ${field}:" | head -1 | sed 's/^  [^:]*: *//' | sed 's/^"\(.*\)"$/\1/' | sed "s/^'\(.*\)'$/\1/")"
+  echo "${value}"
+}
+
+PROJECT_YAML="${PROJECT_PATH}/project.yaml"
+
+# Verify project.yaml exists and is readable (should already be true from Issue-005)
+if [[ ! -f "${PROJECT_YAML}" ]]; then
+  validation_error "Cannot read project.yaml: file missing"
+fi
+if [[ ! -r "${PROJECT_YAML}" ]]; then
+  validation_error "Cannot read project.yaml: file not readable"
+fi
+
+# Verify identity: block exists (scoped extraction)
+if ! grep -q "^identity:" "${PROJECT_YAML}"; then
+  validation_error "Invalid project.yaml structure: missing identity: block"
+fi
+
+# Extract identity values from identity: block (source-of-truth)
+IDENTITY_SLUG="$(read_yaml_field "${PROJECT_YAML}" "slug")"
+IDENTITY_NAME="$(read_yaml_field "${PROJECT_YAML}" "name")"
+IDENTITY_PREFIX="$(read_yaml_field "${PROJECT_YAML}" "prefix")"
+IDENTITY_CREATED="$(read_yaml_field "${PROJECT_YAML}" "created")"
+
+# Validate extracted values (basic non-empty check)
+[[ -z "${IDENTITY_SLUG}" ]] && validation_error "Invalid project.yaml structure: missing identity.slug"
+[[ -z "${IDENTITY_NAME}" ]] && validation_error "Invalid project.yaml structure: missing identity.name"
+[[ -z "${IDENTITY_PREFIX}" ]] && validation_error "Invalid project.yaml structure: missing identity.prefix"
+[[ -z "${IDENTITY_CREATED}" ]] && validation_error "Invalid project.yaml structure: missing identity.created"
+
+# Create directories with .gitkeep
+mkdir -p "${PROJECT_PATH}/phases" || validation_error "Cannot create phases directory"
+touch "${PROJECT_PATH}/phases/.gitkeep" || validation_error "Cannot create phases/.gitkeep"
+
+mkdir -p "${PROJECT_PATH}/docs/system/outputs" || validation_error "Cannot create docs/system/outputs directory"
+touch "${PROJECT_PATH}/docs/system/outputs/.gitkeep" || validation_error "Cannot create docs/system/outputs/.gitkeep"
+
+# Escape values for safe sed substitution (reuse from Issue-005)
+ESCAPED_SLUG="$(escape_sed "${IDENTITY_SLUG}")"
+ESCAPED_NAME="$(escape_sed "${IDENTITY_NAME}")"
+ESCAPED_PREFIX="$(escape_sed "${IDENTITY_PREFIX}")"
+ESCAPED_CREATED="$(escape_sed "${IDENTITY_CREATED}")"
+
+# Render each template
+render_template() {
+  local template_name="$1"
+  local output_file="$2"
+
+  local template_path="${BUILDER_ROOT}/templates/project/${template_name}.tmpl"
+
+  # Verify template exists
+  if [[ ! -f "${template_path}" ]]; then
+    validation_error "Template not found: ${template_path}"
+  fi
+
+  # Render template with safe token substitution (use '|' delimiter)
+  cat "${template_path}" \
+    | sed "s|{project-slug}|${ESCAPED_SLUG}|g" \
+    | sed "s|{Project Slug}|${ESCAPED_SLUG}|g" \
+    | sed "s|{Project Name}|${ESCAPED_NAME}|g" \
+    | sed "s|{PREFIX}|${ESCAPED_PREFIX}|g" \
+    | sed "s|{YYYY-MM-DD}|${ESCAPED_CREATED}|g" \
+    > "${output_file}"
+
+  # Validate file created
+  if [[ ! -f "${output_file}" ]]; then
+    validation_error "Failed to create ${output_file}"
+  fi
+
+  # Check for unresolved allowed tokens (explicit pattern matching)
+  if grep -E '\{(project-slug|Project Slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${output_file}" >/dev/null 2>&1; then
+    UNRESOLVED=$(grep -oE '\{(project-slug|Project Slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${output_file}" | head -1)
+    validation_error "Unresolved token in ${output_file}: ${UNRESOLVED}"
+  fi
+
+  # Validate file readable
+  if [[ ! -r "${output_file}" ]]; then
+    validation_error "${output_file} is not readable"
+  fi
+}
+
+# Create bootstrap files
+render_template "index.md" "${PROJECT_PATH}/index.md"
+render_template "prd.md" "${PROJECT_PATH}/prd.md"
+render_template "roadmap.md" "${PROJECT_PATH}/roadmap.md"
+render_template "iteration-log.md" "${PROJECT_PATH}/iteration-log.md"
+render_template "builder-manifest.yaml" "${PROJECT_PATH}/builder-manifest.yaml"
+
+# Verify all required files exist (8 files total: 1 + 5 + 2 .gitkeep)
+REQUIRED_FILES=(
+  "project.yaml"
+  "index.md"
+  "prd.md"
+  "roadmap.md"
+  "iteration-log.md"
+  "builder-manifest.yaml"
+  "phases/.gitkeep"
+  "docs/system/outputs/.gitkeep"
+)
+
+for file in "${REQUIRED_FILES[@]}"; do
+  if [[ ! -f "${PROJECT_PATH}/${file}" ]]; then
+    validation_error "Required file missing: ${file}"
+  fi
+done
+
 # Success: print normalized values, path resolution, and project creation
 echo "✅ Parameter validation successful"
 echo "✅ Path resolution successful"
 echo "✅ project.yaml created (YAML validation deferred to Issue-009)"
+echo "✅ All bootstrap files created successfully"
 echo ""
 echo "Normalized Parameters:"
 echo "  project-slug: ${NORMALIZED_SLUG}"
@@ -292,16 +409,25 @@ echo "  BUILDER_ROOT: ${BUILDER_ROOT}"
 echo "  PARENT_DIR:   ${PARENT_DIR}"
 echo "  PROJECT_PATH: ${PROJECT_PATH}"
 echo ""
-echo "Created:"
-echo "  PROJECT_PATH: ${PROJECT_PATH}"
-echo "  project.yaml: ${PROJECT_PATH}/project.yaml"
+echo "Created Files:"
+echo "  project.yaml:         ${PROJECT_PATH}/project.yaml"
+echo "  index.md:             ${PROJECT_PATH}/index.md"
+echo "  prd.md:               ${PROJECT_PATH}/prd.md"
+echo "  roadmap.md:           ${PROJECT_PATH}/roadmap.md"
+echo "  iteration-log.md:     ${PROJECT_PATH}/iteration-log.md"
+echo "  builder-manifest.yaml: ${PROJECT_PATH}/builder-manifest.yaml"
+echo ""
+echo "Created Directories:"
+echo "  phases/:              ${PROJECT_PATH}/phases/"
+echo "  docs/system/outputs/: ${PROJECT_PATH}/docs/system/outputs/"
 echo ""
 echo "Path Invariants:"
 echo "  ✅ Sibling structure verified"
 echo "  ✅ No nesting detected"
 echo "  ✅ Relative path invariant satisfied"
 echo ""
-echo "Note: Additional file creation is deferred to Issue-006, Issue-011"
+echo "Note: ai-process.md deployment is deferred to Issue-011"
 echo "      YAML syntax and semantic validation deferred to Issue-009"
+echo "      Git initialization is explicit non-goal per P-084 Section 7"
 
 exit 0
