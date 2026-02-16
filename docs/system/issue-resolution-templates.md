@@ -20,6 +20,12 @@ Behavior:
 
 The proposal artifact remains uncommitted so the human can review it before approval.
 
+STOP.
+
+Transition Binding Rule:
+
+When the human responds "Approved" or "Approved with <updates>", immediately execute the relevant Approval Template below (Regular P-### or Inventory, depending on the issue type). Do NOT pause or request further instruction.
+
 ------------------------------------------------------------
 
 Approval Template (Regular P-###)
