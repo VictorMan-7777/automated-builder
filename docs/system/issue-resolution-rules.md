@@ -266,6 +266,18 @@ Inventory Verification Stage-2 Dependency Rules
    - Stage-2 artifact explicitly references the Stage-1 PASS artifact.
    - The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
 
+5. Windowed Stage-1 PASS Discovery Rule: When locating the Stage-1 PASS artifact prerequisite for Stage-2:
+   - Locate the most recent Stage-1 verification artifact for the inventory item (P-###).
+   - If it contains "Verdict: PASS", use it.
+   - If it does NOT contain "Verdict: PASS", search only newer artifacts (created after that artifact) for a Stage-1 artifact with "Verdict: PASS".
+   - Select the newest Stage-1 artifact that satisfies "Verdict: PASS".
+   - If no PASS artifact exists in the search window, Stage-2 MUST FAIL.
+
+6. Automation Non-Interleaving Invariant (Mode: Automated only): When executing inventory verification in automated mode:
+   - Automated inventory runs MUST NOT have other P-### or inventory verification artifacts interleaved between attempts for the same P-###.
+   - If interleaving is detected (another P-### or verification artifact exists between consecutive attempts for the same P-###), HALT with: "Invariant violation: Interleaved artifacts detected for P-###. Manual review required."
+   - This invariant applies only to automated execution. Human-guided execution is not subject to this constraint.
+
 Validation Lookup Rule
 
 Tools and processes MUST reference the most recent inventory-proposal artifact for a given item ID:

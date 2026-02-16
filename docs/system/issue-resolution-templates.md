@@ -301,10 +301,14 @@ You are in BOUNDED mode. No scope expansion.
 
 Stage-1 Dependency Gate:
 
-Stage-2 MUST search docs/system/outputs/ for Stage-1 artifacts in reverse chronological order (newest first).
-Stage-2 MUST choose the newest artifact containing 'Verdict: PASS'.
-If no PASS artifact is found, Stage-2 MUST fail immediately.
-Stage-2 MUST explicitly cite the Stage-1 PASS artifact filename.
+Stage-2 MUST locate the Stage-1 PASS artifact using windowed discovery:
+1. Locate the most recent Stage-1 verification artifact for this P-### in docs/system/outputs/.
+2. If it contains "Verdict: PASS", use it as the Stage-1 PASS artifact.
+3. If it does NOT contain "Verdict: PASS", search only newer artifacts (created after that artifact) for a Stage-1 artifact with "Verdict: PASS".
+4. Select the newest Stage-1 artifact that satisfies "Verdict: PASS".
+5. If no PASS artifact exists in the search window, Stage-2 MUST fail immediately.
+
+Stage-2 MUST explicitly cite the Stage-1 PASS artifact filename in the output.
 Stage-2 MUST fail if the cited Stage-1 artifact does not contain "Verdict: PASS".
 
 Required Inputs:
