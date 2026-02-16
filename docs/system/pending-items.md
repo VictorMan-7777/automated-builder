@@ -1924,6 +1924,57 @@ No action is taken until explicitly promoted.
   - This is a governance-alignment review only.
   - Changes to Devotional plans must occur under Devotional project issue loop.
 
+### P-094 — Update Devotional Generator Plans for Builder v1 Governance
+- Source: Devotional governance-alignment remediation
+- Captured: 2026-02-16
+- Project: devotional-generator
+- Summary:
+  Modify Devotional Generator PRD, roadmap, and pending items to comply
+  with Builder v1 governance and bootstrap constraints. Apply structural
+  plan updates only and keep domain logic unchanged.
+- Objective:
+  Modify Devotional Generator PRD, roadmap, and pending items to comply
+  with Builder v1 governance and bootstrap constraints.
+- Scope:
+  Update plans to ensure:
+  - Project prefix is defined and consistently used.
+  - Pending items follow {PREFIX}-### namespace.
+  - project.yaml fields align with identity contract.
+  - No governance duplication within project.
+  - YAML structure compatible with Builder validation.
+  - Two-phase validation logic respected in project planning.
+- Acceptance Criteria:
+  - Plans updated to reflect Builder v1 rules.
+  - No governance violations remain.
+  - Changes documented in implementation summary.
+- Notes:
+  - This update is structural only.
+  - Domain logic must remain unchanged.
+
+### P-095 — Rebuild Devotional Generator Using Builder v1
+- Source: Devotional structural validation run
+- Captured: 2026-02-16
+- Project: devotional-generator
+- Summary:
+  Re-run Devotional Generator bootstrap and build cycle after governance
+  alignment updates to confirm Builder v1 compatibility. Validate that
+  bootstrap, invariants, and governance checks pass without manual fixes.
+- Objective:
+  Re-run Devotional Generator bootstrap and build cycle after governance
+  alignment updates.
+- Scope:
+  - Execute run-create-project (if needed for fresh test).
+  - Validate bootstrap using Issue-009 + Issue-007 checks.
+  - Confirm no invariant violations.
+  - Confirm project structure matches P-084 bootstrap contract.
+- Acceptance Criteria:
+  - Bootstrap completes without validation errors.
+  - All governance checks pass.
+  - No manual intervention required post-bootstrap.
+  - Any failures captured as formal Devotional project issues.
+- Notes:
+  - This is a structural validation run, not a content-generation milestone.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
