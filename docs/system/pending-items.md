@@ -1701,6 +1701,65 @@ No action is taken until explicitly promoted.
   - Preserves deterministic validation.
   - Supports session-independent execution.
 
+### P-090 — Track Deferred Items Within Inventory
+- Source: Inventory deferral tracking governance
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Create a deterministic system for tracking deferred items within an
+  Inventory P-### so later Issues and Inventory Verification can reference
+  deferrals without editing approved artifacts. Formalize deferral records
+  for consistent, session-independent execution and validation.
+- Objective:
+  Create a deterministic system for tracking deferred items (deferred Issues,
+  deferred checks, deferred validations, and scoped deferrals) within an
+  Inventory P-### so later Issues and Inventory Verification can reference
+  deferrals without modifying approved artifacts.
+- Problem:
+  During inventory execution, decisions are made to defer validations or
+  behaviors (for example, YAML syntax/semantic validation deferred from
+  Issue-005/006 to Issue-009). Once the inventory and early issues are
+  approved, there is no authoritative place to annotate deferral decisions
+  without editing approved artifacts, causing downstream inconsistency risk.
+- Scope:
+  - Applies to Inventory P-### only.
+  - Covers:
+    - Deferred validations (for example, "YAML parse deferred to Issue-009")
+    - Deferred implementations
+    - Deferred checks/invariants
+    - Deferred scope changes that impact later issues
+  - Does NOT change approval triggers or execution loop semantics.
+  - Does NOT permit editing approved artifacts.
+- Rule Definition:
+  Introduce a Deferred Register concept for Inventory items:
+  - Each Inventory P-### maintains a referenced Deferred Register artifact (append-only).
+  - Every deferral decision made during an Issue lifecycle MUST be recorded in the Deferred Register.
+  - Later Issue proposals MUST cite the Deferred Register when referencing deferred behavior
+    (to avoid conflicts with frozen acceptance criteria).
+- Deferred Register Requirements:
+  Each entry must include:
+  - Deferral ID (for example, DEF-###)
+  - Date
+  - Source (Issue-### + artifact filename)
+  - Deferred Item (what is deferred)
+  - Deferred-To (target Issue-### or stage)
+  - Rationale
+  - Enforcement statement (what later issues must/must not claim)
+  - Status (Open / Resolved in Issue-### / Verified in Stage-2)
+- Acceptance Criteria:
+  - Inventory Stage-1 verification includes the Deferred Register as an input.
+  - Inventory Stage-2 verification fails if an Open deferral is required to satisfy
+    the P-### descriptive scope.
+  - Issue proposals cannot claim completion of deferred items unless the register
+    marks them resolved.
+  - No approved artifact edits are required to keep deferral decisions authoritative.
+- Dependencies:
+  - Issue-resolution templates/rules must define how to create and update the
+    Deferred Register artifact.
+  - Inventory verification templates must include the Deferred Register input.
+- Notes:
+  - This formalizes what decision record artifacts are doing today into a repeatable system.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
