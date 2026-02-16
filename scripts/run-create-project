@@ -4,7 +4,8 @@ set -euo pipefail
 # run-create-project — Command scaffolding for project creation
 # Issue-002 implementation: parameter parsing and normalization
 # Issue-003 implementation: path resolution and validation
-# Does NOT create files (deferred to Issue-005, Issue-006, Issue-011)
+# Issue-005 implementation: project.yaml creation (FIRST file)
+# Does NOT create other files (deferred to Issue-006, Issue-011)
 
 # BUILDER_ROOT definition (Issue-003: use git rev-parse directly)
 # BUILDER_ROOT = absolute path to the automated-builder repository root
@@ -220,9 +221,65 @@ if [[ "${RELATIVE_BUILDER_FROM_PROJECT}" != "${BUILDER_ROOT}" ]]; then
   validation_error "Relative path invariant violated: ../automated-builder does not resolve to BUILDER_ROOT (expected: ${BUILDER_ROOT}, got: ${RELATIVE_BUILDER_FROM_PROJECT})"
 fi
 
-# Success: print normalized values and path resolution
+# Project Creation (Issue-005)
+
+# 1. Create project root directory
+mkdir -p "${PROJECT_PATH}" || validation_error "Cannot create project directory: ${PROJECT_PATH}"
+
+# 2. Verify template exists
+TEMPLATE_PATH="${BUILDER_ROOT}/templates/project/project.yaml.tmpl"
+if [[ ! -f "${TEMPLATE_PATH}" ]]; then
+  validation_error "Template not found: ${TEMPLATE_PATH}"
+fi
+
+# 3. Get current date
+CURRENT_DATE="$(date +%Y-%m-%d)"
+
+# 4. Escape values for safe sed substitution
+# Escape '/', '&', and '\' characters to prevent sed interpretation
+escape_sed() {
+  local value="$1"
+  # Escape backslashes first, then forward slashes, then ampersands
+  value="${value//\\/\\\\}"
+  value="${value//\//\\/}"
+  value="${value//&/\\&}"
+  echo "$value"
+}
+
+ESCAPED_SLUG="$(escape_sed "${NORMALIZED_SLUG}")"
+ESCAPED_NAME="$(escape_sed "${NORMALIZED_NAME}")"
+ESCAPED_PREFIX="$(escape_sed "${NORMALIZED_PREFIX}")"
+ESCAPED_DATE="$(escape_sed "${CURRENT_DATE}")"
+
+# 5. Render template with safe token substitution
+# Use '|' as sed delimiter to avoid conflicts with escaped '/'
+cat "${TEMPLATE_PATH}" \
+  | sed "s|{project-slug}|${ESCAPED_SLUG}|g" \
+  | sed "s|{Project Name}|${ESCAPED_NAME}|g" \
+  | sed "s|{PREFIX}|${ESCAPED_PREFIX}|g" \
+  | sed "s|{YYYY-MM-DD}|${ESCAPED_DATE}|g" \
+  > "${PROJECT_PATH}/project.yaml"
+
+# 6. Validate created file
+if [[ ! -f "${PROJECT_PATH}/project.yaml" ]]; then
+  validation_error "Failed to create project.yaml"
+fi
+
+# 7. Check for unresolved tokens
+if grep -q '{.*}' "${PROJECT_PATH}/project.yaml"; then
+  UNRESOLVED=$(grep -o '{[^}]*}' "${PROJECT_PATH}/project.yaml" | head -1)
+  validation_error "Unresolved token in project.yaml: ${UNRESOLVED}"
+fi
+
+# 8. Validate file permissions
+if [[ ! -r "${PROJECT_PATH}/project.yaml" ]]; then
+  validation_error "project.yaml is not readable"
+fi
+
+# Success: print normalized values, path resolution, and project creation
 echo "✅ Parameter validation successful"
 echo "✅ Path resolution successful"
+echo "✅ project.yaml created (YAML validation deferred to Issue-009)"
 echo ""
 echo "Normalized Parameters:"
 echo "  project-slug: ${NORMALIZED_SLUG}"
@@ -235,13 +292,16 @@ echo "  BUILDER_ROOT: ${BUILDER_ROOT}"
 echo "  PARENT_DIR:   ${PARENT_DIR}"
 echo "  PROJECT_PATH: ${PROJECT_PATH}"
 echo ""
+echo "Created:"
+echo "  PROJECT_PATH: ${PROJECT_PATH}"
+echo "  project.yaml: ${PROJECT_PATH}/project.yaml"
+echo ""
 echo "Path Invariants:"
 echo "  ✅ Sibling structure verified"
 echo "  ✅ No nesting detected"
 echo "  ✅ Relative path invariant satisfied"
-echo "  ✅ Project path available (does not exist)"
 echo ""
-echo "Note: File creation is deferred to Issue-005, Issue-006, Issue-011"
-echo "      This command performs parameter validation and path resolution only."
+echo "Note: Additional file creation is deferred to Issue-006, Issue-011"
+echo "      YAML syntax and semantic validation deferred to Issue-009"
 
 exit 0
