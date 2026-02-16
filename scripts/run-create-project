@@ -392,11 +392,78 @@ for file in "${REQUIRED_FILES[@]}"; do
   fi
 done
 
+# === Issue-011: Deploy ai-process.md ===
+
+# Template path and output path
+AI_PROCESS_TEMPLATE="${BUILDER_ROOT}/templates/project/ai-process.md.tmpl"
+AI_PROCESS_OUTPUT="${PROJECT_PATH}/docs/system/ai-process.md"
+
+# Verify template exists
+if [[ ! -f "${AI_PROCESS_TEMPLATE}" ]]; then
+  validation_error "Template not found: ${AI_PROCESS_TEMPLATE}"
+fi
+
+# Verify docs/system/ directory exists (created in Issue-006)
+if [[ ! -d "${PROJECT_PATH}/docs/system" ]]; then
+  validation_error "docs/system/ directory missing (should have been created in Issue-006)"
+fi
+
+# Render template with safe token substitution (reuse escaped values from Issue-006)
+cat "${AI_PROCESS_TEMPLATE}" \
+  | sed "s|{project-slug}|${ESCAPED_SLUG}|g" \
+  | sed "s|{Project Name}|${ESCAPED_NAME}|g" \
+  | sed "s|{PREFIX}|${ESCAPED_PREFIX}|g" \
+  | sed "s|{YYYY-MM-DD}|${ESCAPED_CREATED}|g" \
+  > "${AI_PROCESS_OUTPUT}"
+
+# Validate file created
+if [[ ! -f "${AI_PROCESS_OUTPUT}" ]]; then
+  validation_error "Failed to create docs/system/ai-process.md"
+fi
+
+# Check for unresolved allowed tokens (explicit pattern matching)
+if grep -E '\{(project-slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${AI_PROCESS_OUTPUT}" >/dev/null 2>&1; then
+  UNRESOLVED=$(grep -oE '\{(project-slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${AI_PROCESS_OUTPUT}" | head -1)
+  validation_error "Unresolved placeholders in ai-process.md: ${UNRESOLVED}"
+fi
+
+# Verify prefix is present in anchored line: "**Prefix**: <PREFIX>"
+# This ensures the prefix appears in the correct metadata location, not just anywhere
+if ! grep -q "^\*\*Prefix\*\*: ${IDENTITY_PREFIX}$" "${AI_PROCESS_OUTPUT}"; then
+  validation_error "Prefix not set in ai-process.md (expected anchored line: **Prefix**: ${IDENTITY_PREFIX})"
+fi
+
+# Validate file readable
+if [[ ! -r "${AI_PROCESS_OUTPUT}" ]]; then
+  validation_error "Cannot read: docs/system/ai-process.md"
+fi
+
+# Verify all 9 required bootstrap files exist (final count)
+ALL_REQUIRED_FILES=(
+  "project.yaml"
+  "index.md"
+  "prd.md"
+  "roadmap.md"
+  "iteration-log.md"
+  "builder-manifest.yaml"
+  "phases/.gitkeep"
+  "docs/system/outputs/.gitkeep"
+  "docs/system/ai-process.md"
+)
+
+for file in "${ALL_REQUIRED_FILES[@]}"; do
+  if [[ ! -f "${PROJECT_PATH}/${file}" ]]; then
+    validation_error "Required file missing: ${file}"
+  fi
+done
+
 # Success: print normalized values, path resolution, and project creation
 echo "✅ Parameter validation successful"
 echo "✅ Path resolution successful"
 echo "✅ project.yaml created (YAML validation deferred to Issue-009)"
 echo "✅ All bootstrap files created successfully"
+echo "✅ ai-process.md deployed successfully"
+echo "✅ All 9 required bootstrap files exist"
 echo ""
 echo "Normalized Parameters:"
 echo "  project-slug: ${NORMALIZED_SLUG}"
@@ -416,6 +483,7 @@ echo "  prd.md:               ${PROJECT_PATH}/prd.md"
 echo "  roadmap.md:           ${PROJECT_PATH}/roadmap.md"
 echo "  iteration-log.md:     ${PROJECT_PATH}/iteration-log.md"
 echo "  builder-manifest.yaml: ${PROJECT_PATH}/builder-manifest.yaml"
+echo "  ai-process.md:        ${PROJECT_PATH}/docs/system/ai-process.md"
 echo ""
 echo "Created Directories:"
 echo "  phases/:              ${PROJECT_PATH}/phases/"
@@ -426,8 +494,12 @@ echo "  ✅ Sibling structure verified"
 echo "  ✅ No nesting detected"
 echo "  ✅ Relative path invariant satisfied"
 echo ""
-echo "Note: ai-process.md deployment is deferred to Issue-011"
-echo "      YAML syntax and semantic validation deferred to Issue-009"
+echo "Bootstrap Complete:"
+echo "  ✅ All 9 required files created"
+echo "  ✅ AI Process Contract deployed"
+echo "  ✅ Ready for project planning and building"
+echo ""
+echo "Note: YAML syntax and semantic validation deferred to Issue-009"
 echo "      Git initialization is explicit non-goal per P-084 Section 7"
 
 exit 0
