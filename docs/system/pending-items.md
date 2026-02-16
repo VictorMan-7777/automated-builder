@@ -1470,45 +1470,6 @@ No action is taken until explicitly promoted.
     - reduction triggers when quality or velocity drops
   Goal is to maximize throughput while preserving clarity and stability.
 
-### P-084 — run-create-project — create project directory + bootstrap required system docs
-- Source: Builder execution readiness for devotional-generator
-- Captured: 2026-02-12
-- Project: Automated-builder
-- Inventory: docs/system/outputs/2026-02-13__01__system__p-084-inventory-proposal-approved.md
-- Summary:
-  Implement `run-create-project` command to bootstrap new projects with all
-  required system documentation. Command creates project directory structure,
-  deploys 9 required files from canonical templates (project.yaml, index.md,
-  prd.md, roadmap.md, iteration-log.md, builder-manifest.yaml, ai-process.md,
-  and .gitkeep files), enforces governance protection rules, and validates
-  17-point contract. Project becomes ready for planner/builder execution with
-  zero manual setup. Prefix determination required by default; derivation
-  available via explicit flag. Templates stored in automated-builder repository;
-  project files deployed to sibling directory.
-- Inventory Scope (11 Issue-### execution slices):
-  - Issue-001: Create template directory and base templates (7 .tmpl files)
-  - Issue-002: Implement command scaffolding with parameter parsing/normalization
-  - Issue-003: Implement path resolution and sibling validation
-  - Issue-004: Implement prefix determination (required by default, derivation opt-in)
-  - Issue-005: Create project.yaml identity file FIRST
-  - Issue-006: Deploy remaining files with placeholder substitution
-  - Issue-007: Implement governance protection validation
-  - Issue-008: Deploy project rules pack template
-  - Issue-009: End-to-end validation (17 checks) and cleanup
-  - Issue-010: Introduce inventory-proposal artifact type (governance)
-  - Issue-011: Validate ai-process.md deployment and AI Process Contract
-- Validation Requirements:
-  - Primary: Confirm all 11 Issue-### items match approved inventory specification
-  - Secondary: Confirm run-create-project produces valid project structure
-  - All 17 validation checks pass (identity file, governance protection, path invariants)
-  - Template deployment successful, no unresolved placeholders
-  - Sibling relationship to automated-builder verified
-- Notes:
-  - Execution proceeds through issue-resolution loop (Issue-### proposal -> approval -> implementation -> summary)
-  - Issue-### items are execution slices only (not inserted into pending-items.md)
-  - P-084 completion requires successful two-stage validation
-  - create or migrate devotional-generator content in this item
-
 ### P-085 — new-010 — Builder Project Templates: Define Where to Store `<slug>` Seed Files for `run-create-project`
 - Source: run-create-project template source-of-truth planning
 - Captured: 2026-02-12
@@ -2138,6 +2099,48 @@ No action is taken until explicitly promoted.
     Proposal artifact: `2026-02-12__04__system__p-083-planner-output-root-approved.md`.
     Implementation summary: `2026-02-12__06__system__p-083-implementation-summary.md`.
     All six authoritative documents updated with correct paths and version bumps.
+
+### P-084 — run-create-project — create project directory + bootstrap required system docs
+- Source: Builder execution readiness for devotional-generator
+- Captured: 2026-02-12
+- Completed: 2026-02-16
+- Project: Automated-builder
+- Inventory: docs/system/outputs/2026-02-13__01__system__p-084-inventory-proposal-approved.md
+- Summary:
+  Implement `run-create-project` command to bootstrap new projects with all
+  required system documentation. Command creates project directory structure,
+  deploys 9 required files from canonical templates (project.yaml, index.md,
+  prd.md, roadmap.md, iteration-log.md, builder-manifest.yaml, ai-process.md,
+  and .gitkeep files), enforces governance protection rules, and validates
+  17-point contract. Project becomes ready for planner/builder execution with
+  zero manual setup. Prefix determination required by default; derivation
+  available via explicit flag. Templates stored in automated-builder repository;
+  project files deployed to sibling directory.
+- Inventory Scope (11 Issue-### execution slices):
+  - Issue-001: Create template directory and base templates (7 .tmpl files)
+  - Issue-002: Implement command scaffolding with parameter parsing/normalization
+  - Issue-003: Implement path resolution and sibling validation
+  - Issue-004: Implement prefix determination (required by default, derivation opt-in)
+  - Issue-005: Create project.yaml identity file FIRST
+  - Issue-006: Deploy remaining files with placeholder substitution
+  - Issue-007: Implement governance protection validation
+  - Issue-008: Deploy project rules pack template
+  - Issue-009: End-to-end validation (17 checks) and cleanup
+  - Issue-010: Introduce inventory-proposal artifact type (governance)
+  - Issue-011: Validate ai-process.md deployment and AI Process Contract
+- Validation Requirements:
+  - Primary: Confirm all 11 Issue-### items match approved inventory specification
+  - Secondary: Confirm run-create-project produces valid project structure
+  - All 17 validation checks pass (identity file, governance protection, path invariants)
+  - Template deployment successful, no unresolved placeholders
+  - Sibling relationship to automated-builder verified
+- Notes:
+  - Execution proceeds through issue-resolution loop (Issue-### proposal -> approval -> implementation -> summary)
+  - Issue-### items are execution slices only (not inserted into pending-items.md)
+  - P-084 completion requires successful two-stage validation
+  - Completion authorized by two-stage inventory verification: Stage-1 PASS (all 11 Issue-### items match approved inventory), Stage-2 PASS (descriptive scope + system state validated)
+  - Stage-1 artifact: `2026-02-16__27__system__p-084-stage1-verification-pass.md`
+  - Stage-2 artifact: `2026-02-16__28__system__p-084-stage2-verification.md`
 
 ## Dependencies
 
