@@ -46,12 +46,12 @@ P-### Inventory Proposal
     → Change
     → Summary
     → Next Issue-### OR Validation?
-→ Inventory Validation
-  - Validate against approved inventory artifact
-  - Deferred analysis (fail if deferred required for P-###)
-  - Deferred handling (non-blocking → new pending items)
-  - Validate against P-### requirements
-  - PASS → mark P-### complete
+→ Inventory Verification Stage 1
+  - Confirm all Issue-### accounted for
+  - Create new pending items if needed
+→ Inventory Verification Stage 2
+  - Validate P-### descriptive scope satisfied
+  - PASS → move P-### to Completed
 → Verification
 → STOP
 ```

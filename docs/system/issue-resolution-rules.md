@@ -97,11 +97,11 @@ P-### Inventory Proposal
     → Change
     → Summary
     → Next Issue-### OR Validation?
-→ Inventory Validation
-  - Validate against approved inventory artifact
-  - Deferred analysis (fail if deferred required for P-###)
-  - Deferred handling (non-blocking → new pending items)
-  - Validate against P-### requirements
+→ Inventory Verification — Stage 1 (Issue Completion Verification)
+  - Confirm all Issue-### accounted for
+  - Create new pending items if needed
+→ Inventory Verification — Stage 2 (Pending Scope Verification)
+  - Validate P-### descriptive scope satisfied
   - PASS → mark P-### complete
 → Verification
 → STOP
@@ -145,7 +145,9 @@ Once an approved artifact is committed, it MUST NOT be modified. The committed a
 Backlog Hygiene Rules
 
 1. Approval does NOT authorize completion. Items remain in Pending until verification authorizes completion.
-2. Verification authorizes completion. When verification passes, move the P-### item from Pending to Completed in pending-items.md as part of the verification commit.
+2. Completion authority:
+   - Standard P-###: Verification PASS authorizes moving the P-### from Pending → Completed.
+   - Inventory P-###: Inventory Verification Stage 2 PASS authorizes moving the P-### from Pending → Completed.
 3. Deferred items remain in Pending. Append "Deferred: <reason>" or "Deferred until: <condition>" to the item block. Do NOT create a separate Deferred section.
 
 Inventory-Specific Rules
@@ -153,9 +155,11 @@ Inventory-Specific Rules
 1. Inventory approval syncs P-### scope immediately. Update the P-### descriptive scope in pending-items.md at approval (before Issue-### execution begins).
 2. Issue-### items are execution slices only. Do NOT insert Issue-### items into pending-items.md.
 3. Validation assumes P-### already synchronized. Validators reference the approved inventory artifact directly.
-4. Deferred analysis at validation. If a deferred Issue-### is required to satisfy P-### requirements, validation MUST fail.
+4. Deferred analysis during Inventory Verification Stage 2. If a deferred Issue-### is required to satisfy P-### requirements, Stage 2 MUST fail.
 5. Deferred handling creates new pending items. Non-blocking deferred Issue-### items become NEW P-### items in pending-items.md.
-6. Completion authority is validation-only. P-### completion is authorized only by successful validation, not by inventory approval.
+6. Two-phase verification for inventory items:
+   - Stage 1 (Issue Completion Verification): Confirms all Issue-### spawned by the inventory-approved artifact are completed. Does NOT authorize P-### completion. If incomplete, create new pending items for missing steps.
+   - Stage 2 (Pending Scope Verification): Confirms that executed work resolves the descriptive scope of the P-### in pending-items.md. PASS authorizes moving P-### from Pending → Completed.
 
 Validation Lookup Rule
 

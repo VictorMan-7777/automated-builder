@@ -110,13 +110,13 @@ Execution sequence (no pauses):
 
 7. Do NOT mark P-### complete at this stage.
 
-The P-### item remains in Pending until Inventory Validation authorizes completion.
+The P-### item remains in Pending until Inventory Verification — Stage 2 PASS authorizes completion.
 
 ------------------------------------------------------------
 
-Inventory Validation Template
+Inventory Verification — Stage 1 (Issue Completion Verification)
 
-Scope: Validation for P-### items with an inventory flag.
+Scope: Confirms all Issue-### items spawned by the inventory-approved artifact are completed.
 
 Trigger: After an Issue-### within the inventory is completed (implementation and summary committed), ask:
 
@@ -124,20 +124,69 @@ Trigger: After an Issue-### within the inventory is completed (implementation an
 Next Issue-###? OR Validation?
 ```
 
-Validation sequence:
+When the user selects Validation, proceed with Stage 1.
 
-When the user selects Validation, the P-### descriptive scope is already synchronized with the approved inventory artifact. Proceed as follows:
+Inputs:
 
-1. Primary validation. Validate that implemented Issue-### work matches the approved inventory artifact.
-2. Deferred analysis. For each deferred Issue-### item:
+1. The approved inventory artifact (*-inventory-approved.md).
+2. Summary artifacts for all implemented Issue-### items.
+3. Deferred register (if any).
+
+Checks:
+
+1. List all Issue-### items defined in the approved inventory artifact.
+2. For each Issue-###, verify it has either:
+   - A committed implementation summary artifact, OR
+   - An entry in the deferred register.
+3. For each missing Issue-###, identify whether it is required to satisfy P-### requirements.
+
+Verdict:
+
+- PASS: All Issue-### items are accounted for (implemented or deferred).
+- FAIL: One or more Issue-### items are missing.
+
+On FAIL:
+
+Create new pending items in pending-items.md for all incomplete Issue-### items.
+
+CRITICAL: Stage 1 does NOT authorize moving P-### to Completed. Proceed to Stage 2.
+
+------------------------------------------------------------
+
+Inventory Verification — Stage 2 (Pending Scope Verification)
+
+Scope: Confirms that executed work resolves the descriptive scope of the P-### item in pending-items.md.
+
+Inputs:
+
+1. The P-### entry in pending-items.md (descriptive scope).
+2. All committed implementation summaries for Issue-### items.
+3. Deferred register (if any).
+4. The approved inventory artifact (*-inventory-approved.md).
+
+Checks:
+
+1. Deferred analysis: For each deferred Issue-### item:
    - Evaluate whether it is required to satisfy the descriptive requirements of the P-### item.
-   - If a deferred Issue-### is required to meet P-### requirements, validation MUST fail.
-   - P-### cannot be marked Completed until all required Issue-### work is implemented.
-3. Deferred handling. Create NEW pending items in pending-items.md from deferred Issue-### items that are NOT required to satisfy P-### requirements.
-4. Secondary validation. Validate that the final system state satisfies the descriptive requirements in the P-### entry.
-5. Completion authority. Only after both primary and secondary validation pass AND all required Issue-### work is implemented may the P-### item be marked Completed in pending-items.md.
+   - If a deferred Issue-### is required to meet P-### requirements, Stage 2 MUST fail.
+2. Secondary validation (Stage 2 check): Validate that the final system state satisfies the descriptive requirements in the P-### entry.
 
-Artifact requirement: The validation artifact follows the same content requirements as the standard Verification artifact (see Verification Template).
+Verdict:
+
+- PASS: All required work is complete and the P-### descriptive scope is fully satisfied.
+- FAIL: Deferred Issue-### items are required for P-###, OR the P-### descriptive scope is not satisfied.
+
+On PASS:
+
+Move the P-### item from Pending to Completed in pending-items.md.
+
+On FAIL:
+
+The P-### item remains in Pending. The artifact must state what remediation is required.
+
+Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from Pending → Completed.
+
+Deferred handling: Create NEW pending items in pending-items.md from deferred Issue-### items that are NOT required to satisfy P-### requirements.
 
 ------------------------------------------------------------
 
