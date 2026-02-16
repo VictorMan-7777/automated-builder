@@ -10,7 +10,7 @@
 
 ## Objective
 
-Deploy project-specific pending-items-rules.md with PREFIX substitution to document P-### → {PREFIX}-### namespace mapping.
+Deploy project-specific pending-items-rules.md with PREFIX substitution to document P-### → {PREFIX}-### namespace mapping. This file provides reference documentation only; it does not enforce the mapping at runtime.
 
 ---
 
@@ -26,6 +26,7 @@ Deploy project-specific pending-items-rules.md with PREFIX substitution to docum
 
 ### Out of Scope
 
+- ❌ Runtime enforcement of namespace mapping (file is documentation only)
 - ❌ Complex rules logic (just template rendering)
 - ❌ Git initialization (explicit non-goal per P-084 Section 7)
 - ❌ YAML syntax and semantic validation (deferred to Issue-009)
@@ -43,7 +44,8 @@ Deploy project-specific pending-items-rules.md with PREFIX substitution to docum
 - [ ] Uses same read_yaml_field() function from Issue-006 (bounded awk extraction)
 
 **File Creation**:
-- [ ] Verifies `PROJECT_PATH/docs/system/` directory exists (created in Issue-006/011)
+- [ ] Verifies `PROJECT_PATH/docs/system/outputs/` directory exists (created in Issue-006)
+- [ ] Parent directory `PROJECT_PATH/docs/system/` inferred to exist (contains outputs/ subdirectory)
 - [ ] Deploys to `PROJECT_PATH/docs/system/pending-items-rules.md`
 - [ ] File permissions are readable (minimum 644)
 
@@ -58,13 +60,12 @@ Deploy project-specific pending-items-rules.md with PREFIX substitution to docum
 - [ ] Does NOT conflict with governance protection (rules are project-specific, not governance)
 - [ ] File is allowed in docs/system/ per P-084 Section 4.1 (project-specific rules)
 
-**Completion Verification**:
-- [ ] Combined with previous issues, all 10 required bootstrap files exist:
-  - project.yaml (Issue-005)
-  - index.md, prd.md, roadmap.md, iteration-log.md, builder-manifest.yaml (Issue-006)
-  - phases/.gitkeep, docs/system/outputs/.gitkeep (Issue-006)
-  - docs/system/ai-process.md (Issue-011)
-  - docs/system/pending-items-rules.md (Issue-008)
+**Dependency Verification**:
+- [ ] Verifies required artifacts from dependencies exist:
+  - project.yaml (Issue-005 dependency)
+  - docs/system/outputs/.gitkeep (Issue-006 dependency)
+  - docs/system/ai-process.md (Issue-011 dependency)
+- [ ] Creates own artifact: docs/system/pending-items-rules.md
 
 ---
 
@@ -133,9 +134,10 @@ if [[ ! -f "${PENDING_ITEMS_TEMPLATE}" ]]; then
   validation_error "Template not found: ${PENDING_ITEMS_TEMPLATE}"
 fi
 
-# Verify docs/system/ directory exists (created in Issue-006/011)
-if [[ ! -d "${PROJECT_PATH}/docs/system" ]]; then
-  validation_error "docs/system/ directory missing (should have been created in Issue-006/011)"
+# Verify docs/system/outputs/ directory exists (created in Issue-006)
+# This implicitly confirms docs/system/ exists (parent of outputs/)
+if [[ ! -d "${PROJECT_PATH}/docs/system/outputs" ]]; then
+  validation_error "docs/system/outputs/ directory missing (should have been created in Issue-006)"
 fi
 ```
 
@@ -182,31 +184,28 @@ if [[ ! -r "${PENDING_ITEMS_OUTPUT}" ]]; then
 fi
 ```
 
-### Step 5: Final File Count Verification
+### Step 5: Dependency Verification
 
 ```bash
-# Verify all 10 required bootstrap files exist
-ALL_BOOTSTRAP_FILES=(
-  "project.yaml"
-  "index.md"
-  "prd.md"
-  "roadmap.md"
-  "iteration-log.md"
-  "builder-manifest.yaml"
-  "phases/.gitkeep"
-  "docs/system/outputs/.gitkeep"
-  "docs/system/ai-process.md"
-  "docs/system/pending-items-rules.md"
+# Verify required artifacts from dependencies exist
+ISSUE_008_DEPENDENCIES=(
+  "project.yaml"                      # Issue-005
+  "docs/system/outputs/.gitkeep"      # Issue-006
+  "docs/system/ai-process.md"         # Issue-011
 )
 
-for file in "${ALL_BOOTSTRAP_FILES[@]}"; do
+for file in "${ISSUE_008_DEPENDENCIES[@]}"; do
   if [[ ! -f "${PROJECT_PATH}/${file}" ]]; then
-    validation_error "Required file missing: ${file}"
+    validation_error "Dependency artifact missing: ${file}"
   fi
 done
 
+# Verify own artifact created
+if [[ ! -f "${PROJECT_PATH}/docs/system/pending-items-rules.md" ]]; then
+  validation_error "Failed to create docs/system/pending-items-rules.md"
+fi
+
 echo "✅ pending-items-rules.md deployed successfully"
-echo "✅ All 10 required bootstrap files exist"
 ```
 
 ---
@@ -230,7 +229,7 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 ### File Creation Validation
 
 1. **Template existence**: Check template file before rendering
-2. **Directory existence**: Verify docs/system/ exists (created in Issue-006/011)
+2. **Directory existence**: Verify docs/system/outputs/ exists (created in Issue-006); docs/system/ inferred from outputs/ subdirectory
 3. **File creation**: Verify output file exists after rendering
 4. **Unresolved tokens**: Explicit grep for allowed token patterns only (3 patterns)
 5. **File readability**: Check file permissions
@@ -245,9 +244,10 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 ### Completion Verification
 
-1. **10-file count**: All required bootstrap files exist
-2. **No unresolved tokens**: Explicit token pattern check (3 patterns)
-3. **Governance compatibility**: File allowed in docs/system/ (project-specific)
+1. **Dependency artifacts**: Required artifacts from Issues 005, 006, 011 exist
+2. **Own artifact created**: pending-items-rules.md successfully deployed
+3. **No unresolved tokens**: Explicit token pattern check (3 patterns)
+4. **Governance compatibility**: File allowed in docs/system/ (project-specific)
 
 ---
 
@@ -268,14 +268,16 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 ## Risks / Failure Modes
 
-- **docs/system/ directory missing**: Should have been created in Issue-006/011
-  - Mitigation: Explicit directory existence check before rendering
+- **docs/system/outputs/ directory missing**: Should have been created in Issue-006
+  - Mitigation: Explicit outputs/ directory existence check (confirms docs/system/ parent exists)
 - **Template content unclear**: What rules to include?
   - Mitigation: Template correctness verified in Issue-001; template documents P-### → {PREFIX}-### mapping per P-084 Section 5.1
 - **Prefix substitution inconsistent**: Different logic from previous issues
   - Mitigation: Reuse escape_sed() and rendering logic from Issue-006/011
 - **Governance protection conflict**: docs/system/ triggers governance validation
   - Mitigation: P-084 Section 4.1 explicitly allows project-specific files like pending-items-rules.md
+- **Runtime enforcement confusion**: Users may expect file to enforce mapping automatically
+  - Mitigation: Document clearly that file is reference documentation only, not runtime enforcement
 
 ---
 
@@ -305,12 +307,12 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
    ```
    Expected: Prefix appears in mapping table examples
 
-4. **10-file verification**:
+4. **Dependency verification**:
    ```bash
-   run-create-project --slug complete-rules --name "Complete Rules Test" --prefix CR
-   find ../complete-rules -type f | wc -l
+   run-create-project --slug deps-rules --name "Dependency Rules Test" --prefix DR
+   ls ../deps-rules/project.yaml ../deps-rules/docs/system/outputs/.gitkeep ../deps-rules/docs/system/ai-process.md ../deps-rules/docs/system/pending-items-rules.md
    ```
-   Expected: 10 files total (including .gitkeep files)
+   Expected: Required dependency artifacts exist (Issues 005, 006, 011) plus own artifact created
 
 5. **Identity source reference**:
    ```bash
@@ -332,7 +334,6 @@ Update success output to include pending-items-rules.md deployment:
 ✅ All bootstrap files created successfully
 ✅ ai-process.md deployed successfully
 ✅ pending-items-rules.md deployed successfully
-✅ All 10 required bootstrap files exist
 
 Normalized Parameters:
   project-slug: test-project
@@ -364,11 +365,10 @@ Path Invariants:
   ✅ No nesting detected
   ✅ Relative path invariant satisfied
 
-Bootstrap Complete:
-  ✅ All 10 required files created
-  ✅ AI Process Contract deployed
+Issue-008 Complete:
+  ✅ pending-items-rules.md deployed
   ✅ Namespace mapping documented (P-### → TP-###)
-  ✅ Ready for project planning and building
+  ✅ Dependency artifacts verified (Issues 005, 006, 011)
 
 Note: YAML syntax and semantic validation deferred to Issue-009
       Git initialization is explicit non-goal per P-084 Section 7
@@ -400,7 +400,7 @@ Note: YAML syntax and semantic validation deferred to Issue-009
 
 ## Namespace Mapping Documentation
 
-**Purpose**: pending-items-rules.md serves as project-specific documentation for the P-### → {PREFIX}-### mapping rule defined in P-084 Section 5.1.
+**Purpose**: pending-items-rules.md serves as project-specific reference documentation for the P-### → {PREFIX}-### mapping rule defined in P-084 Section 5.1. This file documents the enforcement rules but does not enforce them at runtime.
 
 **Mapping Examples** (template content):
 - P-001 → {PREFIX}-001
