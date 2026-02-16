@@ -115,6 +115,39 @@ Post-verification constraint: No new proposals may be started after the Verifica
 
 RULES
 
+Prompt Header Rule
+
+The first line of every execution prompt MUST be a concise task description.
+
+Purpose: Session dropdown title/indexing for later retrieval.
+
+Requirements:
+
+- ≤ 100 characters
+- No multi-line text
+- Must include the artifact/phase identifier when applicable (e.g., "Issue-009 Proposal", "Inventory Verification Stage-2 — P-084")
+- Must not be "You are in BOUNDED mode…" (that becomes line 2).
+
+Examples:
+
+Regular Issue Proposal:
+```
+Issue-012 Proposal — Add git pre-commit hook
+You are in BOUNDED mode. No scope expansion.
+```
+
+Inventory Verification Stage-1:
+```
+Inventory Verification Stage-1 — P-084
+You are in BOUNDED mode. No scope expansion.
+```
+
+Inventory Verification Stage-2:
+```
+Inventory Verification Stage-2 — P-084 (System Builder)
+You are in BOUNDED mode. No scope expansion.
+```
+
 Issue Identifier Rules
 
 1. Issue identifiers MUST appear in proposal, implementation, and summary output artifacts.

@@ -11,6 +11,27 @@ Proposal Template
 
 Scope: Produces a proposal output artifact for a single issue.
 
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Examples:
+
+Regular issue proposal:
+```
+Issue-012 Proposal — Add git pre-commit hook
+You are in BOUNDED mode. No scope expansion.
+```
+
+Inventory-flagged proposal:
+```
+Issue-007 Proposal — Refactor authentication module (P-084)
+You are in BOUNDED mode. No scope expansion.
+```
+
 Behavior:
 
 1. If the inventory artifact is uncommitted, commit it first.
@@ -59,6 +80,27 @@ Approval Template (Regular P-###)
 
 Scope: Execution trigger for an issue (non-inventory).
 
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Examples:
+
+Regular issue approval:
+```
+Issue-012 Approval — Add git pre-commit hook
+You are in BOUNDED mode. No scope expansion.
+```
+
+Inventory-flagged issue approval:
+```
+Issue-007 Approval — Refactor authentication module (P-084)
+You are in BOUNDED mode. No scope expansion.
+```
+
 Proposal artifact prerequisite: Approval MUST reference a proposal artifact. If the proposal artifact is not present in the current session context, the approval instruction MUST include the proposal artifact filename or path. If missing, STOP and request it from the human.
 
 Human response:
@@ -102,6 +144,20 @@ An explicit instruction to update or redo keeps the proposal unapproved and in d
 Inventory Approval Template
 
 Scope: Execution trigger for an inventory item (P-### with inventory flag).
+
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Example:
+
+```
+P-084 Inventory Approval — System Builder MVP
+You are in BOUNDED mode. No scope expansion.
+```
 
 Human response:
 
@@ -150,6 +206,20 @@ The P-### item remains in Pending until Inventory Verification — Stage 2 PASS 
 Inventory Verification — Stage 1 (Issue Completion Verification)
 
 Scope: Confirms all Issue-### items spawned by the inventory-approved artifact are completed.
+
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Example:
+
+```
+Inventory Verification Stage-1 — P-084 (System Builder)
+You are in BOUNDED mode. No scope expansion.
+```
 
 Verification Discovery Safeguards
 
@@ -214,6 +284,20 @@ CRITICAL: Stage 1 does NOT authorize moving P-### to Completed. Proceed to Stage
 Inventory Verification — Stage 2 (Pending Scope Verification)
 
 Scope: Confirms that executed work resolves the descriptive scope of the P-### item in pending-items.md.
+
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Example:
+
+```
+Inventory Verification Stage-2 — P-084 (System Builder)
+You are in BOUNDED mode. No scope expansion.
+```
 
 Stage-1 Dependency Gate:
 
@@ -297,6 +381,20 @@ Deferred handling: Create NEW pending items in pending-items.md from deferred Is
 Verification Template
 
 Scope: Runs once at loop end, after all issues have been resolved, deferred, or left unapproved.
+
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Example:
+
+```
+Verification — P-084 (System Builder)
+You are in BOUNDED mode. No scope expansion.
+```
 
 Behavior:
 
