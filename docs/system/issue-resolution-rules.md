@@ -184,6 +184,26 @@ Inventory Verification Stage-1 Hardening Rules
 
 6. Machine-Verifiable Requirement: Stage-1 PASS must be determinable solely by reading the Stage-1 artifact. External inference or memory is not permitted.
 
+Proposal Self-Review Rule
+
+After producing a proposal artifact, the system MUST immediately review the proposal against:
+- The governing inventory-approved artifact (if inventory branch)
+- The relevant issue template requirements (structure + required sections)
+- The acceptance criteria listed in the proposal itself
+
+If the proposal is missing required elements or contains contradictions, the system MUST generate a revised proposal (new output artifact) and repeat self-review.
+
+Iteration limit:
+- Maximum 5 proposal iterations per Issue.
+- If the proposal still fails self-review after 5 iterations, HALT with:
+  - "Proposal self-review failed after 5 iterations"
+  - A concise list of missing/contradictory requirements
+  - No implementation performed.
+
+Human approval:
+- Even after a proposal passes self-review, the system MUST STOP for human review and approval.
+- Self-review does NOT authorize implementation.
+
 Inventory Verification Stage-2 Dependency Rules
 
 1. Stage-1 Dependency Rule: Inventory Stage-2 MUST:
@@ -191,10 +211,25 @@ Inventory Verification Stage-2 Dependency Rules
    - Fail immediately if a Stage-1 PASS artifact does not exist.
    - Fail immediately if the cited Stage-1 artifact does not contain "Verdict: PASS".
 
-2. Completion Gate Rule: A P-### Inventory item may only be moved from Pending → Completed if:
+2. Required Inputs Rule: Stage-2 MUST explicitly use:
+   - inventory-approved artifact (primary authority)
+   - P-### entry in pending-items.md (secondary authority; descriptive scope only)
+   - all Issue implementation summaries relevant to the inventory item
+   - deferred register (if present; if absent, state "none")
+
+3. Machine-Verifiable Output Requirements Rule: Stage-2 output artifact MUST include:
+   - "Stage-1 Reference: <filename>"
+   - "Inventory Reference: <filename>"
+   - "Verdict: PASS|FAIL"
+   - Evidence-based PASS/FAIL results for:
+     - Descriptive scope validation
+     - Deferred dependency check
+
+4. Completion Authority Binding Rule: A P-### Inventory item may only be moved from Pending → Completed if:
    - Stage-1 PASS artifact exists.
    - Stage-2 PASS artifact exists.
    - Stage-2 artifact explicitly references the Stage-1 PASS artifact.
+   - The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
 
 Validation Lookup Rule
 

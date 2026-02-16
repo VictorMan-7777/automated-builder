@@ -15,10 +15,37 @@ Behavior:
 
 1. If the inventory artifact is uncommitted, commit it first.
 2. Produce the proposal output artifact.
-3. Do NOT implement any changes.
-4. Do NOT commit the proposal artifact.
+3. Execute Proposal Self-Review.
+4. Do NOT implement any changes.
+5. Do NOT commit the proposal artifact.
 
 The proposal artifact remains uncommitted so the human can review it before approval.
+
+Proposal Self-Review
+
+After generating the proposal artifact, the system MUST immediately review the proposal against:
+
+Required checklist:
+- Required sections present (as defined by issue type)
+- Acceptance criteria present and testable
+- Dependencies explicitly listed (including deferrals)
+- No scope expansion beyond inventory authority (if inventory)
+- Proposal aligns with governing inventory-approved artifact (if inventory)
+
+Iteration counter:
+- Start at iteration 1.
+- Maximum 5 iterations per Issue.
+
+If the proposal fails self-review:
+- Generate a revised proposal artifact (increment iteration counter).
+- Repeat self-review.
+- If iteration counter reaches 5 and proposal still fails, HALT with:
+  - "Proposal self-review failed after 5 iterations"
+  - A concise list of missing/contradictory requirements
+  - No implementation performed.
+
+If the proposal passes self-review:
+- Proceed to STOP for human review.
 
 STOP.
 
@@ -188,13 +215,20 @@ Inventory Verification — Stage 2 (Pending Scope Verification)
 
 Scope: Confirms that executed work resolves the descriptive scope of the P-### item in pending-items.md.
 
-Inputs:
+Stage-1 Dependency Gate:
 
-1. The P-### entry in pending-items.md (descriptive scope).
-2. All committed implementation summaries for Issue-### items.
-3. Deferred register (if any).
-4. The approved inventory artifact (*-inventory-approved.md).
-5. The Stage-1 PASS artifact (mandatory prerequisite).
+Stage-2 MUST fail if a Stage-1 PASS artifact does not exist.
+Stage-2 MUST explicitly cite the Stage-1 PASS artifact filename.
+Stage-2 MUST fail if the cited Stage-1 artifact does not contain "Verdict: PASS".
+
+Required Inputs:
+
+Stage-2 MUST explicitly use:
+1. inventory-approved artifact (primary authority)
+2. P-### entry in pending-items.md (secondary authority; descriptive scope only)
+3. all Issue implementation summaries relevant to the inventory item
+4. deferred register (if present; if absent, state "none")
+5. The Stage-1 PASS artifact (mandatory prerequisite)
 
 Required Output Structure:
 
@@ -205,9 +239,10 @@ The Stage-2 artifact MUST include:
    Stage-1 Reference: <filename>
    ```
 
-2. An explicit check:
-   - If no Stage-1 PASS artifact exists → FAIL immediately.
-   - If the cited Stage-1 artifact does not contain "Verdict: PASS" → FAIL immediately.
+2. An Inventory reference field:
+   ```
+   Inventory Reference: <filename>
+   ```
 
 3. A verdict section:
    ```
@@ -218,17 +253,27 @@ The Stage-2 artifact MUST include:
    Verdict: FAIL
    ```
 
+4. Evidence-based PASS/FAIL results for:
+   - Descriptive scope validation
+   - Deferred dependency check
+
 Checks:
 
 1. Stage-1 Dependency Check (mandatory first check):
    - Verify that a Stage-1 PASS artifact exists and is explicitly referenced.
-   - If Stage-1 PASS artifact does not exist or does not contain "Verdict: PASS", Stage-2 MUST fail immediately.
+   - If Stage-1 PASS artifact does not exist, FAIL immediately.
+   - If the cited Stage-1 artifact does not contain "Verdict: PASS", FAIL immediately.
 
-2. Deferred analysis: For each deferred Issue-### item:
-   - Evaluate whether it is required to satisfy the descriptive requirements of the P-### item.
+2. Deferred Dependency Check (evidence-based):
+   - List all deferred Issue-### items from the deferred register.
+   - For each deferred Issue-### item:
+     - Evaluate whether it is required to satisfy the descriptive requirements of the P-### item.
+     - Document the evaluation evidence.
    - If a deferred Issue-### is required to meet P-### requirements, Stage 2 MUST fail.
 
-3. Secondary validation (Stage 2 check): Validate that the final system state satisfies the descriptive requirements in the P-### entry.
+3. Descriptive Scope Validation (evidence-based):
+   - Validate that the final system state satisfies the descriptive requirements in the P-### entry.
+   - Document the validation evidence.
 
 Verdict:
 
@@ -243,7 +288,7 @@ On FAIL:
 
 The P-### item remains in Pending. The artifact must state what remediation is required.
 
-Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from Pending → Completed.
+Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from Pending → Completed. The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
 
 Deferred handling: Create NEW pending items in pending-items.md from deferred Issue-### items that are NOT required to satisfy P-### requirements.
 
