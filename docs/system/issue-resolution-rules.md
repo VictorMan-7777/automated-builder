@@ -161,6 +161,19 @@ Inventory-Specific Rules
    - Stage 1 (Issue Completion Verification): Confirms all Issue-### spawned by the inventory-approved artifact are completed. Does NOT authorize P-### completion. If incomplete, create new pending items for missing steps.
    - Stage 2 (Pending Scope Verification): Confirms that executed work resolves the descriptive scope of the P-### in pending-items.md. PASS authorizes moving P-### from Pending → Completed.
 
+Inventory Verification Stage-1 Hardening Rules
+
+1. Set-Based Verification Rule: Inventory Stage-1 MUST treat Issue-### items as a SET. Numerical order and commit chronology are irrelevant. Verification is coverage-based only.
+
+2. Filesystem-First Discovery Rule: Stage-1 artifact discovery MUST be based on filesystem presence. Cross-document references (including legacy filenames) are NON-authoritative. If multiple filename variants exist, prefer the canonical "*-approved.md" pattern.
+
+3. Flexible Summary Detection Rule: Stage-1 MUST recognize the following as valid implementation summaries:
+   - issue-###-implementation-summary.md
+   - issue-###-summary.md
+   - issue-###-implementation.md (if explicitly labeled as summary)
+
+4. No Assumed Consolidation Rule: Stage-1 MUST NOT presume consolidation of Issues. Consolidation must be explicitly documented by artifact reference. Absent explicit consolidation evidence, each Issue must independently satisfy coverage requirements.
+
 Validation Lookup Rule
 
 Tools and processes MUST reference the most recent inventory-proposal artifact for a given item ID:

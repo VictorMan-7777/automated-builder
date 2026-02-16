@@ -124,6 +124,14 @@ Inventory Verification — Stage 1 (Issue Completion Verification)
 
 Scope: Confirms all Issue-### items spawned by the inventory-approved artifact are completed.
 
+Verification Discovery Safeguards
+
+- Issues are evaluated as a SET.
+- Artifact detection is filesystem-based.
+- Flexible summary filename matching.
+- No consolidation assumptions without artifact reference.
+- Diagnostic output MUST list explicit FOUND/NOT FOUND evidence for each Issue.
+
 Trigger: After an Issue-### within the inventory is completed (implementation and summary committed), ask:
 
 ```
