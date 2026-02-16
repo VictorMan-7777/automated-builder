@@ -1602,6 +1602,61 @@ No action is taken until explicitly promoted.
   - Current Status must remain descriptive, not a second approval/validation mechanism.
   - Inventory must support "Issue Loop in progress" and "Inventory Verification Stage 1/2" states.
 
+### P-088 — Parallel Issue Execution Grouping Rule (Issue-Resolution)
+- Source: Deterministic output ordering for multi-issue execution
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Define deterministic output grouping behavior when multiple Issue-###
+  items are executed in the same session or programming block. Preserve
+  current approval triggers, lifecycle sequencing, artifact boundaries,
+  and inventory authority while enforcing grouped artifact/commit order.
+- Objective:
+  Define deterministic output grouping behavior when multiple Issue-### items
+  are executed in the same session or programming block.
+- Scope:
+  - Applies only to Issue-### execution within an approved P-### (standard or inventory).
+  - Does NOT change approval triggers.
+  - Does NOT change lifecycle sequencing.
+  - Does NOT merge Issue-### artifacts.
+  - Does NOT modify inventory authority.
+- Rule Definition:
+  When multiple Issue-### items are executed in the same session:
+  1. Execution MAY occur in parallel internally.
+  2. Output artifacts MUST be grouped by Issue-###.
+  3. Artifacts for Issue-003 must fully complete (proposal -> approved -> implementation -> summary)
+     before Issue-004 artifacts appear.
+  4. Commit order must remain grouped by Issue number.
+  5. No interleaving of artifacts across Issue numbers.
+- Examples:
+  - Valid order:
+    - Issue-003 proposal
+    - Issue-003 approved
+    - Issue-003 implementation commit
+    - Issue-003 summary
+    - Issue-004 proposal
+    - Issue-004 approved
+    - Issue-004 implementation commit
+    - Issue-004 summary
+  - Invalid order:
+    - Issue-003 proposal
+    - Issue-004 proposal
+    - Issue-003 approved
+    - Issue-004 approved
+    - Issue-003 summary
+    - Issue-004 summary
+- Acceptance Criteria:
+  - Stage-1 Inventory Verification can deterministically account for each Issue-###.
+  - Git history for a parallel block remains readable and grouped.
+  - No artifact renumbering collisions occur due to interleaving.
+- Dependencies:
+  - Issue-resolution lifecycle must already be functioning correctly.
+  - Output numbering must be strictly sequential.
+- Notes:
+  - This rule governs output structure only.
+  - It does not prohibit true parallel execution.
+  - It preserves audit clarity and deterministic validation.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
