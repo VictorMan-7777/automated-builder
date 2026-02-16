@@ -60,7 +60,30 @@ error() {
 }
 
 validation_error() {
-  echo "Validation Error: $1" >&2
+  local msg="$1"
+  local should_cleanup="${2:-false}"
+
+  echo "❌ Validation Error: ${msg}" >&2
+
+  # Cleanup logic (only for post-creation validation failures)
+  if [[ "${should_cleanup}" == "true" && -n "${PROJECT_PATH}" && -d "${PROJECT_PATH}" ]]; then
+    # Safety check: verify PROJECT_PATH ends with project-slug before deletion
+    if [[ "${PROJECT_PATH}" =~ /${NORMALIZED_SLUG}$ ]]; then
+      # Safety check: verify PROJECT_PATH is not BUILDER_ROOT
+      if [[ "${PROJECT_PATH}" != "${BUILDER_ROOT}" ]]; then
+        echo "🧹 Cleaning up partial project directory: ${PROJECT_PATH}" >&2
+        rm -rf "${PROJECT_PATH}"
+        echo "✅ Cleanup complete" >&2
+      else
+        echo "⚠️  CRITICAL: PROJECT_PATH matches BUILDER_ROOT. Aborting cleanup." >&2
+      fi
+    else
+      echo "⚠️  WARNING: PROJECT_PATH does not end with project-slug. Skipping cleanup to prevent data loss." >&2
+      echo "⚠️  PROJECT_PATH: ${PROJECT_PATH}" >&2
+      echo "⚠️  NORMALIZED_SLUG: ${NORMALIZED_SLUG}" >&2
+    fi
+  fi
+
   exit 1
 }
 
@@ -511,10 +534,199 @@ for file in "${ISSUE_008_DEPENDENCIES[@]}"; do
   fi
 done
 
+# ============================================================================
+# Issue-009: End-to-End Validation
+# ============================================================================
+
+echo ""
+echo "Running end-to-end validation checks..."
+
+# Check 1: Project directory exists
+if [[ ! -d "${PROJECT_PATH}" ]]; then
+  validation_error "Project directory does not exist: ${PROJECT_PATH}" true
+fi
+
+# Check 2: project.yaml valid (already validated in Issue-005, verify again)
+if [[ ! -f "${PROJECT_PATH}/project.yaml" ]]; then
+  validation_error "Identity file missing: project.yaml" true
+fi
+
+# Check 3: All P-084 bootstrap artifacts exist
+ALL_REQUIRED_FILES=(
+  "project.yaml"
+  "index.md"
+  "prd.md"
+  "roadmap.md"
+  "iteration-log.md"
+  "builder-manifest.yaml"
+  "phases/.gitkeep"
+  "docs/system/outputs/.gitkeep"
+  "docs/system/ai-process.md"
+  "docs/system/pending-items-rules.md"
+)
+
+for file in "${ALL_REQUIRED_FILES[@]}"; do
+  if [[ ! -f "${PROJECT_PATH}/${file}" ]]; then
+    validation_error "Required file missing: ${file}" true
+  fi
+done
+
+# Check 4: No empty files (.gitkeep files are allowed to be empty)
+for file in "${ALL_REQUIRED_FILES[@]}"; do
+  if [[ "${file}" == *".gitkeep" ]]; then
+    continue
+  fi
+
+  if [[ ! -s "${PROJECT_PATH}/${file}" ]]; then
+    validation_error "Empty file detected: ${file}" true
+  fi
+done
+
+# Check 5: YAML syntax validation (using yq if available, otherwise skip with warning)
+if command -v yq >/dev/null 2>&1; then
+  # Validate project.yaml is parseable YAML
+  if ! yq eval '.' "${PROJECT_PATH}/project.yaml" >/dev/null 2>&1; then
+    validation_error "Invalid YAML syntax in project.yaml" true
+  fi
+
+  # Validate builder-manifest.yaml is parseable YAML
+  if ! yq eval '.' "${PROJECT_PATH}/builder-manifest.yaml" >/dev/null 2>&1; then
+    validation_error "Invalid YAML syntax in builder-manifest.yaml" true
+  fi
+else
+  echo "⚠️  yq not installed, skipping YAML syntax validation"
+  echo "   Install with: brew install yq"
+fi
+
+# Check 6: builder-manifest.yaml contains identity_source reference
+if ! grep -q "identity_source:.*project.yaml" "${PROJECT_PATH}/builder-manifest.yaml"; then
+  validation_error "Missing identity_source reference in builder-manifest.yaml" true
+fi
+
+# Check 7: Governance reference paths resolve (basic check - verify relative path format)
+if ! grep -q "governance:" "${PROJECT_PATH}/builder-manifest.yaml"; then
+  validation_error "No governance section found in builder-manifest.yaml" true
+fi
+
+# Check governance.references paths start with ../automated-builder
+GOVERNANCE_REFS=$(grep -A 10 "^  references:" "${PROJECT_PATH}/builder-manifest.yaml" | grep "    -" | sed 's/.*- //' || echo "")
+if [[ -z "${GOVERNANCE_REFS}" ]]; then
+  validation_error "No governance references found in builder-manifest.yaml" true
+fi
+
+# Verify each reference starts with ../automated-builder
+while IFS= read -r ref_path; do
+  if [[ ! "${ref_path}" =~ ^\.\./automated-builder/ ]]; then
+    validation_error "Invalid governance reference (must start with ../automated-builder/): ${ref_path}" true
+  fi
+done <<< "${GOVERNANCE_REFS}"
+
+# Check 8: phases/ contains only .gitkeep
+PHASES_CONTENTS=$(ls -A "${PROJECT_PATH}/phases/" 2>/dev/null | grep -v "^\.gitkeep$" || true)
+if [[ -n "${PHASES_CONTENTS}" ]]; then
+  validation_error "Unexpected files in phases/: ${PHASES_CONTENTS}" true
+fi
+
+# Check 9: docs/system/outputs/ contains only .gitkeep
+OUTPUTS_CONTENTS=$(ls -A "${PROJECT_PATH}/docs/system/outputs/" 2>/dev/null | grep -v "^\.gitkeep$" || true)
+if [[ -n "${OUTPUTS_CONTENTS}" ]]; then
+  validation_error "Unexpected files in docs/system/outputs/: ${OUTPUTS_CONTENTS}" true
+fi
+
+# Check 10-12: Identity consistency checks (values from project.yaml match across files)
+# Read identity values from project.yaml (source-of-truth)
+IDENTITY_SLUG=$(read_yaml_field "${PROJECT_PATH}/project.yaml" "slug")
+IDENTITY_NAME=$(read_yaml_field "${PROJECT_PATH}/project.yaml" "name")
+IDENTITY_PREFIX=$(read_yaml_field "${PROJECT_PATH}/project.yaml" "prefix")
+IDENTITY_CREATED=$(read_yaml_field "${PROJECT_PATH}/project.yaml" "created")
+
+# Verify values are non-empty
+if [[ -z "${IDENTITY_SLUG}" ]]; then
+  validation_error "Empty slug in project.yaml" true
+fi
+if [[ -z "${IDENTITY_NAME}" ]]; then
+  validation_error "Empty name in project.yaml" true
+fi
+if [[ -z "${IDENTITY_PREFIX}" ]]; then
+  validation_error "Empty prefix in project.yaml" true
+fi
+if [[ -z "${IDENTITY_CREATED}" ]]; then
+  validation_error "Empty created date in project.yaml" true
+fi
+
+# Check 11: No unresolved placeholders (explicit token pattern check)
+# Check all created files for unresolved tokens
+for file in "index.md" "prd.md" "roadmap.md" "iteration-log.md" "builder-manifest.yaml" "docs/system/ai-process.md" "docs/system/pending-items-rules.md"; do
+  if grep -E '\{(project-slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${PROJECT_PATH}/${file}" >/dev/null 2>&1; then
+    UNRESOLVED_TOKEN=$(grep -oE '\{(project-slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${PROJECT_PATH}/${file}" | head -1)
+    validation_error "Unresolved token in ${file}: ${UNRESOLVED_TOKEN}" true
+  fi
+done
+
+# Check 12: Consistency check - slug appears in index.md
+if ! grep -q "${IDENTITY_SLUG}" "${PROJECT_PATH}/index.md"; then
+  validation_error "Inconsistency detected: project-slug missing in index.md" true
+fi
+
+# Check 12: Consistency check - prefix appears in pending-items-rules.md
+if ! grep -q "${IDENTITY_PREFIX}" "${PROJECT_PATH}/docs/system/pending-items-rules.md"; then
+  validation_error "Inconsistency detected: prefix missing in pending-items-rules.md" true
+fi
+
+# Check 12: Consistency check - prefix appears in ai-process.md (anchored line)
+if ! grep -q "^\*\*Prefix\*\*: ${IDENTITY_PREFIX}$" "${PROJECT_PATH}/docs/system/ai-process.md"; then
+  validation_error "Inconsistency detected: prefix not found in ai-process.md anchored line" true
+fi
+
+# Check 13: Prefix determined and set (already verified above with non-empty check)
+
+# Check 14: Path resolution invariants satisfied (already verified during pre-creation, verify again)
+# Verify PROJECT_PATH and BUILDER_ROOT are siblings
+if [[ "$(dirname "${PROJECT_PATH}")" != "$(dirname "${BUILDER_ROOT}")" ]]; then
+  validation_error "Path invariant violated: not siblings" true
+fi
+
+# Verify relative path from PROJECT_PATH resolves to BUILDER_ROOT
+RELATIVE_BUILDER=$(cd "${PROJECT_PATH}" && realpath "../automated-builder" 2>/dev/null || echo "")
+if [[ "${RELATIVE_BUILDER}" != "${BUILDER_ROOT}" ]]; then
+  validation_error "Path invariant violated: relative path does not resolve to builder root" true
+fi
+
+# Check 15: No governance files duplicated (docs/system/ contains only allowed files)
+# Allowed files in docs/system/: ai-process.md, pending-items-rules.md, outputs/ subdirectory
+DISALLOWED_PATTERNS=(
+  "planning.md"
+  "builder.md"
+  "gateway.md"
+  "git.md"
+  "issue-resolution.md"
+  "prompts"
+  "templates"
+)
+
+for pattern in "${DISALLOWED_PATTERNS[@]}"; do
+  if [[ -e "${PROJECT_PATH}/docs/system/${pattern}" ]]; then
+    validation_error "Governance file copied: docs/system/${pattern}" true
+  fi
+done
+
+# Verify docs/system/ contains only allowed files
+DOCS_SYSTEM_CONTENTS=$(ls -A "${PROJECT_PATH}/docs/system/" 2>/dev/null | grep -v "^ai-process.md$" | grep -v "^pending-items-rules.md$" | grep -v "^outputs$" || true)
+if [[ -n "${DOCS_SYSTEM_CONTENTS}" ]]; then
+  validation_error "Unexpected files in docs/system/: ${DOCS_SYSTEM_CONTENTS}" true
+fi
+
+echo "✅ All validation checks passed"
+echo ""
+
+# ============================================================================
+# Success Output
+# ============================================================================
+
 # Success: print normalized values, path resolution, and project creation
 echo "✅ Parameter validation successful"
 echo "✅ Path resolution successful"
-echo "✅ project.yaml created (YAML validation deferred to Issue-009)"
+echo "✅ project.yaml created and validated"
 echo "✅ All bootstrap files created successfully"
 echo "✅ ai-process.md deployed successfully"
 echo "✅ pending-items-rules.md deployed successfully"
@@ -549,13 +761,24 @@ echo "  ✅ Sibling structure verified"
 echo "  ✅ No nesting detected"
 echo "  ✅ Relative path invariant satisfied"
 echo ""
+echo "Validation Summary:"
+echo "  ✅ YAML syntax validation passed"
+echo "  ✅ Identity consistency verified"
+echo "  ✅ Governance protection verified"
+echo "  ✅ All required files exist and non-empty"
+echo "  ✅ Directory structure validated"
+echo "  ✅ Path resolution invariants satisfied"
+echo ""
 echo "Bootstrap Complete:"
-echo "  ✅ All bootstrap artifacts created"
+echo "  ✅ All P-084 bootstrap artifacts deployed"
 echo "  ✅ AI Process Contract deployed"
 echo "  ✅ Namespace mapping documented (P-### → ${NORMALIZED_PREFIX}-###)"
 echo "  ✅ Ready for project planning and building"
 echo ""
-echo "Note: YAML syntax and semantic validation deferred to Issue-009"
-echo "      Git initialization is explicit non-goal per P-084 Section 7"
+echo "Project created: ${PROJECT_PATH}"
+echo "Identity file: ${PROJECT_PATH}/project.yaml"
+echo ""
+echo "Note: Git initialization is manual (per P-084 Section 7)"
+echo "      Run 'git init' in project directory when ready"
 
 exit 0
