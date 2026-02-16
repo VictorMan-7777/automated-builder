@@ -1760,6 +1760,54 @@ No action is taken until explicitly promoted.
 - Notes:
   - This formalizes what decision record artifacts are doing today into a repeatable system.
 
+### P-091 — Formalize Proposal Update vs Approval-with-Changes Rule
+- Source: Approval governance clarification
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Define a deterministic threshold for when to use Update Proposal versus
+  Approved with: <changes> during Issue lifecycle approvals. Preserve
+  lifecycle automation while preventing silent scope and authority changes
+  during approval-time edits.
+- Objective:
+  Define a deterministic rule governing when to use:
+  - "Update Proposal"
+  - "Approved with: <changes>"
+  during the Issue lifecycle.
+- Problem:
+  Currently, small corrections may be applied during approval using
+  "Approved with:" while larger structural corrections require
+  "Update Proposal." There is no formal threshold defining what qualifies
+  as minor versus structural, creating ambiguity in governance behavior.
+- Rule Definition:
+  1. "Update Proposal" MUST be used when:
+     - Changes alter acceptance criteria structure.
+     - Changes modify scope boundaries (in-scope / out-of-scope).
+     - Changes alter validation authority (for example, deferrals, enforcement timing).
+     - Changes modify lifecycle sequencing.
+     - Changes introduce or remove dependencies.
+     - Changes materially affect implementation algorithm logic.
+  2. "Approved with: <changes>" MAY be used when:
+     - Changes are narrow corrections to implementation details.
+     - Changes do not alter scope or acceptance criteria structure.
+     - Changes tighten invariants without expanding scope.
+     - Changes correct deterministic extraction logic.
+     - Changes clarify wording without changing behavior.
+  3. If ambiguity exists, default to "Update Proposal."
+- Acceptance Criteria:
+  - Issue-Resolution templates explicitly describe this distinction.
+  - Approval trigger language remains deterministic.
+  - Lifecycle automation (proposal -> approved -> implementation) remains intact.
+  - No silent scope changes occur during approval.
+- Scope:
+  - Governance-only clarification.
+  - Does not modify existing approved artifacts.
+  - Does not change transition binding rule.
+- Notes:
+  - Preserves strict discipline.
+  - Prevents accidental scope mutation during approval.
+  - Supports long-term audit clarity.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
