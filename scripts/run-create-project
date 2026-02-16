@@ -720,6 +720,162 @@ echo "✅ All validation checks passed"
 echo ""
 
 # ============================================================================
+# Issue-007: Comprehensive Governance Protection Validation
+# ============================================================================
+
+echo "Running comprehensive governance protection validation..."
+
+# Portable realpath function (python3 fallback)
+portable_realpath() {
+  local path="$1"
+  local base_dir="$2"
+
+  # Try realpath command first (most portable)
+  if command -v realpath >/dev/null 2>&1; then
+    (cd "${base_dir}" && realpath "${path}" 2>/dev/null || echo "")
+  else
+    # Fallback to python3 (always available on macOS/Linux)
+    python3 -c "import os,sys; print(os.path.realpath(os.path.join(sys.argv[1], sys.argv[2])))" "${base_dir}" "${path}" 2>/dev/null || echo ""
+  fi
+}
+
+# Step 1: Recursive Prohibited Pattern Scan
+# Prohibited file patterns (contract files at root)
+PROHIBITED_FILES=(
+  "planning.md"
+  "builder.md"
+  "gateway.md"
+)
+
+# Prohibited directory patterns (governance directories anywhere)
+PROHIBITED_DIRS=(
+  "prompts"
+  "templates"
+  ".git"
+)
+
+# Step 1 violations buffer (deterministic per-step collection)
+STEP1_VIOLATIONS=""
+
+# Scan for prohibited files (contract files should not exist at root)
+for pattern in "${PROHIBITED_FILES[@]}"; do
+  FOUND_PATHS=$(find "${PROJECT_PATH}" -maxdepth 1 -type f -name "${pattern}" 2>/dev/null || true)
+
+  if [[ -n "${FOUND_PATHS}" ]]; then
+    while IFS= read -r found_path; do
+      STEP1_VIOLATIONS+="Contract file copied: ${found_path}"$'\n'
+    done <<< "${FOUND_PATHS}"
+  fi
+done
+
+# Scan for prohibited directories (governance directories anywhere in tree)
+for pattern in "${PROHIBITED_DIRS[@]}"; do
+  FOUND_PATHS=$(find "${PROJECT_PATH}" -type d -name "${pattern}" 2>/dev/null || true)
+
+  if [[ -n "${FOUND_PATHS}" ]]; then
+    while IFS= read -r found_path; do
+      STEP1_VIOLATIONS+="Governance directory copied: ${found_path}"$'\n'
+    done <<< "${FOUND_PATHS}"
+  fi
+done
+
+# Step 2: docs/system/ Comprehensive Validation
+# Extends Issue-009 Check 15 with recursive scan
+STEP2_VIOLATIONS=""
+
+if [[ -d "${PROJECT_PATH}/docs/system" ]]; then
+  # Find all files in docs/system/ recursively (excluding outputs/ subdirectory)
+  DOCS_SYSTEM_FILES=$(find "${PROJECT_PATH}/docs/system" -type f -not -path "${PROJECT_PATH}/docs/system/outputs/*" 2>/dev/null || true)
+
+  # Check each file is in allowed list
+  while IFS= read -r file_path; do
+    [[ -z "${file_path}" ]] && continue
+    file_basename=$(basename "${file_path}")
+
+    if [[ "${file_basename}" != "ai-process.md" && "${file_basename}" != "pending-items-rules.md" ]]; then
+      STEP2_VIOLATIONS+="Unexpected file in docs/system/: ${file_path}"$'\n'
+    fi
+  done <<< "${DOCS_SYSTEM_FILES}"
+
+  # Find all directories in docs/system/ recursively (except outputs/ and its subdirectories)
+  DOCS_SYSTEM_DIRS=$(find "${PROJECT_PATH}/docs/system" -mindepth 1 -type d -not -path "${PROJECT_PATH}/docs/system/outputs" -not -path "${PROJECT_PATH}/docs/system/outputs/*" 2>/dev/null || true)
+
+  if [[ -n "${DOCS_SYSTEM_DIRS}" ]]; then
+    while IFS= read -r dir_path; do
+      STEP2_VIOLATIONS+="Unexpected directory in docs/system/: ${dir_path}"$'\n'
+    done <<< "${DOCS_SYSTEM_DIRS}"
+  fi
+fi
+
+# Step 3: Symbolic Link Detection
+STEP3_VIOLATIONS=""
+
+# Find all symbolic links in PROJECT_PATH
+SYMLINKS=$(find "${PROJECT_PATH}" -type l 2>/dev/null || true)
+
+if [[ -n "${SYMLINKS}" ]]; then
+  while IFS= read -r symlink_path; do
+    STEP3_VIOLATIONS+="Symbolic link detected: ${symlink_path}"$'\n'
+  done <<< "${SYMLINKS}"
+fi
+
+# Step 5: Governance Reference Resolution (Canonical Path Validation)
+# Extract governance.references paths from builder-manifest.yaml using indent-aware awk
+GOVERNANCE_REFS=$(awk '
+  /^governance:/ { in_governance=1; next }
+  /^[a-z_]+:/ { if (in_governance) in_governance=0 }
+  in_governance && /^  references:/ { in_references=1; next }
+  in_governance && /^  [a-z_]+:/ { if (in_references) in_references=0 }
+  in_references && /^    - / { gsub(/^    - /, ""); print }
+' "${PROJECT_PATH}/builder-manifest.yaml" || echo "")
+
+if [[ -z "${GOVERNANCE_REFS}" ]]; then
+  validation_error "No governance references found in builder-manifest.yaml" true
+fi
+
+STEP5_VIOLATIONS=""
+
+# Verify each reference resolves to BUILDER_ROOT (using portable realpath)
+while IFS= read -r ref_path; do
+  [[ -z "${ref_path}" ]] && continue
+
+  # Resolve path relative to PROJECT_PATH
+  RESOLVED_PATH=$(portable_realpath "${ref_path}" "${PROJECT_PATH}")
+
+  if [[ -z "${RESOLVED_PATH}" ]]; then
+    STEP5_VIOLATIONS+="Cannot resolve governance reference: ${ref_path}"$'\n'
+    continue
+  fi
+
+  # Check if resolved path is within BUILDER_ROOT
+  if [[ ! "${RESOLVED_PATH}" =~ ^${BUILDER_ROOT} ]]; then
+    STEP5_VIOLATIONS+="Governance reference does not resolve to automated-builder: ${ref_path} (resolved to: ${RESOLVED_PATH})"$'\n'
+  fi
+
+  # Check if resolved path is within PROJECT_PATH (should NOT be)
+  if [[ "${RESOLVED_PATH}" =~ ^${PROJECT_PATH} ]]; then
+    STEP5_VIOLATIONS+="Invalid governance reference resolves within project: ${ref_path}"$'\n'
+  fi
+done <<< "${GOVERNANCE_REFS}"
+
+# Step 6: Merge Violations and HALT Deterministically
+ALL_VIOLATIONS=""
+ALL_VIOLATIONS+="${STEP1_VIOLATIONS}"
+ALL_VIOLATIONS+="${STEP2_VIOLATIONS}"
+ALL_VIOLATIONS+="${STEP3_VIOLATIONS}"
+ALL_VIOLATIONS+="${STEP5_VIOLATIONS}"
+
+# HALT deterministically with all violations if any found
+if [[ -n "${ALL_VIOLATIONS}" ]]; then
+  echo "Governance protection violations detected:" >&2
+  echo "${ALL_VIOLATIONS}" >&2
+  validation_error "Governance protection validation failed (see violations above)" true
+fi
+
+echo "✅ Comprehensive governance protection validation passed"
+echo ""
+
+# ============================================================================
 # Success Output
 # ============================================================================
 
