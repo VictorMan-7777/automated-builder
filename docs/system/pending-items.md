@@ -1891,6 +1891,39 @@ No action is taken until explicitly promoted.
   - Results must be captured in an output artifact.
   - This evaluation occurs before first real project creation.
 
+### P-093 — Review Devotional Generator Plans for Builder v1 Alignment
+- Source: Devotional governance-alignment review
+- Captured: 2026-02-16
+- Project: devotional-generator
+- Summary:
+  Evaluate the existing Devotional Generator PRD, roadmap, and pending
+  items for compatibility with Builder v1 governance and bootstrap rules.
+  Record incompatibilities and required follow-up without silently
+  modifying Devotional planning artifacts during review.
+- Objective:
+  Evaluate the existing Devotional Generator PRD, roadmap, and pending
+  items for compatibility with Builder v1 governance and bootstrap rules.
+- Scope:
+  Review for alignment with:
+  - Prefix enforcement ({PREFIX}-### namespace)
+  - project.yaml identity contract
+  - ai-process.md contract language
+  - Bootstrap file structure (P-084)
+  - Governance duplication restrictions (no project-level governance overrides)
+  - YAML structural requirements (Issue-009 validation)
+  - Two-phase inventory validation model
+- Out of Scope:
+  - Content/domain logic changes
+  - Devotional generation algorithms
+  - RAG or quote logic modifications
+- Acceptance Criteria:
+  - All incompatibilities identified and documented.
+  - Required updates captured as Devotional Generator pending items.
+  - No silent modification of Devotional plans during review.
+- Notes:
+  - This is a governance-alignment review only.
+  - Changes to Devotional plans must occur under Devotional project issue loop.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
