@@ -2007,6 +2007,47 @@ No action is taken until explicitly promoted.
   - This is governance-only.
   - No changes to existing approved artifacts.
 
+### P-097 — Automated Retry Logic for Inventory Verification (Automation-Only)
+- Source: Inventory verification automation resilience
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Enable issue-resolution automation mode to recover from verification
+  failures caused by stale or incomplete artifacts using deterministic
+  discovery and bounded retry behavior, without weakening completion gates.
+- Objective:
+  Enable issue-resolution (automation-only mode) to recover from
+  verification failures caused by stale or incomplete artifacts by
+  searching for newer valid artifacts and performing a bounded retry
+  when appropriate.
+- Scope:
+  Automation-only behavior for Inventory Verification:
+  1) If a verification gate fails, the system MUST continue scanning
+     outputs for a newer artifact satisfying the required condition
+     (for example, "Verdict: PASS").
+  2) The system MUST select the newest valid artifact if multiple
+     candidates exist.
+  3) If no valid artifact exists, the system MAY perform a bounded
+     corrective attempt (for example, regenerate Stage-1 verification),
+     subject to:
+     - Max retry count (<= 2)
+     - Explicit audit artifact explaining retry
+  4) The system MUST NOT mark completion unless required PASS artifacts
+     exist in correct canonical form.
+- Constraints:
+  - Human-run mode: STOP on FAIL (no automatic retry).
+  - Automated mode only: bounded retry permitted.
+  - No silent mutation of historical artifacts; corrections must create new artifacts.
+  - Stage-2 completion authority remains unchanged.
+- Acceptance Criteria:
+  - Verification stages prefer newest valid PASS artifact.
+  - Retry logic cannot loop indefinitely.
+  - Each retry produces explicit diagnostic evidence.
+  - No weakening of completion gates.
+- Notes:
+  - This does not modify Inventory Stage-1 or Stage-2 authority rules.
+  - It governs discovery and bounded retry behavior only.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
