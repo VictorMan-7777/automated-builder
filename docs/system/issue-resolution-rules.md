@@ -174,6 +174,28 @@ Inventory Verification Stage-1 Hardening Rules
 
 4. No Assumed Consolidation Rule: Stage-1 MUST NOT presume consolidation of Issues. Consolidation must be explicitly documented by artifact reference. Absent explicit consolidation evidence, each Issue must independently satisfy coverage requirements.
 
+5. Stage-1 PASS Definition: Inventory Stage-1 is considered PASS only if:
+   - A Stage-1 verification artifact exists in outputs.
+   - The artifact explicitly states: "Verdict: PASS".
+   - The artifact lists every Issue-### from the inventory-approved artifact.
+   - Each Issue has explicit FOUND evidence (approved artifact + implementation summary) or explicit deferral reference.
+
+   Absent these elements, Stage-1 is NOT PASS.
+
+6. Machine-Verifiable Requirement: Stage-1 PASS must be determinable solely by reading the Stage-1 artifact. External inference or memory is not permitted.
+
+Inventory Verification Stage-2 Dependency Rules
+
+1. Stage-1 Dependency Rule: Inventory Stage-2 MUST:
+   - Explicitly cite the Stage-1 PASS artifact filename.
+   - Fail immediately if a Stage-1 PASS artifact does not exist.
+   - Fail immediately if the cited Stage-1 artifact does not contain "Verdict: PASS".
+
+2. Completion Gate Rule: A P-### Inventory item may only be moved from Pending → Completed if:
+   - Stage-1 PASS artifact exists.
+   - Stage-2 PASS artifact exists.
+   - Stage-2 artifact explicitly references the Stage-1 PASS artifact.
+
 Validation Lookup Rule
 
 Tools and processes MUST reference the most recent inventory-proposal artifact for a given item ID:

@@ -154,6 +154,23 @@ Checks:
    - An entry in the deferred register.
 3. For each missing Issue-###, identify whether it is required to satisfy P-### requirements.
 
+Required Output Structure:
+
+The Stage-1 artifact MUST include:
+
+1. A verdict header section:
+   ```
+   Verdict: PASS
+   ```
+   or
+   ```
+   Verdict: FAIL
+   ```
+
+2. An explicit Issue coverage table listing every Issue-### from the inventory-approved artifact.
+
+3. Explicit evidence references for each Issue (FOUND: approved artifact + implementation summary, or explicit deferral reference).
+
 Verdict:
 
 - PASS: All Issue-### items are accounted for (implemented or deferred).
@@ -177,18 +194,46 @@ Inputs:
 2. All committed implementation summaries for Issue-### items.
 3. Deferred register (if any).
 4. The approved inventory artifact (*-inventory-approved.md).
+5. The Stage-1 PASS artifact (mandatory prerequisite).
+
+Required Output Structure:
+
+The Stage-2 artifact MUST include:
+
+1. A Stage-1 reference field:
+   ```
+   Stage-1 Reference: <filename>
+   ```
+
+2. An explicit check:
+   - If no Stage-1 PASS artifact exists → FAIL immediately.
+   - If the cited Stage-1 artifact does not contain "Verdict: PASS" → FAIL immediately.
+
+3. A verdict section:
+   ```
+   Verdict: PASS
+   ```
+   or
+   ```
+   Verdict: FAIL
+   ```
 
 Checks:
 
-1. Deferred analysis: For each deferred Issue-### item:
+1. Stage-1 Dependency Check (mandatory first check):
+   - Verify that a Stage-1 PASS artifact exists and is explicitly referenced.
+   - If Stage-1 PASS artifact does not exist or does not contain "Verdict: PASS", Stage-2 MUST fail immediately.
+
+2. Deferred analysis: For each deferred Issue-### item:
    - Evaluate whether it is required to satisfy the descriptive requirements of the P-### item.
    - If a deferred Issue-### is required to meet P-### requirements, Stage 2 MUST fail.
-2. Secondary validation (Stage 2 check): Validate that the final system state satisfies the descriptive requirements in the P-### entry.
+
+3. Secondary validation (Stage 2 check): Validate that the final system state satisfies the descriptive requirements in the P-### entry.
 
 Verdict:
 
-- PASS: All required work is complete and the P-### descriptive scope is fully satisfied.
-- FAIL: Deferred Issue-### items are required for P-###, OR the P-### descriptive scope is not satisfied.
+- PASS: Stage-1 PASS artifact exists and is referenced, all required work is complete, and the P-### descriptive scope is fully satisfied.
+- FAIL: Stage-1 PASS artifact missing or does not contain "Verdict: PASS", OR deferred Issue-### items are required for P-###, OR the P-### descriptive scope is not satisfied.
 
 On PASS:
 
