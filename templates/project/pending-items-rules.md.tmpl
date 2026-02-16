@@ -1,0 +1,32 @@
+# Pending Items Rules — {Project Name}
+
+**Project**: {project-slug}
+**Prefix**: {PREFIX}
+
+---
+
+## Namespace Mapping
+
+This project uses the prefix `{PREFIX}` for all pending items.
+
+**Mapping Rule**: Automated-builder `P-###` items map to `{PREFIX}-###` in this project.
+
+| Source (automated-builder) | Project Identifier |
+|----------------------------|-------------------|
+| P-001 | {PREFIX}-001 |
+| P-042 | {PREFIX}-042 |
+| P-999 | {PREFIX}-999 |
+
+---
+
+## Identity Source
+
+All prefix references derive from [project.yaml](../project.yaml), which is the authoritative source for project identity.
+
+---
+
+## Enforcement
+
+- All project-specific pending items MUST use `{PREFIX}-###` format
+- This project MUST NOT reference automated-builder `P-###` identifiers directly
+- The prefix value is immutable after project creation

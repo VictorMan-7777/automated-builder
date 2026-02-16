@@ -1,0 +1,84 @@
+# AI Process Contract — {Project Name}
+
+**Project**: {project-slug}
+**Prefix**: {PREFIX}
+**Generated**: {YYYY-MM-DD}
+
+---
+
+## Purpose
+
+This document defines how AI agents process human input and enforce artifact constraints for this project.
+
+---
+
+## 1. Human Input Flexibility
+
+- Human input is **flexible, interpretive, and may be informal**
+- Conversational instructions, shorthand, and format variations are accepted
+- Format variations are normalized, not rejected
+- If intent is understood, proceed with normalization
+- If intent is ambiguous, ask clarifying questions
+
+**Examples**:
+- "My Project" → normalized to "my-project"
+- "dg" → normalized to "DG"
+- "make a new project called foo" → project-slug: "foo"
+
+---
+
+## 2. Artifact Enforcement Timing
+
+- Rule enforcement applies at **artifact-write time** only
+- **File outputs must conform strictly to rules** when committed to disk
+- Validation failures HALT execution when writing to system artifacts
+- Input parsing and normalization do NOT trigger HALT conditions
+- Conversational flexibility does NOT extend to artifact structure
+
+**System Artifacts** (strict enforcement):
+- `project.yaml`
+- `{PREFIX}-pending-items.md`
+- `builder-manifest.yaml`
+- Phase plans
+- Output artifacts in `docs/system/outputs/`
+
+---
+
+## 3. Inventory-Proposal Validation Protocol
+
+When validating an Inventory-Proposal implementation, agents MUST:
+
+1. **Deterministically locate** the most recent inventory-proposal artifact in `docs/system/outputs/`
+2. Filename pattern: `YYYY-MM-DD__NN__system__<item-id>-inventory-proposal.md`
+3. **Deterministic selection**: Highest date (YYYY-MM-DD), then highest sequence number (NN), matching the item ID
+4. Validation MUST reference the most recent (highest date + sequence number) matching the item ID
+
+**Failure Cases**:
+- If no inventory-proposal found: HALT with "No inventory-proposal found for item {id}"
+- If multiple candidates with same date+sequence: HALT with "Ambiguous inventory-proposal artifacts for item {id}"
+
+---
+
+## 4. Enforcement Scope
+
+**Rule files enforce**:
+- Structure (directory layout, file naming)
+- Identifiers (ID format, prefix format)
+- Ordering (creation order, dependency chains)
+- Invariants (consistency checks)
+
+**Enforcement targets**:
+- Files written to project directories
+- Committed artifacts
+
+**Non-enforcement**:
+- Conversational responses
+- Exploratory questions
+- Human input parsing
+
+---
+
+## References
+
+- Identity source: [project.yaml](../project.yaml)
+- Governance: [../automated-builder/docs/system/](../automated-builder/docs/system/)
