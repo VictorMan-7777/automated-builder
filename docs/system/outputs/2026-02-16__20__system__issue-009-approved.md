@@ -2,9 +2,9 @@
 
 **Issue**: Issue-009 — End-to-End Validation and Bootstrap Verification
 **Parent**: P-084 — run-create-project Bootstrap Specification
-**Artifact Type**: Issue-Proposal
+**Artifact Type**: Issue-Approved
 **Date**: 2026-02-16
-**Status**: Proposed
+**Status**: Approved
 
 ---
 

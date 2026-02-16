@@ -1808,6 +1808,89 @@ No action is taken until explicitly promoted.
   - Prevents accidental scope mutation during approval.
   - Supports long-term audit clarity.
 
+### P-092 — Builder v1 Edge Case Evaluation (Pre-Deploy Gate)
+- Source: Builder pre-deploy quality gate
+- Captured: 2026-02-16
+- Project: automated-builder
+- Summary:
+  Define and execute a structured edge case evaluation suite before
+  declaring Builder v1 deployable. Validate deterministic behavior under
+  boundary conditions and invariant violations prior to first real-world
+  project deployment.
+- Objective:
+  Define and execute a structured edge case evaluation suite before
+  declaring Builder v1 deployable.
+- Purpose:
+  Validate that Builder v1 behaves deterministically under boundary
+  conditions and invariant violations before first real-world project
+  deployment (for example, Devotional Generator).
+- Scope:
+  Covers:
+  1. Input normalization edge cases
+  2. Path and invariant enforcement
+  3. Symlink and canonicalization behavior
+  4. Template rendering correctness
+  5. Token substitution safety
+  6. Governance lifecycle integrity
+  7. Deferred validation boundary adherence
+  Does NOT include:
+  - Performance testing
+  - Cross-platform CI automation
+  - Studio stack integration
+- Edge Case Categories:
+  A. Input and Normalization
+  - Slug with spaces, underscores, mixed case
+  - Prefix with whitespace and lowercase
+  - Invalid prefix (numeric, too long, special characters)
+  - Project name with repeated whitespace or quotes
+  Expected Result:
+  - Deterministic normalization or explicit HALT.
+  B. Path Invariants
+  - Parent directory missing
+  - Parent directory not writable
+  - Project directory already exists
+  - Project nested inside builder root
+  - Builder root missing .git/
+  Expected Result:
+  - Explicit HALT with correct error message.
+  C. Symlink Behavior
+  - Parent directory is a symlink
+  - Builder root under symlink
+  - Attempt to bypass sibling invariant via symlink
+  Expected Result:
+  - Canonicalized paths enforce invariants.
+  - No bypass possible.
+  D. Template Rendering
+  - All required files created
+  - No unresolved allowed token patterns remain
+  - sed escaping works with special characters (/, &, \)
+  - project.yaml identity matches rendered outputs
+  Expected Result:
+  - Deterministic PASS or explicit HALT.
+  E. Governance Lifecycle
+  - Proposal -> Approved -> Implementation -> Summary flow deterministic
+  - No unintended pauses
+  - Output numbering monotonic within session
+  - Clean working tree at lifecycle completion
+  F. Deferred Validation Boundary
+  - YAML syntax/semantic validation not claimed prior to Issue-009
+  - No issue incorrectly asserts parse validity
+- Acceptance Criteria:
+  - All edge cases either:
+    - PASS with evidence, or
+    - FAIL and spawn a formal Issue-### for correction.
+  - No silent failure states.
+  - No heuristic validation logic.
+  - No reliance on session memory.
+- Deployment Gate Definition:
+  Builder v1 is declared deployable only when:
+  - Edge Case Evaluation suite passes, OR
+  - Any remaining failures are explicitly deferred and classified as non-blocking.
+- Notes:
+  - This is a structured manual test suite.
+  - Results must be captured in an output artifact.
+  - This evaluation occurs before first real project creation.
+
 ## Completed Items
 
 ### P-001 — Proposal / Approval commit semantics clarification
