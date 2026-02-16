@@ -49,13 +49,13 @@ Deploy `docs/system/ai-process.md` from template and enforce P-084 Section 4.2 A
 **Content Validation** (P-084 Section 4.2 requirements):
 - [ ] ai-process.md explicitly states human input is flexible and normalizable
 - [ ] ai-process.md explicitly states enforcement occurs at artifact-write time
-- [ ] ai-process.md explicitly requires deterministic selection of most recent inventory-proposal artifact
-- [ ] ai-process.md contains project-specific prefix reference (`{PREFIX}` token replaced)
+- [ ] ai-process.md explicitly requires deterministic selection of most recent inventory-approved artifact (primary authority)
+- [ ] ai-process.md contains project-specific prefix in anchored line: `**Prefix**: <PREFIX>` (not just prefix appearing anywhere)
 
 **Post-Deployment Validation**:
 - [ ] HALT: "Required file missing: docs/system/ai-process.md" if deployment fails
 - [ ] HALT: "Unresolved placeholders in ai-process.md" if allowed token patterns remain (`{project-slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}`)
-- [ ] HALT: "Prefix not set in ai-process.md" if project-specific prefix is missing
+- [ ] HALT: "Prefix not set in ai-process.md" if anchored line `**Prefix**: <PREFIX>` not found
 - [ ] File readable: HALT: "Cannot read: docs/system/ai-process.md" if permissions invalid
 
 **Completion Verification**:
@@ -91,11 +91,12 @@ Deploy `docs/system/ai-process.md` from template and enforce P-084 Section 4.2 A
    - Validation failures HALT execution when writing to system artifacts
    - Input parsing and normalization do NOT trigger HALT conditions
 
-3. **Inventory-Proposal Validation Protocol**:
-   - Validation MUST locate the most recent inventory-proposal for the target item ID
-   - Deterministically locate the most recent inventory-proposal artifact in `docs/system/outputs/`
-   - Filename pattern: `YYYY-MM-DD__NN__system__<item-id>-inventory-proposal.md`
+3. **Inventory-Approved Validation Protocol**:
+   - Validation MUST locate the most recent inventory-approved artifact for the target item ID (primary authority)
+   - Deterministically locate the most recent inventory-approved artifact in `docs/system/outputs/`
+   - Filename pattern: `YYYY-MM-DD__NN__system__<item-id>-inventory-approved.md`
    - Deterministic selection: Highest date (YYYY-MM-DD), then highest sequence number (NN)
+   - Fallback: If no inventory-approved found, may use inventory-proposal as fallback (secondary authority)
 
 4. **Enforcement Scope**:
    - Rule files enforce: structure, identifiers, ordering, invariants
@@ -118,7 +119,7 @@ Deploy `docs/system/ai-process.md` from template and enforce P-084 Section 4.2 A
 | File exists | `docs/system/ai-process.md` exists | HALT: "Required file missing: docs/system/ai-process.md" |
 | File readable | File has read permissions | HALT: "Cannot read: docs/system/ai-process.md" |
 | Placeholders resolved | No unresolved `{...}` tokens remain | HALT: "Unresolved placeholders in ai-process.md" |
-| Prefix present | File contains project-specific prefix reference | HALT: "Prefix not set in ai-process.md" |
+| Prefix present (anchored) | File contains anchored line `**Prefix**: <PREFIX>` | HALT: "Prefix not set in ai-process.md" |
 
 ---
 
@@ -193,11 +194,12 @@ if grep -E '\{(project-slug|Project Name|PREFIX|YYYY-MM-DD)\}' "${AI_PROCESS_OUT
 fi
 ```
 
-**Prefix Presence Check**:
+**Prefix Presence Check** (anchored line validation):
 ```bash
-# Verify prefix is present in file (not just template token replaced)
-if ! grep -q "${IDENTITY_PREFIX}" "${AI_PROCESS_OUTPUT}"; then
-  validation_error "Prefix not set in ai-process.md"
+# Verify prefix is present in anchored line: "**Prefix**: <PREFIX>"
+# This ensures the prefix appears in the correct metadata location, not just anywhere
+if ! grep -q "^\*\*Prefix\*\*: ${IDENTITY_PREFIX}$" "${AI_PROCESS_OUTPUT}"; then
+  validation_error "Prefix not set in ai-process.md (expected anchored line: **Prefix**: ${IDENTITY_PREFIX})"
 fi
 ```
 
@@ -260,7 +262,7 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 2. **Directory existence**: Verify docs/system/ exists (created in Issue-006)
 3. **File creation**: Verify output file exists after rendering
 4. **Unresolved tokens**: Explicit grep for allowed token patterns only
-5. **Prefix presence**: Verify PREFIX value appears in rendered file
+5. **Prefix presence**: Verify anchored line `**Prefix**: <PREFIX>` exists (not just prefix appearing anywhere)
 6. **File readability**: Check file permissions
 
 ### Content Validation (Section 4.2 Requirements)
@@ -269,7 +271,7 @@ Issue-011 validates that the template contains required contract language by che
 
 1. **Human input flexibility**: Template contains "flexible, interpretive, and may be informal"
 2. **Artifact-write-time enforcement**: Template contains "artifact-write time"
-3. **Inventory-proposal protocol**: Template contains "deterministically locate"
+3. **Inventory-approved protocol**: Template contains "deterministically locate" (most recent inventory-approved as primary authority)
 
 **Note**: Template correctness verified in Issue-001. Issue-011 validates tokens replaced, not template content itself.
 
@@ -326,12 +328,12 @@ Issue-011 validates that the template contains required contract language by che
    ```
    Expected: No unresolved allowed token patterns found
 
-3. **Prefix presence check**:
+3. **Prefix presence check** (anchored line):
    ```bash
    run-create-project --slug prefix-ai --name "Prefix AI Test" --prefix PA
-   grep 'PA' ../prefix-ai/docs/system/ai-process.md
+   grep '^\*\*Prefix\*\*: PA$' ../prefix-ai/docs/system/ai-process.md
    ```
-   Expected: Prefix value appears in file (not just token replaced)
+   Expected: Anchored line `**Prefix**: PA` found (metadata location validated)
 
 4. **9-file verification**:
    ```bash
@@ -346,8 +348,9 @@ Issue-011 validates that the template contains required contract language by che
    grep -i "flexible, interpretive" ../contract-ai/docs/system/ai-process.md
    grep -i "artifact-write time" ../contract-ai/docs/system/ai-process.md
    grep -i "deterministically locate" ../contract-ai/docs/system/ai-process.md
+   grep -i "inventory-approved" ../contract-ai/docs/system/ai-process.md
    ```
-   Expected: All required contract language present
+   Expected: All required contract language present (including inventory-approved as primary authority)
 
 ---
 
