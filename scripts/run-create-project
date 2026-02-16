@@ -2,15 +2,19 @@
 set -euo pipefail
 
 # run-create-project — Command scaffolding for project creation
-# Issue-002 implementation: parameter parsing and normalization only
+# Issue-002 implementation: parameter parsing and normalization
+# Issue-003 implementation: path resolution and validation
 # Does NOT create files (deferred to Issue-005, Issue-006, Issue-011)
 
-# BUILDER_ROOT definition
+# BUILDER_ROOT definition (Issue-003: use git rev-parse directly)
 # BUILDER_ROOT = absolute path to the automated-builder repository root
 # (the directory containing .git/, templates/, prompts/, etc.)
 # NOT the umbrella projects directory that contains multiple project repositories
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILDER_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+BUILDER_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" ||
+  { echo "Error: Cannot locate automated-builder repository root" >&2; exit 1; }
+
+# Canonicalize BUILDER_ROOT (resolve symlinks)
+BUILDER_ROOT="$(cd "${BUILDER_ROOT}" && pwd -P)"
 
 # Default parent directory (umbrella projects directory)
 DEFAULT_PARENT_DIR="$(dirname "${BUILDER_ROOT}")"
@@ -171,13 +175,54 @@ if [[ ! "${NORMALIZED_PREFIX}" =~ ^[A-Z]{1,4}$ ]]; then
   validation_error "Invalid prefix format after normalization: '${NORMALIZED_PREFIX}' (expected: 1-4 uppercase letters, got '${PREFIX}' → '${NORMALIZED_PREFIX}')"
 fi
 
-# Parent-dir validation: exists (basic check)
+# Parent-dir validation: exists (basic check from Issue-002)
 if [[ ! -d "${NORMALIZED_PARENT_DIR}" ]]; then
   validation_error "Parent directory does not exist: ${NORMALIZED_PARENT_DIR}"
 fi
 
-# Success: print normalized values
+# Path Resolution and Validation (Issue-003)
+
+# Validate PARENT_DIR writability
+if [[ ! -w "${NORMALIZED_PARENT_DIR}" ]]; then
+  validation_error "Parent directory is not writable: ${NORMALIZED_PARENT_DIR}"
+fi
+
+# Canonicalize PARENT_DIR (resolve symlinks)
+PARENT_DIR="$(cd "${NORMALIZED_PARENT_DIR}" && pwd -P)"
+
+# Compute PROJECT_PATH
+PROJECT_PATH="${PARENT_DIR}/${NORMALIZED_SLUG}"
+
+# Check project path doesn't already exist
+if [[ -e "${PROJECT_PATH}" ]]; then
+  validation_error "Project directory already exists: ${PROJECT_PATH}"
+fi
+
+# Verify sibling relationship (using canonicalized paths)
+if [[ "$(dirname "${PROJECT_PATH}")" != "$(dirname "${BUILDER_ROOT}")" ]]; then
+  validation_error "Project must be sibling to automated-builder. Expected parent: $(dirname "${BUILDER_ROOT}"), got: $(dirname "${PROJECT_PATH}")"
+fi
+
+# Check no nesting (using canonicalized paths)
+if [[ "${PROJECT_PATH}" == "${BUILDER_ROOT}"* ]]; then
+  validation_error "Invalid nesting: project cannot be inside automated-builder"
+fi
+
+if [[ "${BUILDER_ROOT}" == "${PROJECT_PATH}"* ]]; then
+  validation_error "Invalid nesting: automated-builder cannot be inside project"
+fi
+
+# Verify relative path invariant (using canonicalized paths)
+RELATIVE_BUILDER_FROM_PROJECT="$(cd "${PARENT_DIR}" && cd automated-builder 2>/dev/null && pwd -P)" ||
+  validation_error "Relative path invariant violated: cannot reach automated-builder from parent directory"
+
+if [[ "${RELATIVE_BUILDER_FROM_PROJECT}" != "${BUILDER_ROOT}" ]]; then
+  validation_error "Relative path invariant violated: ../automated-builder does not resolve to BUILDER_ROOT (expected: ${BUILDER_ROOT}, got: ${RELATIVE_BUILDER_FROM_PROJECT})"
+fi
+
+# Success: print normalized values and path resolution
 echo "✅ Parameter validation successful"
+echo "✅ Path resolution successful"
 echo ""
 echo "Normalized Parameters:"
 echo "  project-slug: ${NORMALIZED_SLUG}"
@@ -185,9 +230,18 @@ echo "  project-name: ${NORMALIZED_NAME}"
 echo "  prefix:       ${NORMALIZED_PREFIX}"
 echo "  parent-dir:   ${NORMALIZED_PARENT_DIR}"
 echo ""
-echo "BUILDER_ROOT:   ${BUILDER_ROOT}"
+echo "Resolved Paths:"
+echo "  BUILDER_ROOT: ${BUILDER_ROOT}"
+echo "  PARENT_DIR:   ${PARENT_DIR}"
+echo "  PROJECT_PATH: ${PROJECT_PATH}"
+echo ""
+echo "Path Invariants:"
+echo "  ✅ Sibling structure verified"
+echo "  ✅ No nesting detected"
+echo "  ✅ Relative path invariant satisfied"
+echo "  ✅ Project path available (does not exist)"
 echo ""
 echo "Note: File creation is deferred to Issue-005, Issue-006, Issue-011"
-echo "      This command performs parameter validation only."
+echo "      This command performs parameter validation and path resolution only."
 
 exit 0
