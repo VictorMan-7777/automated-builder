@@ -65,6 +65,34 @@ NOT inventory-proposal-approved.md.
 
 ------------------------------------------------------------
 
+MODE CONSTRAINTS
+
+Default Mode: Human (no automation constraints)
+
+Constraint State: BOUNDED
+
+Triggered by: "You are in BOUNDED mode. No scope expansion."
+
+Note: Current prompts may use variant phrasing ("Constraint state: BOUNDED" with lowercase 's'). Both variants trigger BOUNDED state. Template phrasing reconciliation will be addressed in a future update.
+
+Prohibitions:
+- Scope expansion beyond prompt header artifact/phase identifier
+- File modification outside docs/system/ is prohibited
+- Within docs/system/, file modification outside the files explicitly listed in the active Issue-### scope (or explicitly listed target files in the governing prompt header) is prohibited
+- Artifact write without template-required fields
+- Commit before designated STOP checkpoint
+
+Requirements:
+- Adherence to governing inventory-approved artifact (if inventory)
+- HALT on constraint violation: stop execution and report the specific violation
+
+Automated Mode
+
+Applies to: Inventory verification executed without human prompts between stages
+Subject to: Automation Non-Interleaving Invariant (Inventory Verification Stage-2 Dependency Rules)
+
+------------------------------------------------------------
+
 LOOP OVERVIEW
 
 The system uses two distinct loops depending on whether the P-### item has an inventory flag.
