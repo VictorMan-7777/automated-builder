@@ -2043,12 +2043,14 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   multi-model review (Claude, Codex, Grok) to reduce reliance on prompt
   discipline and introduce mechanical enforcement where appropriate.
 - Scope:
-  - Define and enforce Mode (Human default, explicit declaration required)
-  - Bind completion authority mechanically to PASS artifacts
-  - Add Stage-2 artifact write-time validation requirements
-  - Enforce proposal iteration limit visibility
-  - Define BOUNDED mode formally
-  - Normalize explicit MUST / MUST NOT prohibitions
+  - HR-1: Define Mode Constraints (BOUNDED state, Human mode, Automated mode)
+  - HR-2: Enforce Artifact Write Validation (Stage-1/Stage-2 write-time validation)
+  - HR-3: Bind Completion Authority to PASS Artifacts (mechanical enforcement)
+  - HR-4: Prevent Cross-Loop Mutation and Bind Issue-### Lifecycle
+  - HR-5: Define Approval Transition Mechanics (artifact-state invariants)
+  - HR-6: Define Approval Lifecycle Execution Contract
+  - HR-7: Proposal Change Log Enforcement + Review Count
+  - HR-8: Issue Dependency Declaration Requirement (Priority, dependencies, execution order)
 - Non-Goals:
   - No redesign of regular vs inventory loops
   - No tooling implementation (hooks/scripts) in this item
