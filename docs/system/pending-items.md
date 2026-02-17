@@ -1104,6 +1104,35 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - decision rules for future Pending items
     - boundary principles to avoid autonomy creep
 
+### P-061 — Lifecycle Changelog Rules
+- Source: Builder lifecycle governance request
+- Captured: 2026-02-17
+- Project: Builder
+- Objective:
+  Define a standardized changelog structure and update rules for Issue proposals covering:
+  - Proposal updates
+  - Review executions
+  - Approval corrections
+- Scope:
+  - Define required changelog table schema (fields and format).
+  - Define when a changelog entry is required.
+  - Define when Review Count increments.
+  - Define when Compliance Pass increments.
+  - Define when no counter increments.
+  - Define immutability rules for changelog entries after approval.
+- Out of Scope:
+  - Automation of changelog generation.
+  - Git commit automation.
+  - Retroactive modification of approved artifacts.
+  - Changes to inventory structure.
+  - Enforcement code.
+- Acceptance Criteria:
+  - Explicit changelog table format defined.
+  - Explicit triggers for entry creation defined.
+  - Explicit counter increment rules defined.
+  - No recursive or auto-trigger behavior introduced.
+  - No conflict with existing review process.
+
 ### P-062 — Define formal supersession rule for Pending items
 - Source: Backlog governance and audit clarity planning
 - Captured: 2026-02-11
