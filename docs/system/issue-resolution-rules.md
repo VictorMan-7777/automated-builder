@@ -1,7 +1,7 @@
 # Issue Resolution Workflow — Rules
 
 Version: 3.0
-Last Updated: 2026-02-14
+Last Updated: 2026-02-17
 
 ------------------------------------------------------------
 
@@ -102,7 +102,7 @@ P-### Inventory Proposal
   - Create new pending items if needed
 → Inventory Verification — Stage 2 (Pending Scope Verification)
   - Validate P-### descriptive scope satisfied
-  - PASS → mark P-### complete
+  - PASS → move P-### to pending-items-archive.md
 → Verification
 → STOP
 ```
@@ -179,8 +179,8 @@ Backlog Hygiene Rules
 
 1. Approval does NOT authorize completion. Items remain in Pending until verification authorizes completion.
 2. Completion authority:
-   - Standard P-###: Verification PASS authorizes moving the P-### from Pending → Completed.
-   - Inventory P-###: Inventory Verification Stage 2 PASS authorizes moving the P-### from Pending → Completed.
+   - Standard P-###: Verification PASS authorizes moving the P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
+   - Inventory P-###: Inventory Verification Stage 2 PASS authorizes moving the P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
 3. Deferred items remain in Pending. Append "Deferred: <reason>" or "Deferred until: <condition>" to the item block. Do NOT create a separate Deferred section.
 
 Inventory-Specific Rules
@@ -192,7 +192,7 @@ Inventory-Specific Rules
 5. Deferred handling creates new pending items. Non-blocking deferred Issue-### items become NEW P-### items in pending-items.md.
 6. Two-phase verification for inventory items:
    - Stage 1 (Issue Completion Verification): Confirms all Issue-### spawned by the inventory-approved artifact are completed. Does NOT authorize P-### completion. If incomplete, create new pending items for missing steps.
-   - Stage 2 (Pending Scope Verification): Confirms that executed work resolves the descriptive scope of the P-### in pending-items.md. PASS authorizes moving P-### from Pending → Completed.
+   - Stage 2 (Pending Scope Verification): Confirms that executed work resolves the descriptive scope of the P-### in pending-items.md. PASS authorizes moving P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
 
 Inventory Verification Stage-1 Hardening Rules
 
@@ -260,7 +260,7 @@ Inventory Verification Stage-2 Dependency Rules
      - Descriptive scope validation
      - Deferred dependency check
 
-4. Completion Authority Binding Rule: A P-### Inventory item may only be moved from Pending → Completed if:
+4. Completion Authority Binding Rule: A P-### Inventory item may only be moved from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md` if:
    - Stage-1 PASS artifact exists.
    - Stage-2 PASS artifact exists.
    - Stage-2 artifact explicitly references the Stage-1 PASS artifact.
@@ -328,7 +328,7 @@ CHANGELOG
 | 3.0 | 2026-02-14 | Full rewrite: parallel typed artifact naming rule, separate Regular vs Inventory loop diagrams, human-readable rules/templates separation, visual spacing enforcement for human prompts |
 | 2.0 | 2026-02-13 | Add Inventory branch rule, Inventory-specific approval behavior, and Inventory Validation section to support full-loop inventory items with inventory flag on P-### |
 | 1.9 | 2026-02-10 | Add Pending-item context to verification template; shift completion authority from approval to verification (P-015) |
-| 1.8 | 2026-02-10 | Add backlog hygiene rule: move completed P-### items to Completed during execution |
+| 1.8 | 2026-02-10 | Add backlog hygiene rule: move completed P-### items to pending-items-archive during execution |
 | 1.7 | 2026-02-10 | Correct loop diagram to show pause-for-review and execution-trigger semantics; add approved artifact immutability rule |
 | 1.6 | 2026-02-10 | Add deferred-item disposition rules and example to verification template |
 | 1.5 | 2026-02-10 | Add proposal artifact prerequisite to approval template |

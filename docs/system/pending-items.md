@@ -1,28 +1,29 @@
 # Pending Items
 
-Items captured during active work loops.
+Active pending items captured during work loops.
 No action is taken until explicitly promoted.
 
 ---
 
 ## Rules
 
-1. Pending item IDs (`P-###`) are unique and never reused after completion.
-2. This file contains exactly three item-state sections: **Pending Items**
-   (open items), **Completed Items** (finished items), and
-   **Dependencies** (ordering model only; NOT a status signal).
+1. Pending item IDs (`P-###`) are unique and never reused after archival.
+2. This file is the canonical list of active pending items only.
 3. New pending items are assigned using the lowest missing `P-###` in the current range first; if no gaps exist, assign `max(existing P-###) + 1`.
-4. New pending items MUST be inserted in numeric order within the **Pending Items** section (ascending by `P-###`).
-5. Completed items are moved from Pending to Completed; they are never deleted.
-6. When an item is moved to **Completed Items**, it MUST be inserted in numeric order within the **Completed Items** section (ascending by `P-###`).
-7. A completed item MUST include a completion date line formatted exactly: `- Completed: YYYY-MM-DD`.
-8. Pending items are capture-only and do not trigger work unless explicitly promoted.
-9. This file is not an Issue tracker and does not start Issue loops.
-10. If an instruction requires moving an item to Completed but the **Completed** section does not exist, STOP and report the error instead of partially applying changes.
-11. Deferred pending items MUST include a deferment line formatted as `- Deferred until: <condition>`. If the item has a `- Notes:` block, use `  - Deferred until: <condition>` inside that block.
+4. New pending items MUST be inserted in numeric order within the `## Pending Items` section (ascending by `P-###`).
+5. Completed items are moved out of this file into `docs/system/pending-items-archive.md`; they are never deleted.
+6. Any P-### moved out of active state MUST be relocated from this file to `docs/system/pending-items-archive.md` under the appropriate archive heading.
+7. Deferred pending items remain in this file until reactivated or determined to be no longer relevant (then they may be archived).
+8. Deferred pending items MUST include a deferment line formatted as `- Deferred until: <condition>`. If the item has a `- Notes:` block, use `  - Deferred until: <condition>` inside that block.
+9. Dependency view + regeneration instructions live in `docs/system/pending.md` (canonical derived view).
+10. Pending items are capture-only and do not trigger work unless explicitly promoted.
+11. This file is not an Issue tracker and does not start Issue loops.
 
 ---
 
+Dependency view + regeneration instructions live in `docs/system/pending.md` (canonical).
+
+---
 ## Pending Items
 
 ### P-003 — Add proposal-artifact reference requirement to Approval template in issue-resolution.md
@@ -2009,171 +2010,31 @@ No action is taken until explicitly promoted.
   - This does not modify Inventory Stage-1 or Stage-2 authority rules.
   - It governs discovery and bounded retry behavior only.
 
-## Completed Items
-
-### P-001 — Proposal / Approval commit semantics clarification
-- Source: Output File System Issue loop
-- Captured: 2026-02-09
-- Completed: 2026-02-10
-- Summary:
-  Proposal artifacts should remain uncommitted until approval.
-  Approval renames proposal to approved and triggers execution.
-- Notes:
-    Identified while resolving Issue-001H.
-
-### P-002 — issue-resolution.md Requires Diff to Reflect Corrected Loop Semantics
-- Source: Output File System Issue loop
-- Captured: 2026-02-10
-- Summary:
-  issue-resolution.md does not currently reflect the clarified execution model:
-  - proposals uncommitted
-  - approval triggers execution
-  - verification is separate
-  - approved-with-updates semantics
-- Notes:
-    Requires a diff/update pass, not in scope of current Issue loop.
-
-### P-012 — Automated builder — completion definition and guardrails
-- Source: System architecture clarification
-- Captured: 2026-02-10
-- Completed: 2026-02-12
-- Summary:
-  Define the completion criteria and non-negotiable guardrails for finishing
-  the automated builder, independent of any downstream generator.
-- Notes:
-    Completion authorized by PASS verification (`2026-02-12__03__system__p-012-verification.md`).
-    Content codified in `builder.md` v1.2 — Definition of Done (6 criteria),
-    Minimal Architecture Guardrails (6 invariants), and Builder Completion Non-Goals.
-
-### P-015 — Verification template — add Pending item context (not inventory-only)
-- Source: Verification workflow gap
-- Captured: 2026-02-10
-- Completed: 2026-02-10
-- Summary:
-  Update verification template to include Pending-item context fields (P-###, target file(s), proposal artifact, acceptance checks) so verification works for non-inventory changes as well.
-- Notes:
-    Verification template updated to include Pending-item context and shift completion authority to verification; dogfooded on P-016.
-
-### P-016 — Enforce output artifact after every Claude iteration
-- Source: Process enforcement gap
-- Captured: 2026-02-10
-- Completed: 2026-02-10
-- Summary:
-  Add/clarify system rule that every Claude iteration must produce an output artifact (saved under docs/system/outputs/) to prevent untracked changes and lost work.
-- Notes:
-    Completion authorized by PASS verification (`2026-02-10__23__system__p-016-re-verification.md`).
-    Proposal/approval loop was not used; retroactive approval recorded (`2026-02-10__22__system__p-016-retroactive-approval.md`).
-
-### P-037 — Determine required availability date for Mac Mini (special configuration)
-- Source: Infrastructure planning for OpenClaw + local LLM development
-- Captured: 2026-02-11
-- Completed: 2026-02-12
-- Summary:
-  Identify when the Mac Mini (special configuration; ~2-week lead time)
-  must be ordered to support local LLM experimentation, multi-agent
-  OpenClaw testing, and overnight verification loops.
-- Notes:
-  Decision complete: selected a used Mac Studio instead of proceeding with a
-  Mac Mini purchase path.
-
-### P-061 — Survey online Bible study platforms (APIs, BYO integration, and low-cost alternatives)
-- Status: Superseded
-- Superseded by: P-031 (expanded scope)
-- Notes:
-  Scope merged into expanded P-031 to eliminate duplication and
-  centralize Bible study platform integration analysis.
-
-### P-083 — Relocate Planner output root to parent projects directory
-- Source: System architecture / project organization
-- Captured: 2026-02-12
-- Completed: 2026-02-12
-- Summary:
-  Move Planner project planning docs and workflow artifacts from
-  automated-builder to parent-level `../<slug>/`. Planning docs (index.md,
-  prd.md, roadmap.md, iteration-log.md, phases/) write to `../<slug>/`.
-  Workflow artifacts (proposals, approvals, verifications, implementation
-  summaries) write to `../<slug>/docs/system/outputs/`. Automated-builder
-  system artifacts remain in `docs/system/outputs/` inside automated-builder.
-- Notes:
-    Completion authorized by verification (this session).
-    Proposal artifact: `2026-02-12__04__system__p-083-planner-output-root-approved.md`.
-    Implementation summary: `2026-02-12__06__system__p-083-implementation-summary.md`.
-    All six authoritative documents updated with correct paths and version bumps.
-
-### P-084 — run-create-project — create project directory + bootstrap required system docs
-- Source: Builder execution readiness for devotional-generator
-- Captured: 2026-02-12
-- Completed: 2026-02-16
-- Project: Automated-builder
-- Inventory: docs/system/outputs/2026-02-13__01__system__p-084-inventory-proposal-approved.md
-- Summary:
-  Implement `run-create-project` command to bootstrap new projects with all
-  required system documentation. Command creates project directory structure,
-  deploys 9 required files from canonical templates (project.yaml, index.md,
-  prd.md, roadmap.md, iteration-log.md, builder-manifest.yaml, ai-process.md,
-  and .gitkeep files), enforces governance protection rules, and validates
-  17-point contract. Project becomes ready for planner/builder execution with
-  zero manual setup. Prefix determination required by default; derivation
-  available via explicit flag. Templates stored in automated-builder repository;
-  project files deployed to sibling directory.
-- Inventory Scope (11 Issue-### execution slices):
-  - Issue-001: Create template directory and base templates (7 .tmpl files)
-  - Issue-002: Implement command scaffolding with parameter parsing/normalization
-  - Issue-003: Implement path resolution and sibling validation
-  - Issue-004: Implement prefix determination (required by default, derivation opt-in)
-  - Issue-005: Create project.yaml identity file FIRST
-  - Issue-006: Deploy remaining files with placeholder substitution
-  - Issue-007: Implement governance protection validation
-  - Issue-008: Deploy project rules pack template
-  - Issue-009: End-to-end validation (17 checks) and cleanup
-  - Issue-010: Introduce inventory-proposal artifact type (governance)
-  - Issue-011: Validate ai-process.md deployment and AI Process Contract
-- Validation Requirements:
-  - Primary: Confirm all 11 Issue-### items match approved inventory specification
-  - Secondary: Confirm run-create-project produces valid project structure
-  - All 17 validation checks pass (identity file, governance protection, path invariants)
-  - Template deployment successful, no unresolved placeholders
-  - Sibling relationship to automated-builder verified
-- Notes:
-  - Execution proceeds through issue-resolution loop (Issue-### proposal -> approval -> implementation -> summary)
-  - Issue-### items are execution slices only (not inserted into pending-items.md)
-  - P-084 completion requires successful two-stage validation
-  - Completion authorized by two-stage inventory verification: Stage-1 PASS (all 11 Issue-### items match approved inventory), Stage-2 PASS (descriptive scope + system state validated)
-  - Stage-1 artifact: `2026-02-16__27__system__p-084-stage1-verification-pass.md`
-  - Stage-2 artifact: `2026-02-16__28__system__p-084-stage2-verification.md`
-
-## Dependencies
-
-### Dependency model through P-086
-
-Legend:
-A -> B means A must be completed before B can be meaningfully executed.
-(A) means cluster / umbrella dependency
-[D] means deferred until <condition>
-
-Core builder readiness
-P-012 (Builder completion criteria) -> P-084 (run-create-project spec)
-P-083 (Planner output root -> ../<slug>/) -> P-084 (run-create-project spec)
-
-Project bootstrapping
-P-084 (run-create-project spec) -> P-085 (template source-of-truth location)
-P-085 (templates) -> (run-create-project implemented) -> first planner run
-
-Devotional-generator (all currently [D] until automated builder complete)
-P-084 + P-085 + (run-create-project implemented) -> P-005 [D]
-P-084 + P-085 + (run-create-project implemented) -> P-006 [D]
-P-006 -> P-007 [D] (uniqueness depends on series support)
-P-006 -> P-008 [D] (spreadsheet import depends on series plan model)
-P-006 -> P-009 [D] (scrivener import depends on series plan model + locking)
-P-008 + P-009 -> P-010 [D] (imports + generation workflow)
-P-010 -> P-011 [D] (export depends on generated volumes)
-
-Research / comparisons (mostly [D] until automated builder core complete)
-(automated builder core complete) -> P-017 [D]
-(automated builder core complete) -> P-018 [D]
-(automated builder core complete) -> P-019 [D]
-(automated builder core complete) -> P-020 [D]
-(devotional generator complete) -> P-021 [D]
-(devotional generator + openclaw integration complete) -> P-022 [D]
-
----
+### P-098 — Harden Issue-Resolution Constitution (Mechanical Enforcement Pass)
+- Source: Multi-model constitutional hardening review (Claude, Codex, Grok)
+- Captured: 2026-02-17
+- Project: automated-builder
+- Type: Inventory
+- Objective:
+  Implement high-leverage constitutional hardening identified in
+  multi-model review (Claude, Codex, Grok) to reduce reliance on prompt
+  discipline and introduce mechanical enforcement where appropriate.
+- Scope:
+  - Define and enforce Mode (Human default, explicit declaration required)
+  - Bind completion authority mechanically to PASS artifacts
+  - Add Stage-2 artifact write-time validation requirements
+  - Enforce proposal iteration limit visibility
+  - Define BOUNDED mode formally
+  - Normalize explicit MUST / MUST NOT prohibitions
+- Non-Goals:
+  - No redesign of regular vs inventory loops
+  - No tooling implementation (hooks/scripts) in this item
+  - No restructuring of pending registry (already completed)
+- Acceptance Criteria:
+  - Updated issue-resolution.md includes formalized invariants section
+  - issue-resolution-rules.md contains explicit enforcement clauses
+  - issue-resolution-templates.md updated only where required for enforcement
+  - No regression to post-P-084 governance hardening
+  - Verification artifact confirms constitutional integrity
+- Dependencies:
+  - None

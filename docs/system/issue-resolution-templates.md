@@ -1,7 +1,7 @@
 # Issue Resolution Workflow — Templates
 
 Version: 3.0
-Last Updated: 2026-02-14
+Last Updated: 2026-02-17
 
 This document contains the procedural templates for the issue resolution workflow. For normative rules and definitions, see [issue-resolution-rules.md](issue-resolution-rules.md).
 
@@ -372,13 +372,13 @@ Verdict:
 
 On PASS:
 
-Move the P-### item from Pending to Completed in pending-items.md.
+Move the P-### item from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
 
 On FAIL:
 
 The P-### item remains in Pending. The artifact must state what remediation is required.
 
-Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from Pending → Completed. The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
+Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`. The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
 
 Deferred handling: Create NEW pending items in pending-items.md from deferred Issue-### items that are NOT required to satisfy P-### requirements.
 
@@ -417,6 +417,6 @@ Required content:
    - Acceptance criteria: what constitutes "done" for this item.
 2. Checks: Specific checks confirming the change was applied correctly and completely.
 3. Verdict: PASS or FAIL with justification.
-4. Completion authority: Verification — not approval — authorizes marking a P-### item as Completed. When the verdict is PASS and all acceptance criteria are met, the artifact must explicitly state that completion is authorized. When the verdict is FAIL, the item remains in Pending and the artifact must state what remediation is required.
+4. Completion authority: Verification — not approval — authorizes moving a P-### item from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`. When the verdict is PASS and all acceptance criteria are met, the artifact must explicitly state that completion is authorized. When the verdict is FAIL, the item remains in Pending and the artifact must state what remediation is required.
 
-Backlog hygiene: When verification authorizes completion of a P-### item, move that item from Pending to Completed in docs/system/pending-items.md and commit the change as part of the verification commit. The completion date is the date of the verification artifact.
+Backlog hygiene: When verification authorizes completion of a P-### item, move that item from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md` and commit the change as part of the verification commit. The completion date is the date of the verification artifact.

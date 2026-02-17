@@ -1,7 +1,7 @@
 # Issue Resolution Workflow
 
 Version: 3.0
-Last Updated: 2026-02-14
+Last Updated: 2026-02-17
 
 ------------------------------------------------------------
 
@@ -51,7 +51,7 @@ P-### Inventory Proposal
   - Create new pending items if needed
 → Inventory Verification Stage 2
   - Validate P-### descriptive scope satisfied
-  - PASS → move P-### to Completed
+  - PASS → move P-### to pending-items-archive.md
 → Verification
 → STOP
 ```
