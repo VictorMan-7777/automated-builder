@@ -137,6 +137,40 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   volume-specific front/back matter; optionally support a series bundle export.
 - Deferred until: automated builder is complete
 
+### P-012 — Automated Mode Expansion — Stage-Level Execution
+- Source: Devotional Generator Builder v1 workflow expansion
+- Captured: 2026-02-17
+- Project: Devotional Generator (Builder v1 workflows)
+- Status: Pending
+- Inventory: No (pending item only)
+- Objective:
+  Expand "Automated Mode" beyond approval templates so that each of the following can run fully automated within its own process:
+  - run-create
+  - run-planner
+  - run-builder
+  Automation must HALT and ask the user whenever required input is missing or a question arises.
+  This item does NOT enable fully automated chaining from run-create -> run-planner -> run-builder.
+- Scope:
+  - Define "stage-level automated execution" for each process (run-create, run-planner, run-builder) independently.
+  - Define what "HALT and ask" means operationally for each process when:
+    - required information is missing,
+    - ambiguity prevents safe continuation,
+    - an invariant/constraint violation is detected.
+  - Generalize/extend the non-interleaving expectation to these stage runs (no cross-stage interleaving; no mixing planner/builder artifacts mid-run).
+  - Ensure stage-level automation remains consistent with MODE CONSTRAINTS semantics (BOUNDED/HALT meaning), without re-opening Issue-001.
+- Out of Scope:
+  - End-to-end pipeline automation across run-create -> run-planner -> run-builder (explicitly deferred).
+  - Lifecycle approval automation.
+  - Inventory amendment automation.
+  - Cross-project orchestration or multi-repo automation.
+- Acceptance Criteria:
+  - Automated Mode stage-level behavior is specified for run-create, run-planner, and run-builder.
+  - HALT-on-question behavior is specified (must stop and request user input; must not proceed silently).
+  - Non-interleaving guardrails for stage automation are specified (no cross-stage bleed/interleaving).
+  - Explicit statement that full pipeline automation is deferred.
+- Dependencies:
+  - None (do not reference Issue-001; it's already resolved/implemented).
+
 ### P-013 — Scan system for documentation inconsistencies
 - Source: Output File System pending items update
 - Captured: 2026-02-10
