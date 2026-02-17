@@ -40,11 +40,34 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Captured: 2026-02-10
 - Project: Automated-builder
 - Summary:
-  Perform a full system architecture review AFTER the automated builder is complete.
-  This review will assess the planner–builder–verification pipeline as a whole,
-  validate architectural assumptions against the completed builder,
-  and identify any refactors or systemic improvements before downstream generators
-  (e.g., the devotional generator) are built.
+  Perform a full system architecture review AFTER the automated builder
+  meets the defined Builder v1 Completion Gate.
+  
+  Builder v1 is considered complete only when ALL of the following are true:
+  
+  1. Planner → Builder → Verification lifecycle executes deterministically
+     without manual state repair.
+  
+  2. Issue lifecycle:
+     - Proposal → Approved → Implementation → Summary executes cleanly.
+     - Commit grouping is deterministic and rule-driven.
+     - Approval transition removes proposal-only sections.
+     - No lifecycle blending occurs.
+  
+  3. Inventory lifecycle:
+     - Inventory Proposal → Approved → Issue execution → Stage-1 PASS → Stage-2 PASS
+       executes without state ambiguity.
+     - Deferred Register (if applicable) functions correctly.
+  
+  4. pending-items.md remains synchronized with approved artifacts
+     without manual correction.
+  
+  5. run-create-project (P-085) produces a fully compliant project
+     validated by verification rules.
+  
+  6. No open governance-breaking Issues remain in automated-builder.
+  
+  Only when all criteria above are satisfied may the architecture review begin.
 
 ### P-005 — Devotional generator — builder planning updates
 - Source: Devotional generator planning
