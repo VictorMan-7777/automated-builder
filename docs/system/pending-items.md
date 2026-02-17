@@ -228,6 +228,37 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   2026-02-12: PRD generation is explicitly out of scope for Builder v1 and deferred to Builder v2.
   Builder v1 consumes a shared, manually authored PRD input to reduce ambiguity and support first-round AI agent comparison testing.
 
+### P-015 — Normalize run-* prompt/script locations
+- Source: run-* location normalization request
+- Captured: 2026-02-17
+- Project: Automated-builder
+- Summary:
+  Normalize canonical locations and cross-references for run-create-project,
+  run-planner, and run-builder so path usage is deterministic across docs,
+  prompts, and scripts.
+- Objective:
+  Define and enforce canonical filesystem locations for run-create-project,
+  run-planner, and run-builder artifacts, and align internal references so
+  command/script lookup is unambiguous.
+- Scope:
+  - Define canonical location for run-create-project script artifact.
+  - Define canonical locations for run-planner and run-builder prompt/script artifacts.
+  - Normalize references in docs/prompts/scripts to canonical run-* paths.
+  - Document allowed aliases or compatibility redirects if non-canonical paths
+    must remain temporarily.
+  - Add verification guidance to detect and prevent drift in run-* references.
+- Out of Scope:
+  - Behavioral changes to run-create-project, run-planner, or run-builder logic.
+  - End-to-end workflow redesign or lifecycle governance changes.
+  - Cross-repo path normalization outside this repository.
+- Acceptance Criteria:
+  - Canonical locations for run-create-project, run-planner, and run-builder
+    are explicitly documented.
+  - Internal references use canonical paths or an explicitly documented
+    compatibility alias.
+  - Verification guidance exists for catching non-canonical run-* references.
+  - No ambiguity remains about where each run-* artifact should live.
+
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
