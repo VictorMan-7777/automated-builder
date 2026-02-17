@@ -145,28 +145,27 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   Add a pending item for scanning the repository and docs to identify
   inconsistencies or missing documentation.
 
-### P-014 — Expand Planner with Q&A PRD Generation Mode (CMS-002) + Agentic/RAG Planning Awareness
+### P-014 — Expand Planner with Shared PRD Input Mode (CMS-002) + Agentic/RAG Planning Awareness
 - Objective:
-  Expand the Planner to support a guided Q&A-style intake flow that can agentically
-  produce an implementation-grade PRD that the Planner can implement, so the Builder
-  receives a strong, consistent foundation. PRD becomes a required planning artifact.
+  Expand Planner/Builder planning awareness while deferring PRD generation capability.
+  For Builder v1 and first-round AI Agent comparisons, Builder must accept a shared,
+  manually authored PRD file as input and use it as the planning foundation; Builder v1
+  must not generate PRDs.
+- Deferred until: Builder v2
 - Scope (In):
-  - Q&A intake flow (interactive prompts + structured answers)
-  - PRD synthesis from answers:
-    - tight scope
-    - numbered requirements
-    - measurable acceptance criteria
-    - explicit non-goals
-    - verification plan
+  - Builder v1 PRD input contract:
+    - accept a provided PRD file (shared manual PRD) as input
+    - validate presence/format required for downstream planning/build steps
+    - use the shared PRD input for AI agent comparison testing
   - Consistency checks:
     - missing sections
     - vague language flags
     - terminology consistency
     - dependency coherence
-  - Gap detection prompts (follow-up questions when info is missing/ambiguous)
+  - Gap detection prompts (follow-up questions when info is missing/ambiguous in provided PRD/input context)
   - Trust-first guardrails (explicit constraints, auditability requirements, safe defaults)
   - Output artifacts:
-    - PRD at prd/prd.md
+    - normalized planning context derived from provided PRD (no PRD generation)
     - capability map
     - open questions list
     - "Builder Handoff" section (what to build, what not to change, verification plan)
@@ -178,20 +177,22 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
       provenance tracking, evaluation criteria, and safe fallbacks
     - Planner must not assume RAG without justification
 - Scope (Out):
+  - PRD generation/synthesis in Builder v1 or Planner-for-Builder-v1 flow
   - Implementing Church MS features directly
   - Automated web scraping (can accept competitor/pain-point notes as inputs)
   - UI beyond CLI/Markdown outputs (unless later requested)
 - Acceptance Criteria:
-  - Planner can run a Q&A session that outputs a structured PRD at prd/prd.md from user inputs
-  - System detects missing required PRD fields and generates follow-up questions until resolved or deferred
-  - PRD enforces "tightness": numbered requirements + measurable acceptance criteria + explicit non-goals
+  - Builder v1 accepts a provided shared PRD file as input for planning/build execution
+  - System detects missing required PRD fields in the provided PRD and generates follow-up questions until resolved or deferred
+  - Provided PRD is validated for "tightness": numbered requirements + measurable acceptance criteria + explicit non-goals
   - Trust-first section is always present and populated
   - Output includes "Builder Handoff" (what to build, what not to change, verification plan)
 - Dependencies:
   - PRD template + lint/check rules (internal validation is fine)
   - Alignment with existing planner/builder governance rules (outputs, approvals, allowed modifications)
 - Notes:
-  2026-02-12: Add Q&A mode to Planner to generate a builder-ready PRD agentically; reduce ambiguity and improve handoff quality.
+  2026-02-12: PRD generation is explicitly out of scope for Builder v1 and deferred to Builder v2.
+  Builder v1 consumes a shared, manually authored PRD input to reduce ambiguity and support first-round AI agent comparison testing.
 
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
