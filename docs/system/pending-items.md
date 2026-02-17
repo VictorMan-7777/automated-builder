@@ -2012,7 +2012,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 
 ### P-098 — Harden Issue-Resolution Constitution (Mechanical Enforcement Pass)
 - Source: Multi-model constitutional hardening review (Claude, Codex, Grok)
-- Captured: 2026-02-17
+- Captured: 2026-02-16
 - Project: automated-builder
 - Type: Inventory
 - Objective:
@@ -2036,5 +2036,6 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - issue-resolution-templates.md updated only where required for enforcement
   - No regression to post-P-084 governance hardening
   - Verification artifact confirms constitutional integrity
+  - Existing regular (non-inventory) and inventory flows remain valid; no prior PASS/verification artifacts are retroactively invalidated by wording changes.
 - Dependencies:
   - None
