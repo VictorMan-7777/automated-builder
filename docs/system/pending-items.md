@@ -259,6 +259,28 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Verification guidance exists for catching non-canonical run-* references.
   - No ambiguity remains about where each run-* artifact should live.
 
+### P-016 — Stabilize run-create bootstrap validation
+- Source: Builder system stabilization request
+- Captured: 2026-02-17
+- Project: Automated-builder
+- Severity: High (blocks project creation)
+- Objective:
+  Fix run-create-project.sh so it completes successfully with valid flags (no cleanup)
+  by resolving the inconsistency: "project-slug missing in index.md".
+- Scope:
+  - Ensure project-slug is injected/rendered into index.md correctly.
+  - Align template rendering with validation rules.
+  - Verify metadata propagation into generated files.
+  - Ensure end-to-end validation passes (yq optional; must fail only for real inconsistencies).
+- Out of Scope:
+  - Adding interactive prompts
+  - Changing CLI flag behavior
+  - Expanding bootstrap functionality
+- Acceptance Criteria:
+  - Running run-create-project.sh with valid flags completes successfully.
+  - index.md includes required project-slug field/content.
+  - No cleanup triggered on success.
+
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
@@ -628,6 +650,30 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - uniqueness and duplication checks
     - final review and sign-off criteria
   This pipeline should be executable step-by-step without ambiguity.
+
+### P-037 — run-create-project interactive prompts for mandatory fields
+- Source: Builder system usability enhancement request
+- Captured: 2026-02-17
+- Project: Automated-builder
+- Status: Deferred (until Item 1 complete)
+- Deferred until: P-016 is complete
+- Objective:
+  If required fields are not provided via flags, prompt interactively for:
+  - slug
+  - name
+  - prefix
+- Scope:
+  - Prompt only when missing.
+  - Preserve current flag-based behavior.
+  - Reuse existing normalization/validation logic.
+- Out of Scope:
+  - Removing flags
+  - Converting to a Claude prompt
+  - Changing bootstrap behavior
+- Acceptance Criteria:
+  - Without required flags, script prompts and proceeds.
+  - With flags, script remains non-interactive.
+  - No breaking changes.
 
 ### P-038 — Identify critical timing points and build dependencies to prevent derailment
 - Source: System execution stability planning
