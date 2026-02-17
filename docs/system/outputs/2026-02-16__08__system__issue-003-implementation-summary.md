@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` with path resolution and validation logic implementing P-084 Section 5.2 path resolution invariants. All paths are canonicalized with `pwd -P` before validation to prevent symlink-based bypasses.
+Extended `system/scripts/run-create-project.md` with path resolution and validation logic implementing P-084 Section 5.2 path resolution invariants. All paths are canonicalized with `pwd -P` before validation to prevent symlink-based bypasses.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+62 lines, -8 lines)
+- `system/scripts/run-create-project.md` (+62 lines, -8 lines)
 
 ---
 
@@ -191,5 +191,5 @@ Per P-084 Section 10 Implementation Plan:
 
 - Approved Artifact: [2026-02-16__07__system__issue-003-approved.md](2026-02-16__07__system__issue-003-approved.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)
 - Path Resolution Invariants: P-084 Section 5.2

@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to deploy pending-items-rules.md from template as project-specific namespace mapping documentation. Implements dependency-scoped verification, explicit 3-token substitution, and outputs/ directory existence check.
+Extended `system/scripts/run-create-project.md` to deploy pending-items-rules.md from template as project-specific namespace mapping documentation. Implements dependency-scoped verification, explicit 3-token substitution, and outputs/ directory existence check.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+67 lines)
+- `system/scripts/run-create-project.md` (+67 lines)
 
 ---
 
@@ -300,4 +300,4 @@ Per P-084 Section 10 Implementation Plan:
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 5.1: Namespace Conversion Contract
 - Template: [templates/project/pending-items-rules.md.tmpl](../../../templates/project/pending-items-rules.md.tmpl)
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

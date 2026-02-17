@@ -1114,7 +1114,7 @@ This section defines ordered implementation slices (Issue-### items) that will s
 **Dependencies**: Issue-001
 
 **Files Likely Touched**:
-- `scripts/run-create-project` or `bin/run-create-project` (create)
+- `system/scripts/run-create-project.md` or `bin/run-create-project` (create)
 
 **Risks / Failure Modes**:
 - Parameter parsing ambiguity

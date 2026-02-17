@@ -66,7 +66,7 @@ Implement P-084 Section 5.2 path resolution invariants to ensure project directo
 
 ### Resolution Algorithm
 
-Extend `scripts/run-create-project` with path resolution logic:
+Extend `system/scripts/run-create-project.md` with path resolution logic:
 
 ```bash
 # 1. Determine BUILDER_ROOT using git rev-parse
@@ -175,7 +175,7 @@ Path Invariants:
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (extend with path resolution)
+- `system/scripts/run-create-project.md` (extend with path resolution)
 
 ---
 

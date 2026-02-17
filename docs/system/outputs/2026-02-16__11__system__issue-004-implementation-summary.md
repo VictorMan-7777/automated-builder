@@ -136,5 +136,5 @@ Per P-084 Section 10 Implementation Plan:
 - Approved Artifact: [2026-02-16__09__system__issue-004-approved.md](2026-02-16__09__system__issue-004-approved.md)
 - Verification Artifact: [2026-02-16__10__system__issue-004-verification.md](2026-02-16__10__system__issue-004-verification.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
-- Issue-002 Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Issue-002 Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)
 - Issue-002 Summary: [2026-02-16__04__system__issue-002-implementation-summary.md](2026-02-16__04__system__issue-002-implementation-summary.md)

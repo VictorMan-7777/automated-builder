@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to implement comprehensive governance protection validation per P-084 Section 4.1. Extends Issue-009 with recursive scanning, symbolic link detection, and canonical path resolution. Uses per-step violation buffers with deterministic HALT behavior.
+Extended `system/scripts/run-create-project.md` to implement comprehensive governance protection validation per P-084 Section 4.1. Extends Issue-009 with recursive scanning, symbolic link detection, and canonical path resolution. Uses per-step violation buffers with deterministic HALT behavior.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+156 lines)
+- `system/scripts/run-create-project.md` (+156 lines)
 
 ---
 
@@ -414,4 +414,4 @@ Per P-084 Section 10 Implementation Plan:
 - Approved Artifact: [2026-02-16__22__system__issue-007-approved.md](2026-02-16__22__system__issue-007-approved.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 4.1: Governance File Protection Rules
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

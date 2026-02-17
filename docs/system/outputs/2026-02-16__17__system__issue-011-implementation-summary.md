@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to deploy ai-process.md from template as the final bootstrap file. Implements anchored prefix validation, explicit token pattern detection, and completes 9-file bootstrap sequence.
+Extended `system/scripts/run-create-project.md` to deploy ai-process.md from template as the final bootstrap file. Implements anchored prefix validation, explicit token pattern detection, and completes 9-file bootstrap sequence.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+74 lines, -2 lines)
+- `system/scripts/run-create-project.md` (+74 lines, -2 lines)
 
 ---
 
@@ -302,4 +302,4 @@ Per P-084 Section 10 Implementation Plan:
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 4.2: AI Process Contract
 - Template: [templates/project/ai-process.md.tmpl](../../../templates/project/ai-process.md.tmpl)
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

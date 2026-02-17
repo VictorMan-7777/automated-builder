@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to create remaining bootstrap files from project.yaml as source-of-truth. Implements bounded awk extraction from identity: block, explicit token pattern validation, and safe sed substitution.
+Extended `system/scripts/run-create-project.md` to create remaining bootstrap files from project.yaml as source-of-truth. Implements bounded awk extraction from identity: block, explicit token pattern validation, and safe sed substitution.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+130 lines, -4 lines)
+- `system/scripts/run-create-project.md` (+130 lines, -4 lines)
 
 ---
 
@@ -321,4 +321,4 @@ Per P-084 Section 10 Implementation Plan:
 - P-084 Section 2.3: Placeholder Substitution Contract
 - P-084 Section 2.4: Project Identity (Source-of-Truth)
 - P-084 Section 3.2-3.8: Bootstrap File Specifications
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

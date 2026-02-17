@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to implement comprehensive end-to-end validation per P-084 Section 6 validation contract. Executes 15 validation checks after all bootstrap files created, with cleanup on failure. Consolidates incremental validations from Issues 005-011 into final comprehensive verification.
+Extended `system/scripts/run-create-project.md` to implement comprehensive end-to-end validation per P-084 Section 6 validation contract. Executes 15 validation checks after all bootstrap files created, with cleanup on failure. Consolidates incremental validations from Issues 005-011 into final comprehensive verification.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+228 lines, -5 lines)
+- `system/scripts/run-create-project.md` (+228 lines, -5 lines)
 
 ---
 
@@ -487,4 +487,4 @@ Per P-084 Section 10 Implementation Plan:
 - Approved Artifact: [2026-02-16__20__system__issue-009-approved.md](2026-02-16__20__system__issue-009-approved.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 6: Validation Contract (15 checks)
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

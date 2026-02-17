@@ -116,7 +116,7 @@ Implement P-084 Section 2.3 placeholder substitution from project.yaml as source
 
 ### Step 1: Read project.yaml (Source-of-Truth)
 
-Extend `scripts/run-create-project` to read identity values from deployed project.yaml:
+Extend `system/scripts/run-create-project.md` to read identity values from deployed project.yaml:
 
 ```bash
 # After project.yaml created and validated (Issue-005)
@@ -306,7 +306,7 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (extend with file creation logic)
+- `system/scripts/run-create-project.md` (extend with file creation logic)
 - `../<project-slug>/index.md` (create)
 - `../<project-slug>/prd.md` (create)
 - `../<project-slug>/roadmap.md` (create)

@@ -47,7 +47,7 @@ Verify that prefix determination implementation satisfies P-084 Section 5.1 name
 
 ### Out of Scope
 
-- ❌ Code changes to scripts/run-create-project (verification only)
+- ❌ Code changes to system/scripts/run-create-project.md (verification only)
 - ❌ Prefix derivation algorithm (removed from scope, not implemented)
 - ❌ Storage in project.yaml (Issue-005)
 - ❌ Collision detection (no prefix registry exists)
@@ -71,7 +71,7 @@ Verify that prefix determination implementation satisfies P-084 Section 5.1 name
 
 ### Code Review
 
-Review `scripts/run-create-project` to confirm:
+Review `system/scripts/run-create-project.md` to confirm:
 
 1. **Required parameter check**:
    ```bash
@@ -182,5 +182,5 @@ The approval and implementation steps will:
 
 - Primary Authority: [P-084 Section 10: Issue-004](2026-02-13__01__system__p-084-inventory-approved.md)
 - Namespace Conversion: P-084 Section 5.1
-- Issue-002 Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Issue-002 Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)
 - Issue-002 Summary: [2026-02-16__04__system__issue-002-implementation-summary.md](2026-02-16__04__system__issue-002-implementation-summary.md)

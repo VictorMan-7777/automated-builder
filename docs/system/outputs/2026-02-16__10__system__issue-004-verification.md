@@ -10,7 +10,7 @@
 
 ## Verification Objective
 
-Confirm that prefix determination implementation in `scripts/run-create-project` (from Issue-002) satisfies P-084 Section 5.1 namespace conversion contract with required prefix input.
+Confirm that prefix determination implementation in `system/scripts/run-create-project.md` (from Issue-002) satisfies P-084 Section 5.1 namespace conversion contract with required prefix input.
 
 ---
 
@@ -46,7 +46,7 @@ Once prefix is determined (validated from input):
 
 ---
 
-## Code Review: scripts/run-create-project
+## Code Review: system/scripts/run-create-project.md
 
 ### 1. Required Parameter Check (Line 104)
 
@@ -205,7 +205,7 @@ fi
 
 **Status**: ✅ PASS
 
-**Summary**: The prefix determination implementation in `scripts/run-create-project` (from Issue-002) fully satisfies P-084 Section 5.1 requirements for explicit prefix input with normalization and validation.
+**Summary**: The prefix determination implementation in `system/scripts/run-create-project.md` (from Issue-002) fully satisfies P-084 Section 5.1 requirements for explicit prefix input with normalization and validation.
 
 **Compliance**:
 - All required checks implemented ✅
@@ -226,5 +226,5 @@ fi
 - Approved Artifact: [2026-02-16__09__system__issue-004-approved.md](2026-02-16__09__system__issue-004-approved.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 5.1: Namespace Conversion Contract
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project) (Issue-002)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md) (Issue-002)
 - Issue-002 Summary: [2026-02-16__04__system__issue-002-implementation-summary.md](2026-02-16__04__system__issue-002-implementation-summary.md)

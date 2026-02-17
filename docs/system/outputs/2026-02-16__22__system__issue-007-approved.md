@@ -425,7 +425,7 @@ fi
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (add comprehensive governance protection validation)
+- `system/scripts/run-create-project.md` (add comprehensive governance protection validation)
 
 **No new files created**: Issue-007 is validation-only.
 

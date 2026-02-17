@@ -410,7 +410,7 @@ All tokens already resolved in Issues 005, 006, 008, 011. Issue-009 validates to
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (add end-to-end validation function, cleanup logic)
+- `system/scripts/run-create-project.md` (add end-to-end validation function, cleanup logic)
 
 **No new files created**: Issue-009 is validation-only.
 

@@ -139,7 +139,7 @@ schema_version: 1
 
 ### Implementation Steps
 
-Extend `scripts/run-create-project` with project.yaml creation:
+Extend `system/scripts/run-create-project.md` with project.yaml creation:
 
 ```bash
 # After path resolution and validation (Issue-003)
@@ -264,7 +264,7 @@ escape_sed() {
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (extend with project.yaml creation)
+- `system/scripts/run-create-project.md` (extend with project.yaml creation)
 
 ---
 

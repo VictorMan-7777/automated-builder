@@ -35,8 +35,8 @@
 From pending-items.md P-084 entry:
 
 1. **Command Implementation**: Implement `run-create-project` command
-   - **Evidence**: ✅ `/scripts/run-create-project` exists (executable bash script, 35,025 bytes)
-   - **Verification**: `ls -la scripts/run-create-project` → `-rwxr-xr-x` (executable)
+   - **Evidence**: ✅ `/system/scripts/run-create-project.md` exists (executable bash script, 35,025 bytes)
+   - **Verification**: `ls -la system/scripts/run-create-project.md` → `-rwxr-xr-x` (executable)
 
 2. **Bootstrap Capability**: Create project directory structure
    - **Evidence**: ✅ Script creates PROJECT_PATH directory (Issue-005 implementation)
@@ -57,11 +57,11 @@ From pending-items.md P-084 entry:
 
 4. **Governance Protection**: Enforce governance protection rules
    - **Evidence**: ✅ Issue-007 + Issue-009 Check 15 implemented
-   - **Verification**: `grep -c "PROHIBITED_" scripts/run-create-project` → 5 references
+   - **Verification**: `grep -c "PROHIBITED_" system/scripts/run-create-project.md` → 5 references
 
 5. **Validation Contract**: Validate 17-point contract (P-084 Section 6)
    - **Evidence**: ✅ Issue-009 (15 checks) + Issue-007 (governance extensions)
-   - **Verification**: `grep -c "# Check" scripts/run-create-project` → 19 references
+   - **Verification**: `grep -c "# Check" system/scripts/run-create-project.md` → 19 references
    - **17-Point Contract** (P-084 Section 6):
      1. Project directory exists ✅
      2. Identity file created FIRST ✅
@@ -183,7 +183,7 @@ From pending-items.md P-084 entry:
 
 ### Artifacts Verified
 
-1. **Command**: `/scripts/run-create-project` (35,025 bytes, executable)
+1. **Command**: `/system/scripts/run-create-project.md` (35,025 bytes, executable)
 2. **Templates**: `templates/project/` (8 .tmpl files)
 3. **Implementation Summaries**: 11/11 Issues (all COMPLETE)
 4. **Governance Compliance**: No prohibited files, governance protection implemented

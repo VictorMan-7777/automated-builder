@@ -82,7 +82,7 @@ ${var^^}  →  $(echo "$var" | tr '[:lower:]' '[:upper:]')
 
 ### Files Modified
 
-**Script:** `scripts/run-create-project`
+**Script:** `system/scripts/run-create-project.md`
 - Line 111: `normalize_slug()` — lowercase conversion
 - Line 138: `normalize_prefix()` — uppercase conversion
 

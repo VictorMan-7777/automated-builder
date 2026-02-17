@@ -261,7 +261,7 @@ All tokens MUST be read from `project.yaml` (source-of-truth):
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (extend with pending-items-rules.md deployment)
+- `system/scripts/run-create-project.md` (extend with pending-items-rules.md deployment)
 - `../<project-slug>/docs/system/pending-items-rules.md` (create)
 
 ---

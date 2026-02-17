@@ -292,7 +292,7 @@ Issue-011 validates that the template contains required contract language by che
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (extend with ai-process.md deployment)
+- `system/scripts/run-create-project.md` (extend with ai-process.md deployment)
 - `../<project-slug>/docs/system/ai-process.md` (create)
 
 ---

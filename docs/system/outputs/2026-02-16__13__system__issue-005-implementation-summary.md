@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Extended `scripts/run-create-project` to create project.yaml as the FIRST file during project bootstrap. Implements deterministic token replacement with safe sed escaping. YAML syntax and semantic validation explicitly deferred to Issue-009.
+Extended `system/scripts/run-create-project.md` to create project.yaml as the FIRST file during project bootstrap. Implements deterministic token replacement with safe sed escaping. YAML syntax and semantic validation explicitly deferred to Issue-009.
 
 ---
 
 ## Files Modified
 
-- `scripts/run-create-project` (+65 lines, -5 lines)
+- `system/scripts/run-create-project.md` (+65 lines, -5 lines)
 
 ---
 
@@ -168,4 +168,4 @@ Per P-084 Section 10 Implementation Plan:
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
 - P-084 Section 2.4: Project Identity (Source-of-Truth)
 - P-084 Section 2.3: Placeholder Substitution Contract
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

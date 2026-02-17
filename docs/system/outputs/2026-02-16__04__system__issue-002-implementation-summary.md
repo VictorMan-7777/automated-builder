@@ -9,13 +9,13 @@
 
 ## Implementation Overview
 
-Created bash script `scripts/run-create-project` with parameter parsing, input normalization, and basic validation. Does NOT create files (deferred to Issue-005, Issue-006, Issue-011).
+Created bash script `system/scripts/run-create-project.md` with parameter parsing, input normalization, and basic validation. Does NOT create files (deferred to Issue-005, Issue-006, Issue-011).
 
 ---
 
 ## Files Created
 
-- `scripts/run-create-project` (193 lines, executable)
+- `system/scripts/run-create-project.md` (193 lines, executable)
 
 ---
 
@@ -145,4 +145,4 @@ Per P-084 Section 10 Implementation Plan:
 
 - Approved Artifact: [2026-02-16__03__system__issue-002-approved.md](2026-02-16__03__system__issue-002-approved.md)
 - P-084 Inventory: [2026-02-13__01__system__p-084-inventory-approved.md](2026-02-13__01__system__p-084-inventory-approved.md)
-- Implementation: [scripts/run-create-project](../../../scripts/run-create-project)
+- Implementation: [system/scripts/run-create-project.md](../../../system/scripts/run-create-project.md)

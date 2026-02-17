@@ -57,7 +57,7 @@ Create command entry point with parameter parsing and normalization per P-084 Se
 
 ### Command Location
 
-Create bash script at: `scripts/run-create-project`
+Create bash script at: `system/scripts/run-create-project.md`
 
 ### BUILDER_ROOT Definition
 
@@ -124,7 +124,7 @@ On successful validation:
 
 ## Files Likely Touched
 
-- `scripts/run-create-project` (create)
+- `system/scripts/run-create-project.md` (create)
 
 ---
 
