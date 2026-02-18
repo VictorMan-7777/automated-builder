@@ -540,6 +540,13 @@ Rules:
 7. No inference. Only verified approvals and implementations.
 8. Must not modify inventory artifacts.
 
+Display formatting for the Issue column:
+- If Priority = Critical → display as Issue-###C
+- If Priority = High → display as Issue-###H
+- Otherwise → display as Issue-###
+
+This is display formatting only. Canonical identifiers (filenames, rule references, enforcement patterns) remain Issue-### without suffix.
+
 Immediately after the table include:
 
 Which issue proposal would you like next? (Or type "Validation" to proceed to Inventory Verification.)
@@ -554,6 +561,7 @@ Rules:
 3. Within that group, recommend the highest-priority executable Issue-### that is not dependency-blocked.
    - Priority order: Critical > High > Medium > Low (as declared in the inventory artifact).
    - If Priority is not defined in the inventory artifact, recommend the earliest-listed Issue-### within that group.
+   - Display: The Recommended line MUST use C/H suffix consistent with the inventory Priority classification (e.g., `Recommended: Issue-004C`). If Priority is not defined or is Medium/Low, no suffix is used.
 4. Never recommend:
    - A completed issue
    - A dependency-blocked issue
@@ -573,6 +581,7 @@ Before writing an Implementation Summary:
 - Validate the governing inventory artifact contains an "Execution Order" section; if absent → HALT ("Execution Order" section missing from governing inventory artifact).
 - Validate the recommendation matches the next executable Issue-### derived from the "Execution Order" section and declared dependency constraints; if not → HALT (recommendation does not match derived next executable Issue-###).
 - Validate recommendation is not dependency-blocked.
+- Validate that any displayed C/H suffix in the table or Recommended line matches the Priority defined in the governing inventory artifact; if not → HALT (C/H suffix does not match Priority classification).
 - If ALL issues are ✅ Complete AND recommendation is not "Validation" → HALT (invalid recommendation).
 - If ANY issue is not ✅ Complete AND recommendation is "Validation" → HALT (premature validation).
 - HALT if any validation above fails.
