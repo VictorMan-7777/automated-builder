@@ -552,6 +552,40 @@ Immediately after the table include:
 Which issue proposal would you like next? (Or type "Validation" to proceed to Inventory Verification.)
 Recommended: <Next Executable Issue OR Validation>
 
+INPUT HANDLING (Unified Inventory Gate):
+
+1) Approval-target precedence:
+   - If a proposal artifact is currently in focus and is awaiting human approval,
+     then input "Approved" or "Approved with <updates>" applies to THAT proposal approval step.
+
+2) No approval-target present (inventory selection context):
+   - If NO proposal is awaiting human approval, then "Approved"/"approve"/"approved, commit"
+     MAY be interpreted as "accept the Recommended issue", but MUST NOT immediately select it
+     unless the approval input includes an explicit selection target.
+
+3) Explicit target approvals (no confirmation required):
+   - "approved <number>" → normalize to Issue-### (leading zeros optional) before proceeding
+   - "approved Issue <number>" → normalize to Issue-### (leading zeros optional) before proceeding
+   - "approved Validation" → proceed to Validation
+
+4) Ambiguous approval token (confirmation required):
+   - If input is an approval token without an explicit target (e.g., "approved")
+     AND no approval-target exists, then echo the normalized recommended target and ask:
+
+     If recommended is an Issue:
+     "No proposal is awaiting approval. Did you mean to accept the recommendation: Issue-###C/H?
+      Reply 'confirm' to proceed, or reply with 'Issue <#>' / 'Validation' to choose differently."
+
+     If recommended is Validation:
+     "No proposal is awaiting approval. Did you mean to accept the recommendation: Validation?
+      Reply 'confirm' to proceed, or reply with 'Issue <#>' to choose differently."
+
+   - Do not proceed until confirmation is received.
+
+Enforcement:
+- If ambiguous approval token is received at the inventory gate, HALT selection and require confirmation.
+- No auto-selection is allowed without an explicit target or a "confirm" response.
+
 Recommendation MUST follow the governing inventory artifact's "Execution Order" section and declared dependencies — not the numeric order of Issue-### identifiers.
 
 Rules:
