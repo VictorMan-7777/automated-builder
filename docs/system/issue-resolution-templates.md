@@ -474,3 +474,78 @@ Required content:
 4. Completion authority: Verification — not approval — authorizes moving a P-### item from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`. When the verdict is PASS and all acceptance criteria are met, the artifact must explicitly state that completion is authorized. When the verdict is FAIL, the item remains in Pending and the artifact must state what remediation is required.
 
 Backlog hygiene: When verification authorizes completion of a P-### item, move that item from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md` and commit the change as part of the verification commit. The completion date is the date of the verification artifact.
+
+------------------------------------------------------------
+
+Implementation Summary Template
+
+Scope: Produces an implementation summary output artifact after an Issue-### has been implemented and committed.
+
+Prompt Format:
+
+```
+<TASK TITLE LINE — REQUIRED>
+You are in BOUNDED mode. No scope expansion.
+```
+
+Example:
+
+```
+Issue-005 Implementation Summary — Define Approval Transition Mechanics
+You are in BOUNDED mode. No scope expansion.
+```
+
+### Governing Inventory Status Snapshot (Required)
+
+Must include a table in this exact format:
+
+| Issue | Status |
+|-------|--------|
+
+Status values allowed:
+- ✅ Complete
+- ⏳ Pending
+- ⏳ Unblocked (waiting dependency resolved)
+
+Rules:
+
+1. The table MUST list issues in ascending numeric order (Issue-001, Issue-002, Issue-003, etc.) exactly as defined in the governing approved inventory artifact.
+2. No reordering.
+3. No omissions.
+4. No additional issues.
+5. Snapshot only — this table does NOT modify inventory.
+6. Status must reflect verified constitutional state at time of summary generation.
+7. No inference. Only verified approvals and implementations.
+8. Must not modify inventory artifacts.
+
+Immediately after the table include:
+
+Which issue proposal would you like next?
+Recommended: <Next Executable Issue>
+
+Recommendation MUST follow approved execution order based on dependency state — not simple numeric order.
+
+Rules:
+
+1. Recommend the first issue that:
+   - Is not Complete
+   - Is not dependency-blocked
+   - Is executable under the current constitutional state
+   - Respects the strictly sequential execution model
+
+2. Never recommend:
+   - A completed issue
+   - A blocked issue
+   - An issue that violates execution ordering
+
+3. If multiple issues are executable, recommend the earliest executable issue according to the governing execution plan.
+
+Enforcement (BOUNDED):
+
+Before writing an Implementation Summary:
+
+- Validate table lists issues in ascending numeric order.
+- Validate status values are allowed.
+- Validate recommendation is executable under execution plan.
+- Validate recommendation is not blocked.
+- HALT if invalid.
