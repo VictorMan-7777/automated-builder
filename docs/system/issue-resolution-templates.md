@@ -76,6 +76,84 @@ When the human responds "Approved" or "Approved with <updates>", immediately exe
 
 ------------------------------------------------------------
 
+Inventory Proposal Template
+
+Scope: Additional required structure for proposals that accompany an Inventory P-### item.
+Applies in addition to the general Proposal Template requirements.
+
+Issue Dependency Declaration (Required Section)
+
+Every Inventory Proposal MUST include an Issue Dependency section before the
+Issue-### Authority Statement.
+
+For each Issue-### defined in Section F (Execution Slices), the proposal MUST
+declare:
+
+- Depends on: List of Issue-### identifiers that must complete before this Issue
+  can start (use "None" if no dependencies)
+- Blocks: List of Issue-### identifiers that cannot start until this Issue
+  completes (use "None" if no blocks)
+- Critical Path: Boolean (true/false) — whether this Issue is on the critical
+  path for P-### completion
+- Parallelizable: Boolean (true/false) — whether this Issue can execute in
+  parallel with other Issue-### items
+- Priority: Critical | High | Medium | Low
+- HR Scope Validation: "Single Issue Sufficient" OR "Requires Decomposition"
+  (list additional Issue-### identifiers)
+
+Priority Definition:
+
+Critical:
+- Blocks execution of other Issues
+- Alters lifecycle mechanics
+- Must execute before dependent Issues
+
+High:
+- Required for structural enforcement but not primary lifecycle gate
+
+Medium:
+- Strengthens enforcement but not structurally blocking
+
+Low:
+- Clarity or audit improvements only
+
+Note: "Critical" priority indicates structural or lifecycle importance and does
+not automatically imply inclusion in the dependency critical path. Critical Path
+status is determined strictly by declared Issue dependencies.
+
+Derived Execution Order (Required):
+
+Based on declared dependencies, the proposal MUST include a section titled
+"Execution Order" listing:
+1. Initial parallel group: All Issue-### items with "Depends on: None"
+2. Subsequent groups: Issue-### items grouped by dependency depth
+3. Final execution group: Issue-### items that have no downstream dependents (leaf nodes in the dependency graph).
+
+Enforcement (BOUNDED state):
+
+Before writing Inventory Proposal artifact:
+- Verify Issue Dependency Declaration section exists
+- Verify all Issue-### items from Section F have dependency entries
+- Verify each Issue-### includes Priority classification
+- Verify each Issue-### includes HR Scope Validation declaration
+- Verify no circular dependencies exist (Issue-A depends on Issue-B AND
+  Issue-B depends on Issue-A)
+- Verify Execution Order section exists and is consistent with declared
+  dependencies
+- If verification fails, HALT: "Issue dependency declaration violation:
+  [missing declarations or circular dependencies]"
+
+Before approving Inventory Proposal:
+- Verify at least one Critical Issue exists if structural lifecycle changes
+  are proposed
+- Verify Execution Order respects Critical path
+- Verify no Issue marked "Requires Decomposition" remains unsplit
+- Verify Issue-### execution sequencing is unambiguous
+- If verification fails, HALT: "Priority/decomposition validation failure:
+  [details]"
+
+------------------------------------------------------------
+
 Approval Template (Regular P-###)
 
 Scope: Execution trigger for an issue (non-inventory).
