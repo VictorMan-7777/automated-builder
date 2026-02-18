@@ -257,9 +257,24 @@ Once an approved artifact is committed, it MUST NOT be modified. The committed a
 Backlog Hygiene Rules
 
 1. Approval does NOT authorize completion. Items remain in Pending until verification authorizes completion.
-2. Completion authority:
-   - Standard P-###: Verification PASS authorizes moving the P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
-   - Inventory P-###: Inventory Verification Stage 2 PASS authorizes moving the P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`.
+2. Completion authority binding:
+
+   Regular P-###:
+   - Verification PASS artifact MUST exist in docs/system/outputs/
+   - Artifact MUST contain: "Verdict: PASS"
+   - Commit moving P-### to archive MUST reference Verification artifact filename
+
+   Inventory P-###:
+   - Stage-1 PASS artifact MUST exist
+   - Stage-2 PASS artifact MUST exist
+   - Stage-2 MUST reference Stage-1 filename
+   - Stage-2 MUST contain: "Verdict: PASS"
+   - Commit moving P-### to archive MUST reference both artifacts
+
+   Enforcement (BOUNDED state):
+   Before committing P-### archival, verify all PASS artifacts exist and contain
+   the exact string "Verdict: PASS".
+   If verification fails, HALT: "Completion authority violation: [missing prerequisites]"
 3. Deferred items remain in Pending. Append "Deferred: <reason>" or "Deferred until: <condition>" to the item block. Do NOT create a separate Deferred section.
 
 Inventory-Specific Rules
