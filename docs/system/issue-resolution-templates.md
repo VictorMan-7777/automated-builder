@@ -520,8 +520,8 @@ Rules:
 
 Immediately after the table include:
 
-Which issue proposal would you like next?
-Recommended: <Next Executable Issue>
+Which issue proposal would you like next? (Or type "Validation" to proceed to Inventory Verification.)
+Recommended: <Next Executable Issue OR Validation>
 
 Recommendation MUST follow approved execution order based on dependency state — not simple numeric order.
 
@@ -540,6 +540,11 @@ Rules:
 
 3. If multiple issues are executable, recommend the earliest executable issue according to the governing execution plan.
 
+4. If ALL issues in the table are marked ✅ Complete, the ONLY valid recommendation is:
+   Recommended: Validation
+
+   If ANY issue is not ✅ Complete, the recommendation MUST be an Issue-### (not Validation) and MUST follow the existing executable-issue rules above.
+
 Enforcement (BOUNDED):
 
 Before writing an Implementation Summary:
@@ -548,4 +553,6 @@ Before writing an Implementation Summary:
 - Validate status values are allowed.
 - Validate recommendation is executable under execution plan.
 - Validate recommendation is not blocked.
-- HALT if invalid.
+- If ALL issues are ✅ Complete AND recommendation is not "Validation" → HALT (invalid recommendation).
+- If ANY issue is not ✅ Complete AND recommendation is "Validation" → HALT (premature validation).
+- HALT if any validation above fails.
