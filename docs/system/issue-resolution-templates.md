@@ -545,27 +545,24 @@ Immediately after the table include:
 Which issue proposal would you like next? (Or type "Validation" to proceed to Inventory Verification.)
 Recommended: <Next Executable Issue OR Validation>
 
-Recommendation MUST follow approved execution order based on dependency state — not simple numeric order.
+Recommendation MUST follow the governing inventory artifact's "Execution Order" section and declared dependencies — not the numeric order of Issue-### identifiers.
 
 Rules:
 
-1. Recommend the first issue that:
-   - Is not Complete
-   - Is not dependency-blocked
-   - Is executable under the current constitutional state
-   - Respects the strictly sequential execution model
-
-2. Never recommend:
+1. Locate the governing inventory artifact's "Execution Order" section.
+2. Determine the earliest Execution Order group that contains at least one Issue-### not marked ✅ Complete.
+3. Within that group, recommend the highest-priority executable Issue-### that is not dependency-blocked.
+   - Priority order: Critical > High > Medium > Low (as declared in the inventory artifact).
+   - If Priority is not defined in the inventory artifact, recommend the earliest-listed Issue-### within that group.
+4. Never recommend:
    - A completed issue
-   - A blocked issue
-   - An issue that violates execution ordering
+   - A dependency-blocked issue
+   - An issue that violates the declared Execution Order
 
-3. If multiple issues are executable, recommend the earliest executable issue according to the governing execution plan.
-
-4. If ALL issues in the table are marked ✅ Complete, the ONLY valid recommendation is:
+5. If ALL issues in the table are marked ✅ Complete, the ONLY valid recommendation is:
    Recommended: Validation
 
-   If ANY issue is not ✅ Complete, the recommendation MUST be an Issue-### (not Validation) and MUST follow the existing executable-issue rules above.
+   If ANY issue is not ✅ Complete, the recommendation MUST be an Issue-### (not Validation) and MUST follow rules 1–4 above.
 
 Enforcement (BOUNDED):
 
@@ -573,8 +570,9 @@ Before writing an Implementation Summary:
 
 - Validate table lists issues in ascending numeric order.
 - Validate status values are allowed.
-- Validate recommendation is executable under execution plan.
-- Validate recommendation is not blocked.
+- Validate the governing inventory artifact contains an "Execution Order" section; if absent → HALT ("Execution Order" section missing from governing inventory artifact).
+- Validate the recommendation matches the next executable Issue-### derived from the "Execution Order" section and declared dependency constraints; if not → HALT (recommendation does not match derived next executable Issue-###).
+- Validate recommendation is not dependency-blocked.
 - If ALL issues are ✅ Complete AND recommendation is not "Validation" → HALT (invalid recommendation).
 - If ANY issue is not ✅ Complete AND recommendation is "Validation" → HALT (premature validation).
 - HALT if any validation above fails.
