@@ -2254,3 +2254,44 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Cross-inventory artifact detection is mechanically prevented after binding.
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
+
+### P-100 — Normalize Verification Field Names (Verdict -> Verification)
+- Source: Verification terminology normalization
+- Captured: 2026-02-18
+- Project: automated-builder
+- Objective:
+  Replace all verification outcome fields labeled "Verdict: PASS/FAIL"
+  with "Verification: PASS/FAIL" across templates, rules, and
+  verification artifacts, and update all enforcement logic to match,
+  without changing underlying semantics.
+- Scope:
+  - Update verification-related templates to:
+    - Require "Verification: PASS" / "Verification: FAIL" instead of
+      "Verdict: PASS" / "Verdict: FAIL".
+    - Update any descriptive or guard text that currently checks for
+      "Verdict: PASS" so it checks for "Verification: PASS" instead.
+  - Update rules that:
+    - Refer to "Verdict: PASS" as the required PASS marker.
+    - Describe completion or gating conditions in terms of "Verdict"
+      rather than "Verification".
+  - Identify verification PASS artifacts produced by the system that
+    currently contain "Verdict: PASS" and plan a one-time migration to
+    "Verification: PASS" where appropriate, or explicitly document any
+    legacy exceptions.
+  - Ensure all write-time validation, completion authority checks, and
+    other guards that inspect verification results look for
+    "Verification: PASS" (and "Verification: FAIL" where applicable).
+- Acceptance Criteria:
+  - [ ] All verification templates that previously emitted or required
+    "Verdict: PASS/FAIL" now emit and require "Verification: PASS/FAIL".
+  - [ ] All rules that referenced "Verdict: PASS" have been updated to
+    "Verification: PASS" with no change in logical conditions.
+  - [ ] All active verification PASS artifacts have been migrated to
+    "Verification: PASS", or explicitly documented as legacy exceptions.
+  - [ ] All validation and guard logic that keys off verification PASS
+    now searches for "Verification: PASS" only.
+  - [ ] A grep for "Verdict: PASS" in docs/system/ and
+    docs/system/outputs/ returns no hits, or only those documented
+    exceptions.
+- Dependencies:
+  - P-098 — Harden Issue-Resolution Constitution
