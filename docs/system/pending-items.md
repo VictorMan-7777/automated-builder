@@ -2228,3 +2228,29 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Existing regular (non-inventory) and inventory flows remain valid; no prior PASS/verification artifacts are retroactively invalidated by wording changes.
 - Dependencies:
   - None
+
+### P-099 — Restart Protocol for Interrupted Inventories
+- Source: Resume-safety governance hardening for inventory workflows
+- Captured: 2026-02-18
+- Project: automated-builder
+- Objective:
+  Define a deterministic restart mechanism when resuming work on an
+  inventory that was interrupted before Stage-2 PASS, requiring explicit
+  governing-inventory binding to prevent cross-inventory contamination.
+- Scope:
+  - Define what constitutes an "Interrupted Inventory".
+  - Require explicit identification of the governing inventory artifact
+    before any Issue selection, proposal creation/update, or execution
+    steps.
+  - Require deterministic confirmation token: confirm inventory P-###.
+  - Enforce HALT on ambiguity or conflicting inventory detection.
+  - Require all subsequent proposal and Issue detection scans to be
+    scoped strictly to the bound inventory lineage.
+- Acceptance Criteria:
+  - System requires explicit inventory binding before resuming interrupted work.
+  - HALT occurs if governing inventory cannot be determined unambiguously.
+  - Deterministic confirmation token is enforced literally (no synonym expansion).
+  - Restart protocol does not alter inventory structure.
+  - Cross-inventory artifact detection is mechanically prevented after binding.
+- Dependencies:
+  - P-098 — Harden Issue-Resolution Constitution
