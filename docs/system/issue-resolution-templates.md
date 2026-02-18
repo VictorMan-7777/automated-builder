@@ -174,23 +174,34 @@ Approved with <updates>
 Execution sequence (no pauses):
 
 1. Apply any approved updates to the proposal.
-2. Rename the typed proposal artifact using the parallel naming rule:
+2. Create approved inventory artifact:
+   a. Source: The active proposal artifact. If the filename carries an iteration suffix (e.g., *-inventory-proposal-2.md), normalize the filename to the canonical base form (*-inventory-proposal.md) before producing the approval snapshot. No additional iteration-suffixed files are created or preserved as separate artifacts in outputs. Iteration history is recorded inside the proposal artifact itself (Iteration Log section), and the approval snapshot contains the complete iteration history as recorded in that section.
+   b. Target: Parallel rename per typed artifact rule (*-inventory-proposal.md → *-inventory-approved.md)
+   c. Artifact-state transition:
+      - Remove: Proposal-phase sections (e.g., "Proposal Self-Review", "Delta From Prior Iteration") if present
+      - Remove: "Iteration: N" header field (if present)
+      - Change: Type from "Inventory Proposal" to "Inventory Approved"
+      - Change: Status to "APPROVED" (from any proposal status containing "DRAFT" or "Awaiting Human Approval")
+      - Remove: "STOPPED — Awaiting human approval" terminator
+      - Update: Issue-### Authority Statement artifact filename reference to approved artifact filename
+3. Commit the approved inventory artifact with message: "docs(system): P-### Inventory Approved — [brief description]"
+4. Pending-items.md synchronization (scope-descriptive only):
+   - MUST ONLY occur during Inventory Approval (this step). MUST NEVER occur during Inventory Verification Stage-2.
+   - MUST ONLY occur if the approved inventory scope no longer matches the scope currently reflected in pending-items.md for this P-###.
+   - If scope already matches: skip this step. Proceed to step 5.
+   - If scope differs: update the P-### description in pending-items.md to reflect the approved inventory scope in descriptive form (P-### style).
 
-   ```
-   *-<type>-proposal.md → *-<type>-approved.md
-   ```
+   Pending items synchronization MUST NOT:
+   - Alter pending item status
+   - Mark any pending item complete
+   - Reorder pending items
+   - Introduce new pending items
+   - Modify pending item identifiers
+   - Modify severity classification
 
-   Example:
+   Pending synchronization is scope-descriptive only and does not alter lifecycle state.
 
-   ```
-   p-084-inventory-proposal.md → p-084-inventory-approved.md
-   ```
-
-3. Commit the approved inventory artifact.
-4. Update pending-items.md for the same P-### to reflect the approved inventory scope in descriptive form (P-### style).
-   - Do NOT add any "approved" marker to the P-### item.
-   - This is a scope sync only.
-5. Commit the updated pending-items.md in a separate commit.
+5. If pending-items.md was updated in step 4: commit the change in a separate commit with message: "docs(system): Sync P-### scope to approved inventory"
 6. Ask the user:
 
    ```
@@ -200,6 +211,49 @@ Execution sequence (no pauses):
 7. Do NOT mark P-### complete at this stage.
 
 The P-### item remains in Pending until Inventory Verification — Stage 2 PASS authorizes completion.
+
+Verification Stage-2 Constraint: Inventory Verification Stage-2 is strictly validation. It MUST NOT modify pending-items.md under any circumstances. Archival of a P-### item from pending-items.md to pending-items-archive.md is authorized exclusively by a Stage-2 PASS verdict, not by this approval transition.
+
+Artifact-State Invariants:
+
+Proposal artifacts:
+- MAY contain: Proposal-phase sections (e.g., "Proposal Self-Review", "Delta From Prior Iteration")
+- MAY contain: "Iteration: N" header field
+- MUST contain: Type "Inventory Proposal"
+- MUST contain: Status ending with "Awaiting Human Approval" OR containing "DRAFT"
+- MUST end with: "STOPPED — Awaiting human approval" (if not yet approved)
+
+Approved artifacts:
+- MUST NOT contain: Proposal-phase sections (e.g., "Proposal Self-Review", "Delta From Prior Iteration")
+- MUST NOT contain: "Iteration: N" header field
+- MUST contain: Type "Inventory Approved"
+- MUST contain: Status "APPROVED"
+- MUST NOT contain: "STOPPED — Awaiting human approval"
+- MUST NOT contain: "DRAFT"
+
+Enforcement (BOUNDED state):
+
+Before writing approved artifact, verify:
+- Source proposal artifact exists and is readable
+- Source filename is the canonical base form (*-inventory-proposal.md); if an iteration suffix was present, confirm normalization has occurred
+- Target approved artifact filename follows parallel rename rule (*-inventory-proposal.md → *-inventory-approved.md)
+- No additional iteration-suffixed artifacts created in outputs
+- Artifact-state transition requirements satisfied:
+  - Proposal-phase sections removed (if present)
+  - "Iteration: N" header field removed (if present)
+  - Type changed from "Inventory Proposal" to "Inventory Approved"
+  - Status changed to "APPROVED"
+  - "STOPPED — Awaiting human approval" terminator removed
+  - Issue-### Authority Statement updated with approved artifact filename
+If verification fails, HALT: "Approval artifact validation failed: [missing requirements]"
+
+Before committing approved artifact, verify:
+- Artifact file exists at target path
+- Artifact contains Type "Inventory Approved"
+- Artifact contains Status "APPROVED"
+- Artifact does not contain "DRAFT"
+- Artifact does not contain "Awaiting human approval"
+If verification fails, HALT: "Approval commit validation failed: [missing requirements]"
 
 ------------------------------------------------------------
 
