@@ -433,6 +433,15 @@ Create new pending items in pending-items.md for all incomplete Issue-### items.
 
 CRITICAL: Stage 1 does NOT authorize moving P-### to Completed. Proceed to Stage 2.
 
+Validation (BOUNDED State)
+
+Before writing Stage-1 artifact, verify:
+1. Verdict field present: "Verdict: PASS" or "Verdict: FAIL"
+2. Issue coverage table lists every Issue-### from inventory-approved artifact
+3. Each Issue-### has FOUND evidence or deferral reference
+
+If validation fails, HALT: "Stage-1 write validation failed: [missing elements]"
+
 ------------------------------------------------------------
 
 Inventory Verification — Stage 2 (Pending Scope Verification)
@@ -535,6 +544,16 @@ The P-### item remains in Pending. The artifact must state what remediation is r
 Completion authority: Stage 2 PASS is the ONLY authority that moves an inventory P-### from `docs/system/pending-items.md` to `docs/system/pending-items-archive.md`. The commit that moves P-### must occur only after Stage-2 PASS artifact is written.
 
 Deferred handling: Create NEW pending items in pending-items.md from deferred Issue-### items that are NOT required to satisfy P-### requirements.
+
+Validation (BOUNDED State)
+
+Before writing Stage-2 artifact, verify:
+1. Stage-1 reference field cites valid Stage-1 PASS artifact filename
+2. Inventory reference field cites inventory-approved artifact filename
+3. Verdict field present: "Verdict: PASS" or "Verdict: FAIL"
+4. Evidence sections present: descriptive scope validation, deferred dependency check
+
+If validation fails, HALT: "Stage-2 write validation failed: [missing elements]"
 
 ------------------------------------------------------------
 
