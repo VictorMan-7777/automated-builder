@@ -342,6 +342,51 @@ Human approval:
 - Even after a proposal passes self-review, the system MUST STOP for human review and approval.
 - Self-review does NOT authorize implementation.
 
+Unified Inventory Gate — Input Handling
+
+Non-Authoritative Intent Aliases
+
+Applies to: Unified Inventory Gate and all proposal-entry points.
+
+Purpose: Allow human-friendly phrasing at the inventory gate without
+weakening deterministic authorization rules.
+
+Intent phrases — examples of recognized non-authoritative approval expressions:
+- "approve"
+- "approve proposal 4"
+- "ok approve"
+- "let's approve 003"
+- Similar informal expressions indicating approval intent
+
+Intent phrases MUST NOT trigger any state change.
+
+When intent is detected:
+
+1. If a target Issue-### or Validation was included in the phrase, normalize
+   it (e.g., "approve proposal 4" → Issue-004; leading zeros optional).
+2. Respond with the exact deterministic command required:
+   - If target is an Issue-###: reply `approved 004` (or `approved Issue-004`)
+   - If no target and a recommendation is active: issue the confirmation
+     prompt defined in the templates INPUT HANDLING block.
+3. Await the literal deterministic token before proceeding. No state change
+   occurs until the literal token is received.
+
+Deterministic token authority:
+
+Only the following tokens may trigger state transitions:
+- `approved` (and `approved <target>` variants)
+- `confirm`
+- `confirm recreate Issue-###`
+- `confirm inventory P-###`
+
+No synonym expansion is permitted for state-changing tokens. "Approve", "ok",
+"looks good", "yes", or other informal expressions are NOT deterministic tokens
+and MUST NOT trigger state transitions.
+
+Parse-layer constraint: Intent alias handling occurs at the parse layer only
+and does not bypass lifecycle enforcement, BOUNDED state constraints, or any
+other constitutional rules.
+
 Duplicate Proposal Recreation Guard
 
 Applies to: All proposal creation requests (Unified Inventory Gate and any
