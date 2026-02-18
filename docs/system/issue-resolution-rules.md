@@ -265,7 +265,31 @@ Backlog Hygiene Rules
 Inventory-Specific Rules
 
 1. Inventory approval syncs P-### scope immediately. Update the P-### descriptive scope in pending-items.md at approval (before Issue-### execution begins).
-2. Issue-### items are execution slices only. Do NOT insert Issue-### items into pending-items.md.
+2. Issue-### Lifecycle Binding and Cross-Loop Isolation
+
+   Issue-### items defined in the Inventory Proposal (required prior to approval):
+   - Exist only inside the approved inventory artifact
+   - MUST NOT move to pending-items.md
+   - MUST NOT become P-### items
+   - Are not independently archived
+   - Are bound to the lifecycle of the governing Inventory P-###
+   - Complete their lifecycle when the Inventory P-### reaches Stage-2 PASS
+
+   Issue-### identifiers MUST NOT appear in pending-items.md except:
+   - Descriptive references to completed work: "Resolved via Issue-012"
+   - Dependency references in P-### blocks: "Depends on: Issue-009 completion"
+
+   Enforcement (BOUNDED state):
+
+   Before committing pending-items.md:
+   - Verify no lines contain pattern "Issue-\d{3}[CH]?" in new P-### Summary blocks or as standalone items
+   - If pattern found, HALT: "Loop isolation violation: Issue-### at line [N]"
+
+   Before creating P-### from Issue-###:
+   - HALT: "Lifecycle binding violation: Issue-### items cannot become P-### items"
+
+   Before archiving Issue-### independently:
+   - HALT: "Lifecycle binding violation: Issue-### items are not independently archived"
 3. Validation assumes P-### already synchronized. Validators reference the approved inventory artifact directly.
 4. Deferred analysis during Inventory Verification Stage 2. If a deferred Issue-### is required to satisfy P-### requirements, Stage 2 MUST fail.
 5. Deferred handling creates new pending items. Non-blocking deferred Issue-### items become NEW P-### items in pending-items.md.
@@ -317,6 +341,59 @@ Iteration limit:
 Human approval:
 - Even after a proposal passes self-review, the system MUST STOP for human review and approval.
 - Self-review does NOT authorize implementation.
+
+Duplicate Proposal Recreation Guard
+
+Applies to: All proposal creation requests (Unified Inventory Gate and any
+proposal-creation entry point).
+
+Inventory Binding (precondition):
+
+Before any proposal create, update, or recreate action for Issue-###:
+1. Determine the governing Inventory P-### for the current session by
+   locating the relevant APPROVED inventory artifact (e.g., the most
+   recently approved *-inventory-approved.md for the active P-###).
+2. All proposal existence checks and artifact scans MUST be scoped only
+   to files explicitly associated with that governing Inventory P-###.
+3. If the governing inventory cannot be determined unambiguously:
+   HALT: "Inventory binding required — reply: confirm inventory P-###"
+4. If the governing inventory IS determined, scans are bounded to its
+   associated Issue-### set only. Cross-inventory matches are ignored.
+
+If a request to create or draft a proposal for Issue-### is received and a
+proposal artifact already exists for that Issue:
+
+1. STOP immediately. Do not write or overwrite any file.
+2. Present the following choice to the human:
+
+   Option A (default-safe): Update the existing proposal in place.
+   Option B (exception): Recreate the proposal from scratch — ONLY with
+   explicit confirmation token: "confirm recreate Issue-###"
+
+Confirmation token rules:
+- Literal match only. No synonym expansion.
+- Token format: "confirm recreate Issue-###" where ### matches the
+  zero-padded Issue number.
+- Without this exact token, the system MUST NOT regenerate, overwrite,
+  or create a second proposal artifact.
+
+Enforcement (BOUNDED state):
+
+Before writing any new proposal artifact:
+- Establish governing inventory per Inventory Binding precondition above.
+  If unresolvable, HALT: "Inventory binding required — reply: confirm inventory P-###"
+- Scan only the inventory-bound outputs set for the governing Inventory
+  P-### (files explicitly associated with that inventory's Issue-### items).
+  If no explicit association mechanism exists, default to HALT on ambiguity:
+  HALT: "Inventory binding required — reply: confirm inventory P-###"
+- Within the inventory-bound set, check for existing *__issue-###__proposal.md
+  or *__issue-###__approved.md matching the requested Issue-###.
+- If a proposal artifact is found, HALT creation and present Option A /
+  Option B choice.
+- If Option B is selected, require the confirmation token before
+  proceeding.
+- If confirmation token is absent or does not match literally,
+  HALT: "Recreation token required: confirm recreate Issue-###"
 
 Inventory Verification Stage-2 Dependency Rules
 
