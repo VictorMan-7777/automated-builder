@@ -1635,6 +1635,29 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - reduction triggers when quality or velocity drops
   Goal is to maximize throughput while preserving clarity and stability.
 
+### P-083 — Set up SSH for project repo access (PRD + build app)
+- Source: Devotional Generator repo access setup request
+- Captured: 2026-02-17
+- Project: Devotional Generator
+- Objective:
+  Configure SSH-based Git access for the Devotional Generator project repository
+  so PRD work and the app build workflow can use Git operations reliably without
+  HTTPS credential prompts.
+- Scope:
+  - Document SSH key creation/checking and adding the key to the Git host account.
+  - Configure repo remote to use SSH.
+  - Validate by cloning/pulling/pushing via SSH from the Devotional Generator environment(s).
+  - Include minimal troubleshooting checks (agent forwarding / permissions / known_hosts)
+    needed to confirm it works.
+- Out of Scope:
+  - CI/CD setup
+  - Repo structure changes
+  - Automation beyond basic SSH Git auth
+- Acceptance Criteria:
+  - Repo remote uses SSH URL.
+  - Clone/pull/push works via SSH without credential prompts.
+  - Instructions live in the repo in the appropriate docs location per existing rules.
+
 ### P-085 — new-010 — Builder Project Templates: Define Where to Store `<slug>` Seed Files for `run-create-project`
 - Source: run-create-project template source-of-truth planning
 - Captured: 2026-02-12
