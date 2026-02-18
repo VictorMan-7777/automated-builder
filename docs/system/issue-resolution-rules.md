@@ -93,6 +93,57 @@ Subject to: Automation Non-Interleaving Invariant (Inventory Verification Stage-
 
 ------------------------------------------------------------
 
+APPROVAL LIFECYCLE EXECUTION CONTRACT
+
+Applies to: All approval responses (Regular P-### and Inventory P-###).
+
+Trigger: Human response of "Approved" or "Approved with <updates>" received
+in response to a proposal artifact.
+
+Upon trigger, the system MUST automatically execute the full approval
+lifecycle without additional prompts:
+
+1. Apply any approved corrections to the proposal artifact.
+2. Produce the approved artifact per constitutional naming rules and
+   artifact-state invariants (Issue-005).
+3. Commit the approved artifact with constitutional commit message.
+4. Execute post-approval sequencing:
+   - For Inventory P-###: Pending-items.md scope sync (if required per
+     Issue-005 guardrails), commit, then present the unified inventory gate:
+     "Which issue proposal would you like next? (Or type 'Validation' to
+     proceed to Inventory Verification.)"
+   - For Regular Issue-###: Proceed immediately to implementation.
+5. Continue execution until the next constitutional human gate:
+   - Inventory: human responds to the unified inventory gate (selecting
+     an Issue-### or Validation when all issues are Complete)
+   - Regular Issue-###: human selects verification decision
+
+Constitutional human gates (exhaustive list):
+- "Which issue proposal would you like next? (Or type 'Validation' to
+  proceed to Inventory Verification.)" prompt (Inventory loop; Validation
+  is a selectable branch within this prompt and is the only valid
+  recommendation when all issues are ✅ Complete)
+- Verification decision (Regular loop)
+- STOP checkpoints explicitly defined in governing templates
+
+The system MUST NOT:
+- Stop between the approval trigger and completion of the full execution
+  lifecycle without having reached a constitutional human gate
+- Require additional human prompts to initiate or continue approved
+  execution before a constitutional gate is reached
+- Pause between approval trigger and execution phase entry
+
+Enforcement:
+
+If execution stops after the approval trigger without reaching a
+constitutional human gate:
+- Classification: Constraint violation
+- Required response: Report violation, identify last completed step,
+  and resume execution from that step. If approved artifact was not
+  yet written, revert to DRAFT state.
+
+------------------------------------------------------------
+
 LOOP OVERVIEW
 
 The system uses two distinct loops depending on whether the P-### item has an inventory flag.

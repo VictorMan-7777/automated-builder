@@ -139,6 +139,17 @@ Redo the proposal...
 
 An explicit instruction to update or redo keeps the proposal unapproved and in draft. Revise the proposal artifact per the instruction. The proposal remains uncommitted and awaits a subsequent approval instruction.
 
+Approval Lifecycle Execution Contract:
+
+Upon receiving "Approved" or "Approved with <updates>", the system MUST
+execute the complete approval lifecycle (steps 1–7 above) automatically,
+without pausing for additional prompts, and continue into execution phase
+until the next constitutional human gate is reached.
+
+Stopping before a constitutional human gate is reached is a constraint
+violation. Required response: identify last completed step and resume
+from that point.
+
 ------------------------------------------------------------
 
 Inventory Approval Template
@@ -254,6 +265,17 @@ Before committing approved artifact, verify:
 - Artifact does not contain "DRAFT"
 - Artifact does not contain "Awaiting human approval"
 If verification fails, HALT: "Approval commit validation failed: [missing requirements]"
+
+Approval Lifecycle Execution Contract:
+
+Upon receiving "Approved" or "Approved with <updates>", the system MUST
+execute the complete approval lifecycle (steps 1–7 above) automatically,
+without pausing for additional prompts, and continue into execution phase
+until the next constitutional human gate is reached.
+
+Stopping before a constitutional human gate is reached is a constraint
+violation. Required response: identify last completed step and resume
+from that point.
 
 ------------------------------------------------------------
 
