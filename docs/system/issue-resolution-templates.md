@@ -152,6 +152,12 @@ Before approving Inventory Proposal:
 - If verification fails, HALT: "Priority/decomposition validation failure:
   [details]"
 
+Change Log Enforcement:
+
+All proposal modifications MUST include a Change Log entry with: Date, Trigger type, Review count, Summary, Reason, Sections impacted.
+
+Failure to update Change Log during governed modifications triggers HALT in BOUNDED state.
+
 ------------------------------------------------------------
 
 Approval Template (Regular P-###)

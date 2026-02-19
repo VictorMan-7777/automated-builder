@@ -227,6 +227,40 @@ Inventory Verification Stage-2 — P-084 (System Builder)
 You are in BOUNDED mode. No scope expansion.
 ```
 
+PROPOSAL CHANGE LOG ENFORCEMENT
+
+Whenever a proposal artifact is modified via:
+- Approval with correction
+- Automated review that applies edits
+- Explicit update prompt
+- Human-requested revision
+
+The proposal Change Log section MUST be updated in the same action.
+
+Change Log Entry Requirements:
+
+Each entry MUST include:
+- Date: YYYY-MM-DD
+- Trigger type: "Approval correction", "Automated review", "Explicit update", or "Human-requested revision"
+- Review count: Integer tracking cumulative review iterations
+- Summary: Brief description of what changed (1-2 sentences)
+- Reason: Why the change was required
+- Sections impacted: List of section identifiers (A, B, C, D, E, F, HR-N, Issue-NNN)
+
+Enforcement (BOUNDED state):
+
+Before committing proposal artifact modifications:
+- Verify Change Log section exists
+- Verify most recent entry matches current modification trigger
+- Verify review count is incremented for review-triggered updates
+
+Review count MUST increment only when a formal system review method (e.g., Stress-Test Review, Issue Proposal Review, Root-Cause Review) is executed and produces findings. Non-review updates (wording edits, explicit update prompts without a formal review method, approval formatting changes) MUST NOT increment review count.
+- If verification fails, HALT: "Change Log enforcement violation: [missing or incomplete entry]"
+
+Before applying automated review edits:
+- Verify Change Log will be updated with review entry
+- If Change Log update not planned, HALT: "Automated review Change Log requirement violation"
+
 Issue Identifier Rules
 
 1. Issue identifiers MUST appear in proposal, implementation, and summary output artifacts.
