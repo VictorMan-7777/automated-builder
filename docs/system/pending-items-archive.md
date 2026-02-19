@@ -6,6 +6,18 @@ Archived pending items that no longer need to be referenced by the builder.
 
 ## Completed
 
+### P-085 — Builder Project Templates: Define Where to Store `<slug>` Seed Files for `run-create-project`
+- Source: run-create-project template source-of-truth planning
+- Captured: 2026-02-12
+- Completed: 2026-02-19
+- Project: Automated-builder
+- Summary:
+  Defined `templates/project/` as the canonical template directory for `run-create-project`.
+  Documented all 8 templates and their deployment targets in `docs/system/index.md`.
+  Established normative substitution contract in `docs/implementation/system/template-specification.md`.
+  Added Bootstrap Verification review type to `prompts/gatekeeper/gatekeeper-checklist.md`.
+- Verification: `docs/system/outputs/2026-02-19__01__system__p-085-verification.md` — PASS
+
 ### P-001 — Proposal / Approval commit semantics clarification
 - Source: Output File System Issue loop
 - Captured: 2026-02-09
