@@ -7,6 +7,25 @@
 
 ---
 
+## ⚠ Governance Notice (Read First)
+
+This repository operates under a formal Issue Resolution Constitution.
+
+ALL agents (Planner, Builder, Gatekeeper, System, or external AI) MUST read:
+
+docs/system/issue-resolution.md
+
+BEFORE:
+- Exploring the repository
+- Creating proposals
+- Modifying files
+- Generating inventory items
+- Running verification
+
+Failure to anchor to issue-resolution.md invalidates output authority.
+
+---
+
 ## Overview
 
 This repository implements a **plan-first, gated-phase approach** to software project development using a three-role workflow:

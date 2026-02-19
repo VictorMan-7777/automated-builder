@@ -3,6 +3,35 @@
 Version: 3.0
 Last Updated: 2026-02-17
 
+---
+
+## Governance Entry Contract (Mandatory First Read)
+
+All governed operations MUST begin by reading this file.
+
+For any request involving:
+- Issues
+- Inventory proposals
+- Pending items
+- Verification
+- Approval
+- Template changes
+- P-### work
+
+The agent MUST, in this order:
+
+1. Read docs/system/issue-resolution.md
+2. Read docs/system/issue-resolution-templates.md
+3. Read docs/system/pending-items.md
+4. Locate the referenced Issue or P-### item
+5. Proceed under governed mechanics
+
+Repository-wide exploration is NOT permitted before Step 1.
+
+Failure to follow this order invalidates output authority.
+
+---
+
 ------------------------------------------------------------
 
 This document defines the issue resolution workflow for the automated-builder system. It specifies how issues are identified, proposed, approved, implemented, and verified.
