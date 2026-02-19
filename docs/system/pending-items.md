@@ -2156,6 +2156,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Deterministic confirmation token is enforced literally (no synonym expansion).
   - Restart protocol does not alter inventory structure.
   - Cross-inventory artifact detection is mechanically prevented after binding.
+- Deferred until: Builder v1 complete
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
 
@@ -2197,5 +2198,6 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - [ ] A grep for "Verdict: PASS" in docs/system/ and
     docs/system/outputs/ returns no hits, or only those documented
     exceptions.
+- Deferred until: Builder v1 complete
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
