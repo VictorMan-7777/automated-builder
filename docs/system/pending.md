@@ -33,7 +33,7 @@ Note: The dependency view is derived data and is intentionally updated on-demand
 
 ## Dependency View
 
-Last refreshed: 2026-02-19
+Last refreshed: 2026-02-19 (rev 2)
 
 ### Legend
 
@@ -86,8 +86,8 @@ P-085 (templates as source-of-truth) [DONE]
   v
 P-098 (Constitution hardening) [DONE]
   |
-  +-----------> P-099 (restart protocol)      [V1-GATE-3]
-  +-----------> P-100 (normalize Verification field names)  [V1-GATE-1,6]
+  +-----------> P-099 (restart protocol)             [D] until Builder v1 complete
+  +-----------> P-100 (normalize Verification names) [D] until Builder v1 complete
 ```
 
 ---
@@ -180,22 +180,24 @@ P-010 -> P-011 [D]
 
 ```
 [DONE] P-084, P-085, P-098, P-083, P-012(original)
+[D/post-v1] P-099, P-100
 
-NEXT (all unblocked):
-  P-099  Restart Protocol for Interrupted Inventories     [Gate-3]
-  P-100  Normalize Verification Field Names               [Gate-1,6]
+NEXT (all unblocked, no deps):
   P-086  Approval template pending-items sync             [Gate-4,6]
   P-088  Parallel Issue Execution Grouping Rule           [Gate-2,6]
   P-091  Proposal Update vs Approval-with-Changes Rule    [Gate-2,6]
+  P-089  Inventory Approval must declare sequence status  [Gate-3,6]
+  P-087  Pending Items "Current Status" field             [Gate-4]
 
 THEN (remaining governance cleanup):
-  P-087, P-089, P-090, P-096, P-003, P-015, P-013
+  P-090, P-096, P-003, P-015, P-013
 
 GATE:
   P-092  Builder v1 Edge Case Evaluation (Pre-Deploy Gate)
 
 POST-GATE:
   P-093, P-094, P-095 (Devotional Generator alignment)
+  P-099, P-100 (now deferred to post-v1)
 ```
 
 ---
