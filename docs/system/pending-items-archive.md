@@ -138,6 +138,42 @@ Archived pending items that no longer need to be referenced by the builder.
   - Stage-2 artifact: `2026-02-16__28__system__p-084-stage2-verification.md`
 
 
+### P-098 — Harden Issue-Resolution Constitution (Mechanical Enforcement Pass)
+- Source: Multi-model constitutional hardening review (Claude, Codex, Grok)
+- Captured: 2026-02-16
+- Project: automated-builder
+- Type: Inventory
+- Objective:
+  Implement high-leverage constitutional hardening identified in
+  multi-model review (Claude, Codex, Grok) to reduce reliance on prompt
+  discipline and introduce mechanical enforcement where appropriate.
+- Scope:
+  - HR-1: Define Mode Constraints (BOUNDED state, Human mode, Automated mode)
+  - HR-2: Enforce Artifact Write Validation (Stage-1/Stage-2 write-time validation)
+  - HR-3: Bind Completion Authority to PASS Artifacts (mechanical enforcement)
+  - HR-4: Prevent Cross-Loop Mutation and Bind Issue-### Lifecycle
+  - HR-5: Define Approval Transition Mechanics (artifact-state invariants)
+  - HR-6: Define Approval Lifecycle Execution Contract
+  - HR-7: Proposal Change Log Enforcement + Review Count
+  - HR-8: Issue Dependency Declaration Requirement (Priority, dependencies, execution order)
+- Non-Goals:
+  - No redesign of regular vs inventory loops
+  - No tooling implementation (hooks/scripts) in this item
+  - No restructuring of pending registry (already completed)
+- Acceptance Criteria:
+  - Updated issue-resolution.md includes formalized invariants section
+  - issue-resolution-rules.md contains explicit enforcement clauses
+  - issue-resolution-templates.md updated only where required for enforcement
+  - No regression to post-P-084 governance hardening
+  - Verification artifact confirms constitutional integrity
+  - Existing regular (non-inventory) and inventory flows remain valid; no prior PASS/verification artifacts are retroactively invalidated by wording changes.
+- Dependencies:
+  - None
+- Completion authorized by two-stage inventory verification:
+  - Stage-1 artifact: `2026-02-18__15__system__p-098-stage-1-verification.md`
+  - Stage-2 artifact: `2026-02-18__16__system__p-098-stage-2-verification.md`
+
+
 ## Moved to Project Docs
 
 ## Superseded / Replaced
