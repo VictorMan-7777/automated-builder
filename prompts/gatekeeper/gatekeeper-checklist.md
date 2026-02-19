@@ -63,6 +63,25 @@ Review implementation from Builder:
 
 **Output**: Phase APPROVED / REVISE / REJECT
 
+### Bootstrap Verification
+
+Review a project bootstrapped by `run-create-project` for template compliance.
+
+**Spec**: [docs/implementation/system/template-specification.md](../../docs/implementation/system/template-specification.md)
+
+- [ ] All 8 deployment targets exist at the expected project-relative paths
+  (`project.yaml`, `index.md`, `prd.md`, `roadmap.md`, `iteration-log.md`,
+  `builder-manifest.yaml`, `docs/system/ai-process.md`, `docs/system/pending-items-rules.md`)
+- [ ] `project.yaml` is valid YAML containing `identity.slug`, `identity.name`,
+  `identity.prefix`, `identity.created`, and `schema_version: 1`
+- [ ] No file in the bootstrap output contains unresolved `{...}` tokens
+  (excluding code blocks and examples)
+- [ ] All identity values in non-YAML bootstrap files match `project.yaml` exactly
+
+**Output**: Bootstrap COMPLIANT / NON-COMPLIANT
+
+---
+
 ### Milestone Review
 
 Review milestone completion:
@@ -304,4 +323,5 @@ All Gatekeeper reviews MUST comply with:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-18 | Add Bootstrap Verification review type linked to stable template-specification.md (P-085) |
 | 1.0 | 2026-02-05 | Initial gatekeeper system prompt |

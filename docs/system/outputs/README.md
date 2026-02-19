@@ -1,15 +1,48 @@
 # Output Capture Directory
 
 **Location**: `docs/system/outputs/`
-**Purpose**: Canonical storage for every Claude iteration output artifact
-**Version**: 1.2
-**Last Updated**: 2026-02-12
+**Purpose**: Evidence artifacts and long captures from Claude sessions
+**Version**: 1.3
+**Last Updated**: 2026-02-18
+
+---
+
+## Evidence, Not Authority
+
+**outputs/ is an evidence store, not a normative authority.**
+
+- Files here capture what happened in a session (plans drafted, decisions made, verification results).
+- They MUST NOT be referenced as the canonical source for rules, contracts, or specifications.
+- Normative contracts belong in `docs/implementation/` (stable, non-archived).
+
+**Prohibition**: No document, prompt, or specification may cite a file in `docs/system/outputs/` as the authoritative source for a rule or contract. If an outputs file contains a normative statement, that statement must be extracted into a stable location before it can be referenced.
+
+---
+
+## Monthly Archive Convention
+
+On the **5th of each month**, move all files dated in the prior calendar month into:
+
+```
+docs/system/outputs-archive/YYYY-MM/
+```
+
+`outputs/` retains only the **current month's** evidence files. `outputs-archive/` accumulates prior months.
+
+**Example** (archiving on 2026-03-05):
+```bash
+mkdir -p docs/system/outputs-archive/2026-02
+git mv docs/system/outputs/2026-02-*.md docs/system/outputs-archive/2026-02/
+git commit -m "docs: archive 2026-02 session outputs"
+```
+
+README.md and any other non-dated index files remain in `outputs/` permanently.
 
 ---
 
 ## Overview
 
-This directory stores formal, permanent records of Claude Code outputs. Every Claude iteration must produce an output artifact saved here for permanent record.
+This directory stores evidence artifacts from Claude Code sessions. Every Claude iteration must produce an output artifact saved here as a session record.
 
 ---
 
@@ -257,27 +290,13 @@ See detailed output: docs/system/outputs/2026-02-05__01__planner__reorganization
 
 ## File Retention
 
-### Permanent Storage
+### Committed to Git
 
-Files in this directory are **permanent records**:
-- Committed to git
-- Part of repository history
-- Not deleted unless explicitly outdated/superseded
+All files in this directory are committed to git and part of repository history. They are not deleted.
 
-### When to Archive
+### Archiving
 
-If a file becomes obsolete:
-1. Create `docs/system/outputs/archive/` directory
-2. Move old file to archive with note
-3. Document in commit message why archived
-
-Example:
-```bash
-mkdir -p docs/system/outputs/archive
-git mv docs/system/outputs/2026-01-15__01__planner__old-plan.md \
-       docs/system/outputs/archive/2026-01-15__01__planner__old-plan.md
-git commit -m "docs: archive superseded planning output"
-```
+Follow the monthly archive convention described at the top of this document. Prior-month files move to `docs/system/outputs-archive/YYYY-MM/` on the 5th. This keeps the active `outputs/` directory scoped to current-month evidence only.
 
 ---
 
@@ -404,6 +423,7 @@ All outputs MUST NOT:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3 | 2026-02-18 | Add "Evidence, Not Authority" policy; add monthly archive convention; update retention section (P-085 hygiene) |
 | 1.2 | 2026-02-12 | Update project-specific paths from `docs/projects/<slug>/` to `../<slug>/`; direct project workflow artifacts to `../<slug>/docs/system/outputs/` (P-083) |
 | 1.1 | 2026-02-10 | Replace stale file trees with filesystem-is-source-of-truth note; update header (Issue-005). Incorporates prior changes: canonical format references (Issue-002H), output capture rule replacement (Issue-003) |
 | 1.0 | 2026-02-05 | Initial long output capture rule documentation |

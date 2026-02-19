@@ -208,6 +208,36 @@ System prompts should follow the canonical prompt template: [docs/system/prompt-
 
 ---
 
+### Bootstrap Templates
+
+**Location**: `templates/project/`
+
+**Purpose**: Canonical template source-of-truth for `run-create-project`. All project bootstrap
+files are generated from these templates with placeholder substitution.
+
+**Templates**:
+
+| Template | Deploys to (project-relative) |
+|---|---|
+| `project.yaml.tmpl` | `project.yaml` |
+| `index.md.tmpl` | `index.md` |
+| `prd.md.tmpl` | `prd.md` |
+| `roadmap.md.tmpl` | `roadmap.md` |
+| `iteration-log.md.tmpl` | `iteration-log.md` |
+| `builder-manifest.yaml.tmpl` | `builder-manifest.yaml` |
+| `ai-process.md.tmpl` | `docs/system/ai-process.md` |
+| `pending-items-rules.md.tmpl` | `docs/system/pending-items-rules.md` |
+
+**Placeholder syntax**: `{Token}` — e.g. `{project-slug}`, `{Project Name}`, `{PREFIX}`, `{YYYY-MM-DD}`.
+Substitution source is `project.yaml` (`identity.*` fields).
+
+**Normative spec**: [docs/implementation/system/template-specification.md](../implementation/system/template-specification.md)
+
+**Authority**: Template files are system-controlled. Changes require a proposal and approval.
+`run-create-project` may read templates and write only to `../<project-slug>/`.
+
+---
+
 ### Long Outputs / Summaries
 
 **Location**: `docs/system/outputs/`
@@ -428,4 +458,5 @@ mkdir -p ../<your-project-slug>
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-02-18 | Add Bootstrap Templates subsection linking to stable normative spec (P-085) |
 | 1.0 | 2026-02-05 | Initial system overview |
