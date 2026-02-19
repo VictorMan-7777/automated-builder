@@ -174,6 +174,30 @@ Archived pending items that no longer need to be referenced by the builder.
   - Stage-2 artifact: `2026-02-18__16__system__p-098-stage-2-verification.md`
 
 
+### P-016 — Stabilize run-create bootstrap validation
+- Source: Builder system stabilization request
+- Captured: 2026-02-17
+- Project: Automated-builder
+- Severity: High (blocks project creation)
+- Objective:
+  Fix run-create-project.sh so it completes successfully with valid flags (no cleanup)
+  by resolving the inconsistency: "project-slug missing in index.md".
+- Scope:
+  - Ensure project-slug is injected/rendered into index.md correctly.
+  - Align template rendering with validation rules.
+  - Verify metadata propagation into generated files.
+  - Ensure end-to-end validation passes (yq optional; must fail only for real inconsistencies).
+- Out of Scope:
+  - Adding interactive prompts
+  - Changing CLI flag behavior
+  - Expanding bootstrap functionality
+- Acceptance Criteria:
+  - Running run-create-project.sh with valid flags completes successfully.
+  - index.md includes required project-slug field/content.
+  - No cleanup triggered on success.
+- Verification artifact: `2026-02-18__19__p-016__verification.md`
+
+
 ## Moved to Project Docs
 
 ## Superseded / Replaced

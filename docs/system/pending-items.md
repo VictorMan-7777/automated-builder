@@ -259,28 +259,6 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Verification guidance exists for catching non-canonical run-* references.
   - No ambiguity remains about where each run-* artifact should live.
 
-### P-016 — Stabilize run-create bootstrap validation
-- Source: Builder system stabilization request
-- Captured: 2026-02-17
-- Project: Automated-builder
-- Severity: High (blocks project creation)
-- Objective:
-  Fix run-create-project.sh so it completes successfully with valid flags (no cleanup)
-  by resolving the inconsistency: "project-slug missing in index.md".
-- Scope:
-  - Ensure project-slug is injected/rendered into index.md correctly.
-  - Align template rendering with validation rules.
-  - Verify metadata propagation into generated files.
-  - Ensure end-to-end validation passes (yq optional; must fail only for real inconsistencies).
-- Out of Scope:
-  - Adding interactive prompts
-  - Changing CLI flag behavior
-  - Expanding bootstrap functionality
-- Acceptance Criteria:
-  - Running run-create-project.sh with valid flags completes successfully.
-  - index.md includes required project-slug field/content.
-  - No cleanup triggered on success.
-
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
