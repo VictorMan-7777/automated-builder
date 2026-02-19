@@ -33,12 +33,16 @@ Note: The dependency view is derived data and is intentionally updated on-demand
 
 ## Dependency View
 
-### Dependency model through P-086
+### Dependency model through P-100
 
 Legend:
 A -> B means A must be completed before B can be meaningfully executed.
 (A) means cluster / umbrella dependency
 [D] means deferred until <condition>
+
+Explicit declared P-### dependencies (from active pending items)
+P-098 -> P-099
+P-098 -> P-100
 
 Core builder readiness
 P-012 (Builder completion criteria) -> P-084 (run-create-project spec)
