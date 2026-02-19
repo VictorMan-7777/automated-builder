@@ -1527,9 +1527,28 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Source: Focus discipline and v1 readiness planning
 - Captured: 2026-02-11
 - Project: Automated-builder
+- Classification: Inventory
 - Summary:
   Identify which Pending items are truly critical before Devotional
   Generator v1 release and define a clear execution sequence for them.
+- Scope:
+  Pending-items normalization audit:
+    - duplicate detection
+    - scope overlap detection
+    - identify items already satisfied by completed work
+    - propose merge/elimination candidates
+    - explicit rule: NO auto-mutation of other pending items during audit
+  v1-critical classification:
+    - categorize each active item as:
+      - must-complete-before-v1
+      - safe-to-defer
+      - explicit post-v1 deferral
+    - require justification for classification
+  Dependency and sequencing refinement:
+    - establish logical execution order
+    - identify blockers and prerequisites
+    - minimize governance overhead
+    - produce a stabilized execution set of <= 5-7 critical items
 - Notes:
   Analysis should:
     - distinguish between must-do before v1 and safe-to-defer items
@@ -1543,6 +1562,12 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - items explicitly deferred until post-v1
     - any items that can be merged or paused
   Goal is to reduce cognitive load and protect focused execution.
+- Acceptance Criteria:
+  - Audit report produced
+  - v1 classification table produced
+  - Refined dependency map produced
+  - <= 5-7 critical path items identified
+  - No pending-items mutated except via proposal
 
 ### P-080 — Identify critical security edge points and protection requirements
 - Source: Security posture and risk boundary planning
@@ -2201,3 +2226,31 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Deferred until: Builder v1 complete
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
+
+### P-101 — Formalize Pending-Items Governance Contract
+- Source: Constitutional governance continuation - pending surface stabilization
+- Captured: 2026-02-19
+- Project: Automated-builder
+- Classification: Regular Issue
+- Objective:
+  Define and enforce canonical governance rules for pending-items management.
+- Scope:
+  - Define canonical operational rules for pending-items lifecycle
+  - Consolidate rules into pending-items-rules.md.tmpl
+  - Define required metadata fields
+  - Define deferral annotation process
+  - Define duplicate/scope-overlap detection expectations
+  - Define merge/elimination workflow (proposal + approval required)
+  - Define archive synchronization contract
+  - Require scope evaluation before adding new items
+  - Explicit anti-entropy safeguards
+  - Prevent cognitive overload growth
+- Acceptance Criteria:
+  - Rules template defined
+  - Governance contract formalized
+  - No operational ambiguity remains
+  - Merge/elimination requires proposal + approval
+  - Archive sync explicitly defined
+- Non-Goals:
+  - No tooling implementation
+  - No automatic mutation of existing items
