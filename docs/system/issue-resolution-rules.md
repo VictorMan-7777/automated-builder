@@ -311,6 +311,10 @@ Backlog Hygiene Rules
    If verification fails, HALT: "Completion authority violation: [missing prerequisites]"
 3. Deferred items remain in Pending. Append "Deferred: <reason>" or "Deferred until: <condition>" to the item block. Do NOT create a separate Deferred section.
 
+Current Status Update Authority
+
+The `- Current Status:` field in `docs/system/pending-items.md` MUST be updated at the lifecycle trigger steps defined in `docs/system/issue-resolution-templates.md`. Out-of-band corrections are permitted only when Current Status has become factually inaccurate due to status drift. Correction commits MUST use message format `docs(system): Correct P-### Current Status — [reason]` and MUST state they are correcting status drift, not advancing lifecycle state. If Current Status is absent from an active item, treat it as `Awaiting proposal` and note the missing field.
+
 Inventory-Specific Rules
 
 1. Inventory approval syncs P-### scope immediately. Update the P-### descriptive scope in pending-items.md at approval (before Issue-### execution begins).

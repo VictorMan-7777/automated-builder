@@ -18,6 +18,11 @@ No action is taken until explicitly promoted.
 9. Dependency view + regeneration instructions live in `docs/system/pending.md` (canonical derived view).
 10. Pending items are capture-only and do not trigger work unless explicitly promoted.
 11. This file is not an Issue tracker and does not start Issue loops.
+12. Every active P-### MUST include a `- Current Status:` field reflecting its actual lifecycle state. The field MUST be updated at the lifecycle trigger steps in `docs/system/issue-resolution-templates.md`. Out-of-band correction commits are permitted only for status drift, with message `docs(system): Correct P-### Current Status — [reason]`. Allowed values by item type:
+
+   Standard P-###: `Awaiting proposal` | `Proposal produced — awaiting approval` | `Implementation complete — awaiting archive` | `Deferred — [condition]`
+
+   Inventory P-###: `Awaiting inventory proposal` | `Inventory proposal produced — awaiting approval` | `Inventory approved — awaiting Issue-### execution` | `Issue loop in progress — Issue-[N]` | `Inventory Verification Stage 1 pending` | `Inventory Verification Stage 2 pending` | `Deferred — [condition]`
 
 ---
 
@@ -34,6 +39,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   Update the Approval template to require an explicit proposal artifact
   reference when the proposal is not present in-session, mirroring the inventory
   artifact existence requirement. Do not add search/discovery logic.
+- Current Status: Implementation complete — awaiting archive
 
 ### P-004 — Architecture review — next pass planning
 - Source: System architecture clarification
@@ -68,6 +74,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   6. No open governance-breaking Issues remain in automated-builder.
   
   Only when all criteria above are satisfied may the architecture review begin.
+- Current Status: Awaiting proposal
 
 ### P-005 — Devotional generator — builder planning updates
 - Source: Devotional generator planning
@@ -78,6 +85,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   plan, including newly identified features or adjustments to the existing
   builder design.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-006 — Devotional generator — multi-volume series support (Vol 1–6)
 - Source: Devotional generator planning
@@ -88,6 +96,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   topic-specific), each 30 days (Mon–Sat). Generator completes Vol 1 and
   generates Vol 2–6 from a structured plan.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-007 — Devotional generator — series-level uniqueness (scripture + quotes)
 - Source: Devotional generator planning
@@ -98,6 +107,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   appear in Volumes 2–6. Track used scriptures/quotes in a registry and
   validate before generation/export.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-008 — Devotional generator — one-time spreadsheet import (Vol 1 mapping)
 - Source: Devotional generator planning
@@ -108,6 +118,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   for Volume 1). Define import format, validation, and mapping into internal
   series plan model.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-009 — Devotional generator — one-time Scrivener import (existing draft)
 - Source: Devotional generator planning
@@ -118,6 +129,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   Define export format and parsing, and mark imported days as locked so
   generator fills only missing days.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-010 — Devotional generator — workflow to finish Volume 1 then generate Vol 2–6
 - Source: Devotional generator planning
@@ -127,6 +139,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   Workflow: import spreadsheet + Scrivener → generate remaining days in Volume 1
   → generate Volumes 2–6 → enforce series-level uniqueness throughout.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-011 — Devotional generator — per-volume KDP-ready export
 - Source: Devotional generator planning
@@ -136,6 +149,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   Export separate KDP-ready PDFs per volume with consistent formatting and
   volume-specific front/back matter; optionally support a series bundle export.
 - Deferred until: automated builder is complete
+- Current Status: Deferred — automated builder is complete
 
 ### P-012 — Automated Mode Expansion — Stage-Level Execution
 - Source: Devotional Generator Builder v1 workflow expansion
@@ -170,6 +184,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Explicit statement that full pipeline automation is deferred.
 - Dependencies:
   - None (do not reference Issue-001; it's already resolved/implemented).
+- Current Status: Implementation complete — awaiting archive
 
 ### P-013 — Scan system for documentation inconsistencies
 - Source: Output File System pending items update
@@ -178,6 +193,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Summary:
   Add a pending item for scanning the repository and docs to identify
   inconsistencies or missing documentation.
+- Current Status: Awaiting proposal
 
 ### P-014 — Expand Planner with Shared PRD Input Mode (CMS-002) + Agentic/RAG Planning Awareness
 - Objective:
@@ -227,6 +243,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   2026-02-12: PRD generation is explicitly out of scope for Builder v1 and deferred to Builder v2.
   Builder v1 consumes a shared, manually authored PRD input to reduce ambiguity and support first-round AI agent comparison testing.
+- Current Status: Deferred — Builder v2
 
 ### P-015 — Normalize run-* prompt/script locations
 - Source: run-* location normalization request
@@ -258,6 +275,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     compatibility alias.
   - Verification guidance exists for catching non-canonical run-* references.
   - No ambiguity remains about where each run-* artifact should live.
+- Current Status: Implementation complete — awaiting archive [ambiguous — verify]
 
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
@@ -276,6 +294,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - potential impact areas for the builder
     - cost/benefit risks for adopting them
     - recommendations for what, if anything, to integrate
+- Current Status: Deferred — automated builder core is complete
 
 ### P-018 — Review OpenClaw 2026.2.9 release and assess impact
 - Source: OpenClaw release update
@@ -291,6 +310,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - simplify builder or skill implementation
     - affect local LLM or Pocket AI strategies
     - introduce new integration or migration considerations
+- Current Status: Deferred — automated builder core is complete
 
 ### P-019 — Compare NanoClaw to OpenClaw
 - Source: OpenClaw ecosystem research
@@ -307,6 +327,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - strengths and weaknesses of each
     - integration considerations
     - where one may be preferable within your stack
+- Current Status: Deferred — automated builder core is complete
 
 ### P-020 — Compare Mac Mini vs VPS vs Cloudflare as deployment platform
 - Source: Infrastructure and cost optimization planning
@@ -324,6 +345,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - scalability and reliability
     - suitability for local LLM or hybrid execution
     - security and access considerations
+- Current Status: Deferred — automated builder core is complete
 
 ### P-021 — Compare OpenClaw vs human VA for protecting devotionals from hallucinations
 - Source: Quality control and risk mitigation planning
@@ -340,6 +362,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - cost and turnaround time
     - scalability and consistency
     - risk tolerance and failure modes
+- Current Status: Deferred — devotional generator is complete
 
 ### P-022 — Explore “VA in a box” for churches using OpenClaw + local LLMs
 - Source: Product expansion and ministry tooling ideation
@@ -357,6 +380,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - cost structure and sustainability with local inference
     - deployment and support model
     - ethical, theological, and trust considerations
+- Current Status: Deferred — devotional generator and OpenClaw integration are complete
 
 ### P-023 — AI Coding Ladder
 - Source: AI workflow maturity planning
@@ -381,6 +405,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - graduation criteria are explicit for each stage transition
   - mid-loop generation workflow is documented as a named, repeatable workflow
   - ladder documentation is linked from system index/navigation docs
+- Current Status: Awaiting proposal
 
 ### P-024 — Classify OpenClaw as High-Risk Creation Environment
 - Source: Security posture and environment classification
@@ -401,6 +426,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - canonical docs explicitly label OpenClaw as isolated non-production tooling
   - risk boundary language is consistent across updated references
   - usage constraints are clear enough to prevent production misclassification
+- Current Status: Awaiting proposal
 
 ### P-025 — Refactor ChMS Pending Items to Align with OpenClaw Isolation Model
 - Source: Backlog consistency and risk-boundary alignment
@@ -422,6 +448,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - all ChMS-related pending items are reviewed against isolation constraints
   - unsafe/incorrect production assumptions are corrected
   - updated items are consistent with OpenClaw high-risk classification
+- Current Status: Deferred — ChMS project activation
 
 ### P-026 — Evaluate Integrating Claude Task Master into Builder
 - Source: Builder tooling strategy review
@@ -442,6 +469,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - documented assessment covers overlap, risks, and benefits
   - a clear integration decision is recorded with rationale
   - follow-up actions (if any) are explicit and bounded
+- Current Status: Awaiting proposal
 
 ### P-027 — Implement RAG for Quote Retrieval
 - Source: Devotional generator retrieval quality improvement
@@ -462,6 +490,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - RAG quote retrieval pipeline is integrated into devotional-generator flow
   - retrieved quotes include traceable metadata/source references
   - verification confirms quote retrieval path is operational and reproducible
+- Current Status: Awaiting proposal
 
 ### P-028 — Define versioning and upgrade strategy for Devotional Generator
 - Source: Long-term system stability planning
@@ -476,6 +505,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - upgrade sequencing
     - rollback guarantees
     - compatibility expectations across generator releases
+- Current Status: Awaiting proposal
 
 ### P-029 — Evaluate OpenClaw VA for Evangelical-focused content auditing
 - Source: Theological quality and alignment planning
@@ -493,6 +523,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - effectiveness versus human theological review
     - risk of false positives/negatives
     - transparency and auditability of decisions
+- Current Status: Deferred — devotional generator and OpenClaw integration are complete
 
 ### P-030 — Identify security flaws in OpenClaw and the codebase that could deter customers
 - Source: Security and customer trust planning
@@ -510,6 +541,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - access control and secrets management
     - deployment and update mechanisms
     - perception risks (what *looks* unsafe, even if technically sound)
+- Current Status: Deferred — automated builder and OpenClaw integration are complete
 
 ### P-031 — Evaluate Church VA integration with online Bible study platforms (API, BYO, and low-cost paths)
 - Source: Content licensing, theological depth, and Church VA resource planning
@@ -536,6 +568,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - tradeoffs between cost, theological depth, and legal risk
   Goal is to define a sustainable, legally compliant resource strategy
   for Church VA deployment.
+- Current Status: Deferred — ChMS project activation
 
 ### P-032 — Evaluate training a Church VA to reflect the Pastor’s “voice”
 - Source: Church VA personalization and trust exploration
@@ -553,6 +586,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - training data sources (sermons, writings) and safeguards
     - risks of drift or misrepresentation over time
     - transparency to congregants about AI involvement
+- Current Status: Deferred — Church VA and OpenClaw architecture are defined
 
 ### P-033 — Design a software development company model to build and operate a ChMS
 - Source: Organizational and delivery model planning
@@ -571,6 +605,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - quality, security, and compliance responsibilities
     - support, customer success, and church-facing roles
     - scalability from solo/founder-led to small team
+- Current Status: Deferred — ChMS scope and product direction are defined
 
 ### P-034 — Create Devotional Generator “Ready” Checklist (v1 Release Gate)
 - Source: Devotional generator operational priority
@@ -591,6 +626,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - export requirements for Amazon KDP
     - what is explicitly out-of-scope for v1
   This checklist becomes the release gate for Devotional Generator v1.
+- Current Status: Awaiting proposal
 
 ### P-035 — Define minimum OpenClaw skill interface for Devotional Generator
 - Source: Devotional generator OpenClaw integration planning
@@ -609,6 +645,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - validation and error states
     - safety and theological alignment constraints
   Must remain intentionally minimal for v1.
+- Current Status: Awaiting proposal
 
 ### P-036 — Define KDP-ready pipeline checklist for Devotional Generator
 - Source: Devotional product production planning
@@ -628,6 +665,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - uniqueness and duplication checks
     - final review and sign-off criteria
   This pipeline should be executable step-by-step without ambiguity.
+- Current Status: Awaiting proposal
 
 ### P-037 — run-create-project interactive prompts for mandatory fields
 - Source: Builder system usability enhancement request
@@ -652,6 +690,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Without required flags, script prompts and proceeds.
   - With flags, script remains non-interactive.
   - No breaking changes.
+- Current Status: Deferred — P-016 is complete
 
 ### P-038 — Identify critical timing points and build dependencies to prevent derailment
 - Source: System execution stability planning
@@ -672,6 +711,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - scope creep and premature scaling risks
   Output should produce a simple timeline with guardrails,
   not a detailed Gantt chart.
+- Current Status: Awaiting proposal
 
 ### P-039 — Define canonical data model for Devotional Generator (v1)
 - Source: Architecture stability planning
@@ -688,6 +728,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - export metadata (KDP formatting fields)
     - versioning strategy for future changes
   Prevents downstream instability as generator evolves.
+- Current Status: Awaiting proposal
 
 ### P-040 — Implement reproducibility and run-record logging for devotional builds
 - Source: Quality control and audit stability
@@ -703,6 +744,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - theological audit
     - early adopter trust
     - hallucination investigation
+- Current Status: Awaiting proposal
 
 ### P-041 — Define hallucination and doctrinal error response protocol
 - Source: Risk mitigation planning
@@ -718,6 +760,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - update/republish rules (KDP)
     - version tracking
     - communication policy if distributed via OpenClaw skill
+- Current Status: Awaiting proposal
 
 ### P-042 — Define early adopter feedback capture and iteration loop
 - Source: OpenClaw skill launch planning
@@ -732,6 +775,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - signal vs noise filtering
     - update cadence
     - change log transparency
+- Current Status: Awaiting proposal
 
 ### P-043 — Define minimum viable ChMS feature boundary (anti-scope creep guardrail)
 - Source: Scope control planning
@@ -747,6 +791,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - what the MVP will NOT include
     - counseling/sermon/AI assistant exclusions
     - limits on automation authority
+- Current Status: Deferred — ChMS project activation
 
 ### P-044 — Define data ownership and portability guarantees for churches
 - Source: Customer trust and retention planning
@@ -762,6 +807,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - deletion guarantees
     - backup/restore transparency
     - shutdown contingency plan
+- Current Status: Deferred — ChMS project activation
 
 ### P-045 — Define incident response and outage protocol (church-facing)
 - Source: Operational reliability planning
@@ -777,6 +823,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - severity classification
     - rollback/restore procedure
     - post-incident review practice
+- Current Status: Deferred — ChMS project activation
 
 ### P-046 — Define versioning and upgrade strategy across Devotional Generator and ChMS
 - Source: Long-term system stability planning
@@ -792,6 +839,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - upgrade sequencing
     - rollback guarantees
     - tenant-specific upgrade control
+- Current Status: Deferred — ChMS project activation
 
 ### P-047 — Prioritize critical system-stability pending items
 - Source: Stability and governance review
@@ -809,6 +857,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - identify which can safely remain deferred
     - highlight hidden dependencies between items
     - prevent backlog sprawl from slowing momentum
+- Current Status: Deferred — ChMS project activation
 
 ### P-048 — Consolidate stability-related pending items into a System Stability Gate
 - Source: Backlog coherence and scope management
@@ -825,6 +874,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - which safeguards belong in Devotional Generator v1
     - which safeguards are post-v1 maturity steps
     - how to maintain execution velocity without sacrificing durability
+- Current Status: Deferred — ChMS project activation
 
 ### P-049 — Define trigger points for adding human resources (non-optional)
 - Source: Execution capacity and risk management planning
@@ -844,6 +894,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - which roles would be required first (theological reviewer, devops,
       support, QA, etc.)
   Goal is to avoid waiting until failure forces reactive hiring.
+- Current Status: Deferred — ChMS project activation
 
 ### P-050 — Identify first non-negotiable hire (role, cost, and lead time)
 - Source: Scaling and sustainability planning
@@ -863,6 +914,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - realistic hiring lead time (search → onboarding)
     - measurable trigger conditions for activation
   Goal is to avoid reactive hiring after quality or trust degradation.
+- Current Status: Deferred — ChMS project activation
 
 ### P-051 — Define church-count thresholds for dedicated Systems Manager and Customer Success
 - Source: Operational scaling and staffing planning
@@ -881,6 +933,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - whether roles can be part-time/contract initially
     - cost implications and margin impact at each tier
   Goal is to establish objective scaling triggers before operational strain occurs.
+- Current Status: Deferred — ChMS project activation
 
 ### P-052 — Determine marketability and critical pricing thresholds
 - Source: Product viability and revenue planning
@@ -901,6 +954,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - break-even analysis at different church counts
   Goal is to define pricing that supports sustainability without
   undermining adoption.
+- Current Status: Deferred — ChMS project activation
 
 ### P-053 — Model realistic slow revenue flow and identify income derailment risks
 - Source: Financial sustainability and risk planning
@@ -928,6 +982,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - break-even thresholds
     - early warning indicators for revenue instability
     - mitigation strategies for major derailment risks
+- Current Status: Deferred — ChMS project activation
 
 ### P-054 — Determine if system can be built without outside capital (path and constraints)
 - Source: Funding strategy and independence planning
@@ -953,6 +1008,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - minimum viable revenue targets to sustain development
     - critical constraints that must be accepted
     - triggers that would justify reconsidering outside capital
+- Current Status: Deferred — ChMS project activation
 
 ### P-055 — Identify optimal order of functional integration for bootstrapped growth
 - Source: Bootstrapped execution strategy planning
@@ -976,6 +1032,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - Phase 2 (stability + automation)
     - Phase 3 (expansion)
     - explicit “do not build yet” items
+- Current Status: Deferred — ChMS project activation
 
 ### P-056 — Define feedback & Aquisition strategy without existing market contacts
 - Source: Founder constraint and go-to-market planning
@@ -998,6 +1055,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - time investment per method
     - expected signal quality
     - early validation checkpoints
+- Current Status: Deferred — ChMS project activation
 
 ### P-057 — Identify characteristics of initial hire to offset founder constraints
 - Source: Founder self-awareness and scaling strategy
@@ -1018,6 +1076,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - budget range and timing relative to revenue milestones
   Goal is to ensure the first hire meaningfully expands capability rather
   than reinforcing existing strengths.
+- Current Status: Deferred — ChMS project activation
 
 ### P-058 — Design system to be welcoming to both introverts and extroverts without overwhelming the founder
 - Source: Founder constraint and community design planning
@@ -1037,6 +1096,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - boundaries that protect founder focus and energy
   Goal is to design an ecosystem that supports diverse user types
   while preserving founder sustainability.
+- Current Status: Deferred — ChMS project activation
 
 ### P-059 — Define indicators of build slowdown and acceleration
 - Source: Execution velocity and system health monitoring
@@ -1060,6 +1120,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - early warning signs of derailment
     - actions to take when slowdown indicators appear
     - criteria distinguishing healthy acceleration from chaotic overreach
+- Current Status: Deferred — ChMS project activation
 
 ### P-060 — Map pending items to execution system (Human / ChatGPT / Claude / Codex / OpenClaw)
 - Source: Execution boundary clarification
@@ -1081,6 +1142,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - a simple responsibility matrix
     - decision rules for future Pending items
     - boundary principles to avoid autonomy creep
+- Current Status: Awaiting proposal
 
 ### P-061 — Lifecycle Changelog Rules
 - Source: Builder lifecycle governance request
@@ -1110,6 +1172,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Explicit counter increment rules defined.
   - No recursive or auto-trigger behavior introduced.
   - No conflict with existing review process.
+- Current Status: Awaiting proposal
 
 ### P-062 — Define formal supersession rule for Pending items
 - Source: Backlog governance and audit clarity planning
@@ -1127,6 +1190,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - prohibition of silent deletion
     - documentation requirements for scope merges
   Goal is to maintain historical traceability while reducing duplication.
+- Current Status: Awaiting proposal
 
 ### P-063 — Define lightweight governance pattern to prevent backlog bureaucracy
 - Source: Backlog scaling and execution discipline planning
@@ -1145,6 +1209,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - safeguards against process creep
   Goal is to ensure governance increases clarity and stability
   without reducing build velocity.
+- Current Status: Awaiting proposal
 
 ### P-064 — Define best process for systemic review and optimal implementation points
 - Source: System stability and quality assurance planning
@@ -1166,6 +1231,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - escalation criteria if risks are discovered
   Goal is to prevent late-stage surprises while avoiding constant
   over-review that slows progress.
+- Current Status: Deferred — ChMS project activation
 
 ### P-065 — Define 3-layer review model (Light, Milestone, Gate)
 - Source: System review process refinement
@@ -1197,6 +1263,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - escalation rules
   Goal is to create predictable review checkpoints without introducing
   bureaucratic drag.
+- Current Status: Deferred — ChMS project activation
 
 ### P-066 — Rank all Pending items by impact and execution priority
 - Source: Backlog prioritization and focus discipline
@@ -1219,6 +1286,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - identification of safely deferred items
     - any items that can be consolidated or paused indefinitely
   Goal is to reduce cognitive load and protect execution focus.
+- Current Status: Awaiting proposal
 
 ### P-067 — Identify unrecognized costs, bottleneck thresholds, and mitigation process
 - Source: Financial risk and sustainability planning
@@ -1248,6 +1316,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - mitigation strategies (rate limits, tiered pricing, cost caps, automation)
     - decision triggers for pricing adjustments
   Goal is to prevent hidden cost growth from destabilizing the system.
+- Current Status: Deferred — ChMS project activation
 
 ### P-068 — Identify top 3 most likely hidden cost spikes and mitigation strategy
 - Source: Financial risk foresight planning
@@ -1271,6 +1340,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - infrastructure and backup scaling costs
     - support and human review overhead
   Goal is to prevent avoidable financial instability during growth.
+- Current Status: Deferred — ChMS project activation
 
 ### P-069 — Identify low-cost add-ons with strong revenue leverage
 - Source: Revenue optimization and margin strategy planning
@@ -1295,6 +1365,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - revenue upside potential
     - which can be introduced post-v1 without destabilizing the core system
   Goal is to increase sustainability without materially increasing risk.
+- Current Status: Deferred — ChMS project activation
 
 ### P-070 — Evaluate Kickstarter or similar crowdfunding platforms as leverage strategy
 - Source: Funding, validation, and early adopter planning
@@ -1320,6 +1391,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - recommendation: pursue, delay, or avoid
   Goal is to determine if crowdfunding accelerates validation or
   distracts from focused execution.
+- Current Status: Deferred — ChMS project activation
 
 ### P-071 — Identify non-equity funding options and suitability
 - Source: Capital strategy and founder control planning
@@ -1350,6 +1422,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - medium-term options
     - high-risk or misaligned options to avoid
   Goal is to preserve founder control while enabling sustainable growth.
+- Current Status: Deferred — ChMS project activation
 
 ### P-072 — Determine most realistic non-equity funding path
 - Source: Capital strategy prioritization
@@ -1373,6 +1446,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - timeline for execution
     - criteria for abandoning pursuit if traction is low
   Goal is to avoid analysis paralysis and focus capital strategy.
+- Current Status: Deferred — ChMS project activation
 
 ### P-073 — Develop solid business plan (internal and external versions)
 - Source: Strategic clarity and stakeholder communication planning
@@ -1402,6 +1476,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - funding requirements (if applicable)
   Goal is to align execution clarity internally while enabling
   credible communication externally.
+- Current Status: Deferred — ChMS project activation
 
 ### P-074 — Define minimal viable structure for internal business plan
 - Source: Strategic clarity without over-engineering
@@ -1426,6 +1501,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - updateable quarterly
     - directly actionable
   Goal is to create clarity and alignment without slowing execution.
+- Current Status: Deferred — ChMS project activation
 
 ### P-075 — Define execution order map and fork decision points document
 - Source: Build sequencing and scope control planning
@@ -1450,6 +1526,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - visually clear (timeline or phase map)
     - easy to update
   Goal is to protect focus and prevent execution drift.
+- Current Status: Deferred — ChMS project activation
 
 ### P-076 — Create time and resource map with execution switch points
 - Source: Execution sequencing and capacity planning
@@ -1478,6 +1555,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - or decision-tree style map
   Goal is to reveal bottlenecks and inflection points before
   they are encountered reactively.
+- Current Status: Deferred — ChMS project activation
 
 ### P-077 — Identify clusterable or integrable Pending items for streamlined execution
 - Source: Backlog architecture and execution efficiency planning
@@ -1501,6 +1579,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - items to remain standalone
     - items safe to defer long-term
   Goal is to reduce cognitive load and prevent planning sprawl.
+- Current Status: Awaiting proposal
 
 ### P-078 — Define cadence for backlog re-evaluation and reorganization
 - Source: Sustainable governance and execution rhythm planning
@@ -1522,6 +1601,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - event-based override triggers
     - anti-churn guardrails
   Goal is to maintain alignment and focus while preserving execution velocity.
+- Current Status: Awaiting proposal
 
 ### P-079 — Identify critical Pending items and define execution sequencing
 - Source: Focus discipline and v1 readiness planning
@@ -1568,6 +1648,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Refined dependency map produced
   - <= 5-7 critical path items identified
   - No pending-items mutated except via proposal
+- Current Status: Awaiting inventory proposal
 
 ### P-080 — Identify critical security edge points and protection requirements
 - Source: Security posture and risk boundary planning
@@ -1594,6 +1675,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - escalation protections for multi-tenant phase
     - early warning indicators for compromise risk
   Goal is to prevent preventable breaches and preserve customer trust.
+- Current Status: Deferred — ChMS project activation
 
 ### P-081 — Identify which Pending items can be executed in parallel
 - Source: Execution efficiency and capacity optimization planning
@@ -1615,6 +1697,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - recommended parallel limit (e.g., 2–3 active lanes max)
     - risk of over-parallelization
   Goal is to increase execution velocity without increasing chaos.
+- Current Status: Awaiting proposal
 
 ### P-082 — Define maximum safe parallel execution lanes
 - Source: Founder bandwidth and execution sustainability planning
@@ -1637,6 +1720,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
     - escalation conditions for temporarily expanding lanes
     - reduction triggers when quality or velocity drops
   Goal is to maximize throughput while preserving clarity and stability.
+- Current Status: Awaiting proposal
 
 ### P-083 — Set up SSH for project repo access (PRD + build app)
 - Source: Devotional Generator repo access setup request
@@ -1660,6 +1744,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Repo remote uses SSH URL.
   - Clone/pull/push works via SSH without credential prompts.
   - Instructions live in the repo in the appropriate docs location per existing rules.
+- Current Status: Implementation complete — awaiting archive
 
 ### P-086 — Update Issues approval template to enforce pending-items sync
 - Project: automated-builder
@@ -1667,6 +1752,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   When a proposal revision is approved, the corresponding P-### entry in
   pending-items.md must be updated to reflect the approved revision text.
   Validation may reference P-### and must be able to trust it is current.
+- Current Status: Awaiting proposal
 
 ### P-087 — Pending Items "Current Status" Field (Session Reorientation Removal)
 - Source: Session continuity and governance update
@@ -1711,6 +1797,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - Current Status must remain descriptive, not a second approval/validation mechanism.
   - Inventory must support "Issue Loop in progress" and "Inventory Verification Stage 1/2" states.
+- Current Status: Proposal produced — awaiting approval [verify]
 
 ### P-088 — Parallel Issue Execution Grouping Rule (Issue-Resolution)
 - Source: Deterministic output ordering for multi-issue execution
@@ -1766,6 +1853,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - This rule governs output structure only.
   - It does not prohibit true parallel execution.
   - It preserves audit clarity and deterministic validation.
+- Current Status: Awaiting proposal
 
 ### P-089 — Inventory Approval Must Declare Issue Sequence Status
 - Source: Inventory governance clarification
@@ -1810,6 +1898,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Prevents silent reordering.
   - Preserves deterministic validation.
   - Supports session-independent execution.
+- Current Status: Awaiting proposal
 
 ### P-090 — Track Deferred Items Within Inventory
 - Source: Inventory deferral tracking governance
@@ -1869,6 +1958,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Inventory verification templates must include the Deferred Register input.
 - Notes:
   - This formalizes what decision record artifacts are doing today into a repeatable system.
+- Current Status: Awaiting proposal
 
 ### P-091 — Formalize Proposal Update vs Approval-with-Changes Rule
 - Source: Approval governance clarification
@@ -1917,6 +2007,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Preserves strict discipline.
   - Prevents accidental scope mutation during approval.
   - Supports long-term audit clarity.
+- Current Status: Awaiting proposal
 
 ### P-092 — Builder v1 Edge Case Evaluation (Pre-Deploy Gate)
 - Source: Builder pre-deploy quality gate
@@ -2000,6 +2091,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - This is a structured manual test suite.
   - Results must be captured in an output artifact.
   - This evaluation occurs before first real project creation.
+- Current Status: Awaiting proposal
 
 ### P-093 — Review Devotional Generator Plans for Builder v1 Alignment
 - Source: Devotional governance-alignment review
@@ -2033,6 +2125,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - This is a governance-alignment review only.
   - Changes to Devotional plans must occur under Devotional project issue loop.
+- Current Status: Awaiting proposal
 
 ### P-094 — Update Devotional Generator Plans for Builder v1 Governance
 - Source: Devotional governance-alignment remediation
@@ -2060,6 +2153,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - This update is structural only.
   - Domain logic must remain unchanged.
+- Current Status: Awaiting proposal
 
 ### P-095 — Rebuild Devotional Generator Using Builder v1
 - Source: Devotional structural validation run
@@ -2084,6 +2178,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - Any failures captured as formal Devotional project issues.
 - Notes:
   - This is a structural validation run, not a content-generation milestone.
+- Current Status: Awaiting proposal
 
 ### P-096 — Define When Issue-Resolution Requires a New Session
 - Source: Session-boundary governance clarification
@@ -2116,6 +2211,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - This is governance-only.
   - No changes to existing approved artifacts.
+- Current Status: Awaiting proposal
 
 ### P-097 — Automated Retry Logic for Inventory Verification (Automation-Only)
 - Source: Inventory verification automation resilience
@@ -2157,6 +2253,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - This does not modify Inventory Stage-1 or Stage-2 authority rules.
   - It governs discovery and bounded retry behavior only.
+- Current Status: Awaiting proposal
 
 ### P-099 — Restart Protocol for Interrupted Inventories
 - Source: Resume-safety governance hardening for inventory workflows
@@ -2184,6 +2281,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Deferred until: Builder v1 complete
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
+- Current Status: Deferred — Builder v1 complete
 
 ### P-100 — Normalize Verification Field Names (Verdict -> Verification)
 - Source: Verification terminology normalization
@@ -2226,6 +2324,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Deferred until: Builder v1 complete
 - Dependencies:
   - P-098 — Harden Issue-Resolution Constitution
+- Current Status: Deferred — Builder v1 complete
 
 ### P-101 — Formalize Pending-Items Governance Contract
 - Source: Constitutional governance continuation - pending surface stabilization
@@ -2254,6 +2353,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Non-Goals:
   - No tooling implementation
   - No automatic mutation of existing items
+- Current Status: Awaiting proposal
 
 ### P-102 — Audit and Restore Project Template Baselines (/templates/project/)
 - Source: Discovery — pending-items-rules.md.tmpl found empty after slug conversion
@@ -2319,3 +2419,5 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   This item addresses bootstrap integrity risk introduced during slug/template
   conversion. Template baseline corruption is considered a Builder v1 blocker
   because it can silently generate structurally incomplete projects.
+- Current Status: Awaiting proposal
+

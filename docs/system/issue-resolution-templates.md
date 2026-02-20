@@ -34,11 +34,11 @@ You are in BOUNDED mode. No scope expansion.
 
 Behavior:
 
-1. If the inventory artifact is uncommitted, commit it first.
+1. If the inventory artifact (*-inventory-proposal.md) is uncommitted, commit it first. If the inventory proposal artifact is committed in this step: include the pending-items.md Current Status update to `Inventory proposal produced — awaiting approval` in the same commit. If step 1 is skipped (artifact already committed in a prior session), the Current Status was set at that prior commit — no action needed in the current session.
 2. Produce the proposal output artifact.
 3. Execute Proposal Self-Review.
 4. Do NOT implement any changes.
-5. Do NOT commit the proposal artifact.
+5. Do NOT commit the proposal artifact. The proposal output artifact from step 2 remains uncommitted; no Current Status trigger is placed at step 2.
 
 The proposal artifact remains uncommitted so the human can review it before approval.
 
@@ -203,11 +203,11 @@ Execution sequence (no pauses):
 
 1. Apply the specified updates to the proposal, if any.
 2. Rename the proposal artifact from *-proposal.md to *-approved.md.
-3. Commit the approved artifact.
+3. Commit the approved artifact. If this Issue-### belongs to a parent inventory P-###: include the parent P-###'s pending-items.md Current Status update (`Issue loop in progress — Issue-[N]`, where N is this Issue number) in the same commit.
 4. Implement the approved change.
 5. Commit the implementation.
 6. Create the implementation summary artifact.
-7. Commit the summary.
+7. Commit the summary artifact. If this is a standalone P-### (not an Issue-### within an inventory): update `- Current Status:` in pending-items.md to `Implementation complete — awaiting archive` and include that change in the same commit.
 
 Alternative responses:
 
@@ -298,7 +298,11 @@ Execution sequence (no pauses):
 
    Pending synchronization is scope-descriptive only and does not alter lifecycle state.
 
-5. If pending-items.md was updated in step 4: commit the change in a separate commit with message: "docs(system): Sync P-### scope to approved inventory"
+5. Commit pending-items.md. This step is unconditional — pending-items.md MUST always be committed here, regardless of whether a scope-sync update occurred in step 4. The commit MUST include the Current Status update to `Inventory approved — awaiting Issue-### execution`. If step 4 produced a scope-sync update, include that change in the same commit.
+
+   Commit message:
+   - If scope-sync occurred (step 4 fired): `docs(system): Sync P-### scope and update Current Status — inventory approved`
+   - If no scope-sync (step 4 was skipped): `docs(system): Update P-### Current Status — inventory approved`
 6. Ask the user:
 
    ```
@@ -399,6 +403,10 @@ Next Issue-###? OR Validation?
 
 When the user selects Validation, proceed with Stage 1.
 
+Update `- Current Status:` in pending-items.md for this P-### to `Inventory Verification Stage 1 pending`. Commit as a standalone commit with message: `docs(system): Update P-### Current Status — Stage-1 pending`
+
+This is a standalone commit. The user selecting "Validation" is a constitutional human gate; no other commit occurs at this trigger point.
+
 Inputs:
 
 1. The approved inventory artifact (*-inventory-approved.md).
@@ -438,6 +446,10 @@ Verdict:
 On FAIL:
 
 Create new pending items in pending-items.md for all incomplete Issue-### items.
+
+When Stage-1 verdict is PASS: include the pending-items.md Current Status update to `Inventory Verification Stage 2 pending` in the Stage-1 artifact commit. Do not create a separate commit for the status update.
+
+When Stage-1 verdict is FAIL: do not update Current Status. It remains `Inventory Verification Stage 1 pending`.
 
 CRITICAL: Stage 1 does NOT authorize moving P-### to Completed. Proceed to Stage 2.
 

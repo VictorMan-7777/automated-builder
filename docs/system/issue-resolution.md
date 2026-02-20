@@ -23,7 +23,7 @@ The agent MUST, in this order:
 1. Read docs/system/issue-resolution.md
 2. Read docs/system/issue-resolution-templates.md
 3. Read docs/system/pending-items.md
-4. Locate the referenced Issue or P-### item
+4. Locate the referenced Issue or P-### item. After locating a P-### entry: read the `- Current Status:` field. This field is the canonical resume point for session reorientation — it states the next required action without relying on prior chat context.
 5. Proceed under governed mechanics
 
 Repository-wide exploration is NOT permitted before Step 1.
