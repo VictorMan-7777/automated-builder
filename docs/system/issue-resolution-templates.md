@@ -254,6 +254,8 @@ P-084 Inventory Approval — System Builder MVP
 You are in BOUNDED mode. No scope expansion.
 ```
 
+Proposal artifact prerequisite: Approval MUST reference a proposal artifact. If the proposal artifact is not present in the current session context, the approval instruction MUST include the proposal artifact filename or path. If missing, STOP and request it from the human.
+
 Human response:
 
 ```
