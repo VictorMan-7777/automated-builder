@@ -2254,3 +2254,68 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Non-Goals:
   - No tooling implementation
   - No automatic mutation of existing items
+
+### P-102 — Audit and Restore Project Template Baselines (/templates/project/)
+- Source: Discovery — pending-items-rules.md.tmpl found empty after slug conversion
+- Captured: 2026-02-20
+- Project: automated-builder
+- Summary:
+  Audit all baseline project templates under /templates/project/ to ensure
+  they are complete, non-empty, and sufficient to instantiate a fully
+  compliant project via run-create-project. Identify empty, truncated,
+  drifted, or missing baseline files and restore canonical content where
+  required. Confirm that template files and run-create-project copy logic
+  produce structurally valid projects with no silent omissions.
+
+- Objective:
+  Ensure that a newly instantiated project contains all required baseline
+  governance, lifecycle, and configuration files necessary for Builder v1
+  compliance, and that no template files are empty, stubbed, or incomplete.
+
+- Scope:
+  1. Enumerate all files under /templates/project/.
+  2. Identify:
+     - Zero-byte files.
+     - Truncated or placeholder-only files.
+     - Templates missing canonical content.
+     - Required baseline files missing from templates.
+  3. Compare each template to its canonical non-template counterpart (if applicable).
+  4. Verify slug/placeholder substitution does not remove required structural content.
+  5. Review run-create-project to confirm:
+     - Correct source template paths.
+     - No silent skips or broken references.
+     - All required baseline files are copied.
+  6. Validate that instantiating a test project produces:
+     - Required governance files.
+     - Required lifecycle templates.
+     - Required baseline documentation.
+     - No empty system files.
+
+- Non-Goals:
+  - Governance redesign.
+  - Lifecycle modification.
+  - Template content expansion beyond canonical baseline.
+  - Introduction of new template files unrelated to baseline integrity.
+  - Automation redesign.
+
+- Acceptance Criteria:
+  - No file under /templates/project/ is zero bytes.
+  - No template file contains placeholder-only or structurally incomplete content.
+  - All required baseline files for Builder v1 instantiation are present.
+  - run-create-project copies all required baseline files without omission.
+  - A test instantiation produces a structurally valid project (verification-ready).
+  - Verification artifact explicitly lists:
+      - Template inventory.
+      - Deficiencies found (if any).
+      - Restoration actions taken.
+      - Final structural sufficiency verdict (PASS / FAIL).
+
+- Dependencies:
+  - Access to canonical system files for comparison.
+  - run-create-project script logic.
+  - Current Builder v1 baseline requirements.
+
+- Notes:
+  This item addresses bootstrap integrity risk introduced during slug/template
+  conversion. Template baseline corruption is considered a Builder v1 blocker
+  because it can silently generate structurally incomplete projects.
