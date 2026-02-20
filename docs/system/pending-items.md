@@ -1797,7 +1797,7 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   - Current Status must remain descriptive, not a second approval/validation mechanism.
   - Inventory must support "Issue Loop in progress" and "Inventory Verification Stage 1/2" states.
-- Current Status: Proposal produced — awaiting approval [verify]
+- Current Status: Implementation complete — awaiting archive
 
 ### P-088 — Parallel Issue Execution Grouping Rule (Issue-Resolution)
 - Source: Deterministic output ordering for multi-issue execution
