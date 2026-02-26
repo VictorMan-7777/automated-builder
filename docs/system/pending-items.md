@@ -2421,3 +2421,58 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   because it can silently generate structurally incomplete projects.
 - Current Status: Awaiting proposal
 
+### P-103 — Builder Robustness — Multi-Phase Expansion Framework (Baseline +10 Planning Capability)
+- Source: Planner robustness expansion request
+- Captured: 2026-02-26
+- Project: automated-builder
+- Objective:
+  Enable Planner to generate an additional configurable set of up to 10
+  structured architectural phases per project, tailored to project complexity,
+  to improve robustness, lifecycle coverage, and system quality.
+- Problem Statement:
+  Current planning is optimized for compact, fast infrastructure spine
+  completion and does not explicitly enforce extended lifecycle coverage such
+  as rewrite orchestration maturity, observability/audit hardening, schema
+  evolution strategy, failure recovery planning, versioning strategy, security
+  posture planning, performance envelope testing, boundary stress testing,
+  production activation gating, and decommissioning strategy.
+- Scope:
+  1. Introduce a configurable "Phase Expansion Mode" in Planner.
+  2. When enabled, generate up to 10 additional structured phases.
+  3. Require each additional phase to include:
+     - Architecturally meaningful boundary.
+     - Clearly defined objective.
+     - Deterministic gates.
+     - Minimalism constraints.
+     - Explicit avoidance of speculative bloat.
+  4. Keep additional phase count adaptive:
+     - Small systems: fewer additional phases.
+     - Complex systems: full expansion.
+  5. Ensure expanded phases do not:
+     - Duplicate existing infrastructure.
+     - Violate deterministic enforcement patterns.
+     - Introduce LLM heuristics without explicit authorization.
+- Non-Goals:
+  - Forcing all projects to always receive 10 extra phases.
+  - Modifying current Devotional Generator phase structure.
+  - Altering Builder governance rules.
+  - Changing issue-resolution process.
+- Acceptance Criteria:
+  - Planner can produce 0-10 additional phases based on project complexity.
+  - Each additional phase includes:
+    - Clear architectural boundary.
+    - Deterministic test requirement.
+    - Explicit non-goals.
+  - Expanded plans remain HALT-disciplined.
+  - Expanded phases do not introduce UI, encryption, scoring harness, or
+    external dependencies unless explicitly authorized.
+  - Planner output includes a "Phase Justification" section for each added
+    phase.
+- Dependencies:
+  - Existing Planner architecture.
+  - Current governance enforcement (issue-resolution + pending-items rules).
+  - No Builder execution engine changes required.
+- Notes:
+  System-quality improvement focused on long-term architectural maturity, not a
+  feature request.
+- Current Status: Awaiting proposal
