@@ -8,15 +8,89 @@ from typing import Tuple
 from scripts.irb.evidence import CheckStatus, RunReport
 
 
-def get_project_slug(target: Path) -> str:
-    """Read pyproject.toml project.name via stdlib tomllib. Falls back to dir basename."""
+def _parse_project_name_regex(toml_text: str) -> str | None:
+    """Tiny deterministic TOML parser: extract [project] name without tomllib.
+
+    Rules:
+    - Find a line matching ``[project]`` (as a section header, nothing else on line).
+    - Within that section, find ``name = "..."`` or ``name = '...'`` (double or single quotes).
+    - Stop scanning when the next ``[<something>]`` section begins.
+    - Comment lines (stripped starting with ``#``) are ignored.
+    - Return the extracted name string, or None if not found.
+    """
+    import re
+
+    in_project_section = False
+    section_re = re.compile(r"^\s*\[([^\]]+)\]\s*$")
+    name_re = re.compile(r"""^\s*name\s*=\s*["']([^"']+)["']\s*(?:#.*)?$""")
+
+    for raw_line in toml_text.splitlines():
+        line = raw_line.strip()
+        if line.startswith("#"):
+            continue
+        section_m = section_re.match(raw_line)
+        if section_m:
+            section_name = section_m.group(1).strip()
+            if section_name == "project":
+                in_project_section = True
+            elif in_project_section:
+                # Entered a new section after [project] — stop
+                break
+            continue
+        if in_project_section:
+            name_m = name_re.match(raw_line)
+            if name_m:
+                return name_m.group(1)
+
+    return None
+
+
+def get_project_slug(target: Path) -> tuple[str, str]:
+    """Return (project_slug, slug_source) using a four-tier fallback chain.
+
+    Tiers:
+    1. stdlib ``tomllib`` (Python 3.11+)
+    2. ``tomli`` backport (optional install)
+    3. Inline regex parser (no external deps)
+    4. ``target.name`` directory basename
+    """
+    pyproject = target / "pyproject.toml"
+
+    # Tier 1: stdlib tomllib (Python 3.11+)
     try:
-        import tomllib  # stdlib Python 3.11+
-        with open(target / "pyproject.toml", "rb") as fh:
+        import tomllib  # type: ignore[import]
+        with open(pyproject, "rb") as fh:
             data = tomllib.load(fh)
-        return data["project"]["name"]
+        name = data["project"]["name"]
+        return name, "tomllib"
+    except (ImportError, ModuleNotFoundError):
+        pass  # Python < 3.11 — try next tier
     except Exception:
-        return target.name
+        pass  # file missing, parse error, no [project].name — fall through
+
+    # Tier 2: tomli backport
+    try:
+        import tomli  # type: ignore[import]
+        with open(pyproject, "rb") as fh:
+            data = tomli.load(fh)
+        name = data["project"]["name"]
+        return name, "tomli"
+    except (ImportError, ModuleNotFoundError):
+        pass
+    except Exception:
+        pass
+
+    # Tier 3: inline regex parser
+    try:
+        text = pyproject.read_text(encoding="utf-8")
+        name = _parse_project_name_regex(text)
+        if name:
+            return name, "fallback_regex"
+    except Exception:
+        pass
+
+    # Tier 4: basename fallback
+    return target.name, "basename_fallback"
 
 
 def compute_report_filename(
@@ -41,6 +115,7 @@ def build_json_report(report: RunReport) -> dict:
         "target_project": report.target_project,
         "target_git_sha": report.target_git_sha,
         "runner_timestamp": report.runner_timestamp,
+        "slug_source": report.slug_source,
         "outcome": report.outcome.value,
         "summary": {
             "total": report.summary.total,
@@ -74,6 +149,7 @@ def build_md_report(report: RunReport, tier: int) -> str:
         f"**Git SHA:** `{report.target_git_sha_8}`  ",
         f"**Timestamp:** {report.runner_timestamp}  ",
         f"**Spec:** {report.spec_id} v{report.spec_version}  ",
+        f"**Slug source:** {report.slug_source}  ",
         "",
         "## Summary",
         "",

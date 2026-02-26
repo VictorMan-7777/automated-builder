@@ -53,5 +53,6 @@ class RunReport:
     outcome: Outcome
     summary: RunSummary
     checks: List[CheckResult]
+    slug_source: str = "basename_fallback"
     output_md_path: Optional[Path] = None
     output_json_path: Optional[Path] = None

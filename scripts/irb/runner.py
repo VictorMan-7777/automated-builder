@@ -141,7 +141,7 @@ def _run(
 
     git_sha = cache.get("git_sha", "")
     git_sha_8 = git_sha[:8] if git_sha else "00000000"
-    project_slug = get_project_slug(target)
+    project_slug, slug_source = get_project_slug(target)
 
     total = len(results)
     passed = sum(1 for r in results if r.status == CheckStatus.PASS)
@@ -169,6 +169,7 @@ def _run(
             blocking_failed=blocking_failed,
         ),
         checks=results,
+        slug_source=slug_source,
     )
 
     md_fn, json_fn = compute_report_filename(project_slug, tier, git_sha_8, runner_date)
