@@ -130,7 +130,7 @@ def _check_qa_002(check_def: dict, target: Path, cache: dict) -> CheckResult:
     passed = len(occurrences) == 0
     summary = (
         f"md_files_scanned={len(md_files)}; "
-        f"forbidden={FORBIDDEN}; "
+        f"forbidden_count={len(FORBIDDEN)}; "
         f"occurrences={len(occurrences)}"
     )
     if occurrences:

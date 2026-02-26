@@ -135,9 +135,11 @@ def _check_hyg_001(check_def: dict, target: Path, cache: dict) -> CheckResult:
                         samples.append(f"{rel}:{line_no}:{redacted}")
 
     passed = match_count == 0
+    # Avoid embedding raw forbidden strings (e.g. "/Users/") in evidence output —
+    # use count instead to keep report artifacts free of path substrings.
     summary = (
         f"tracked_files={len(files)}; file_list_hash={file_hash}; "
-        f"forbidden_substrings={forbidden_substrings}; "
+        f"forbidden_substrings_count={len(forbidden_substrings)}; "
         f"match_count={match_count}; "
         f"skipped_size={skipped_size}; skipped_binary={skipped_binary}"
     )
