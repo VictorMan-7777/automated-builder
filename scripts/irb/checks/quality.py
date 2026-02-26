@@ -53,8 +53,9 @@ def _check_qa_001(check_def: dict, target: Path, cache: dict) -> CheckResult:
             evidence_summary="no .md files in docs/irb/",
         )
 
-    # A bare fence is ``` (only backticks, possibly with trailing spaces) at end of line
-    bare_fence_re = re.compile(r"^```\s*$")
+    # MD040: flag opening fence lines with no language tag.
+    # Closing fences (``` with no tag) are not violations — track fence state.
+    fence_re = re.compile(r"^(```+)(.*)")
     occurrences: list[str] = []
 
     for md_path in md_files:
@@ -62,11 +63,19 @@ def _check_qa_001(check_def: dict, target: Path, cache: dict) -> CheckResult:
             lines = md_path.read_text(encoding="utf-8").splitlines()
         except Exception:
             continue
+        in_fence = False
         for line_no, line in enumerate(lines, 1):
-            if bare_fence_re.match(line):
-                rel = md_path.name
-                if len(occurrences) < 10:
-                    occurrences.append(f"docs/irb/{rel}:{line_no}")
+            m = fence_re.match(line)
+            if m:
+                lang = m.group(2).strip()
+                if not in_fence:
+                    # Opening fence — flag if no language tag
+                    in_fence = True
+                    if not lang and len(occurrences) < 10:
+                        occurrences.append(f"docs/irb/{md_path.name}:{line_no}")
+                else:
+                    # Closing fence — reset state, never flag
+                    in_fence = False
 
     passed = len(occurrences) == 0
     summary = (

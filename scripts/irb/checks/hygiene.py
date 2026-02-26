@@ -204,17 +204,19 @@ def _check_hyg_002(check_def: dict, target: Path, cache: dict) -> CheckResult:
 
 
 def _check_hyg_003(check_def: dict, target: Path, cache: dict) -> CheckResult:
-    """T15-HYG-003: no local-state files are tracked."""
-    LOCAL_STATE_GLOBS = [
-        ".claude/settings.local.json",
-        ".DS_Store",
-        "node_modules/**",
-        "node_modules/*",
-        ".pytest_cache/**",
-        ".pytest_cache/*",
-        "__pycache__/**",
-        "__pycache__/*",
-    ]
+    """T15-HYG-003: no local-state files are tracked.
+
+    Matching rules:
+    - Exact path: .claude/settings.local.json
+    - Filename at any depth: .DS_Store
+    - Directory component at any depth: node_modules, .pytest_cache, __pycache__
+    """
+    # Exact-path matches
+    LOCAL_STATE_EXACT = {".claude/settings.local.json"}
+    # Any directory component (at any nesting depth) matching these names
+    LOCAL_STATE_DIRS = {"node_modules", ".pytest_cache", "__pycache__"}
+    # Any filename (at any nesting depth) matching these names
+    LOCAL_STATE_FILES = {".DS_Store"}
 
     files = cache.get("T15:tracked_files") or git_ls_files(target)
     if files is None:
@@ -226,25 +228,31 @@ def _check_hyg_003(check_def: dict, target: Path, cache: dict) -> CheckResult:
             failure_reason="Could not retrieve tracked file list",
         )
 
-    # Also match nested paths: any component matching the denylist patterns
     def _is_local_state(f: str) -> bool:
-        parts = f.replace("\\", "/").split("/")
-        # Exact match
-        if any(fnmatch.fnmatch(f, g) for g in LOCAL_STATE_GLOBS):
+        posix = f.replace("\\", "/")
+        if posix in LOCAL_STATE_EXACT:
             return True
-        # Prefix match: node_modules, .pytest_cache, __pycache__ anywhere in path
-        for i, part in enumerate(parts):
-            prefix = "/".join(parts[:i + 1])
-            if any(fnmatch.fnmatch(prefix, g.rstrip("/*")) for g in LOCAL_STATE_GLOBS):
+        parts = posix.split("/")
+        filename = parts[-1]
+        if filename in LOCAL_STATE_FILES:
+            return True
+        # Any directory component in the path
+        for part in parts[:-1]:
+            if part in LOCAL_STATE_DIRS:
                 return True
         return False
 
     offending = [f for f in files if _is_local_state(f)]
     passed = len(offending) == 0
 
+    denylist_desc = {
+        "exact": sorted(LOCAL_STATE_EXACT),
+        "dir_components": sorted(LOCAL_STATE_DIRS),
+        "filenames": sorted(LOCAL_STATE_FILES),
+    }
     summary = (
         f"tracked_files={len(files)}; "
-        f"local_state_denylist_globs={LOCAL_STATE_GLOBS}; "
+        f"denylist={denylist_desc}; "
         f"offending_count={len(offending)}"
     )
     if offending:
