@@ -24,6 +24,7 @@ if str(_AB_ROOT) not in sys.path:
 import argparse
 import datetime
 import json
+import shlex
 
 EXIT_CERTIFIED = 0
 EXIT_FAILED = 1
@@ -76,6 +77,9 @@ def main() -> int:
     if not target.exists():
         print(f"ERROR: target path does not exist: {target}", file=sys.stderr)
         return EXIT_ERROR
+    if not target.is_dir():
+        print(f"ERROR: target path is not a directory: {target}", file=sys.stderr)
+        return EXIT_ERROR
 
     spec_path = (
         Path(args.spec).resolve()
@@ -84,6 +88,9 @@ def main() -> int:
     )
     if not spec_path.exists():
         print(f"ERROR: spec not found: {spec_path}", file=sys.stderr)
+        return EXIT_ERROR
+    if not spec_path.is_file():
+        print(f"ERROR: spec path is not a file: {spec_path}", file=sys.stderr)
         return EXIT_ERROR
 
     output_dir = (
@@ -94,7 +101,7 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     python_exe = args.python_exe or sys.executable
-    pytest_extra_args = args.pytest_args.split() if args.pytest_args else []
+    pytest_extra_args = shlex.split(args.pytest_args) if args.pytest_args else []
 
     try:
         return _run(target, spec_path, output_dir, args.tier, python_exe, pytest_extra_args)
@@ -176,9 +183,9 @@ def _run(
     md_path = output_dir / md_fn
     json_path = output_dir / json_fn
 
-    md_path.write_text(build_md_report(report, tier), encoding="utf-8")
+    md_path.write_text(build_md_report(report, tier, target, _AB_ROOT), encoding="utf-8")
     json_path.write_text(
-        json.dumps(build_json_report(report), indent=2, ensure_ascii=False),
+        json.dumps(build_json_report(report, target, _AB_ROOT), indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
 

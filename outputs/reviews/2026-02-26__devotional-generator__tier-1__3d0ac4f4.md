@@ -1,10 +1,11 @@
 # IRB Tier-1 Certification Report
 
 **Outcome:** `CERTIFIED`  
-**Project:** devotional-generator-system-a  
+**Project:** devotional-generator  
 **Git SHA:** `3d0ac4f4`  
-**Timestamp:** 2026-02-26T20:05:11Z  
+**Timestamp:** 2026-02-26T22:48:22Z  
 **Spec:** irb-tier-1 v2.0.0  
+**Slug source:** fallback_regex  
 
 ## Summary
 
@@ -104,13 +105,13 @@
 - Status: PASS
 - Blocking: False
 - Evidence collected: True
-- Evidence: python_exe=/Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a/.venv/bin/python3; python_version=3.9.6; pytest_available=True; pytest_version='pytest 9.0.2'
+- Evidence: python_exe=$TARGET_ROOT/.venv/bin/python3; python_version=3.9.6; pytest_available=True; pytest_version='pytest 9.0.2'
 
 **T1-BUILD-002** — pytest_exits_zero
 - Status: PASS
 - Blocking: True
 - Evidence collected: True
-- Evidence: exit_code=0; stdout_lines=560; cmd=/Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a/.venv/bin/python3 -m pytest tests/...
+- Evidence: exit_code=0; stdout_lines=560; cmd=$TARGET_ROOT/.venv/bin/python3 -m pytest tests/...
 
 **T1-BUILD-003** — python_test_count_minimum
 - Status: PASS

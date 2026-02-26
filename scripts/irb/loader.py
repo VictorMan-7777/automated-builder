@@ -21,6 +21,11 @@ def load_spec(spec_path: Path) -> dict:
     with open(spec_path, encoding="utf-8") as fh:
         spec = yaml.safe_load(fh)
 
+    if spec is None:
+        raise ValueError("Spec is empty")
+    if not isinstance(spec, dict):
+        raise ValueError(f"Spec root must be a mapping/object, got {type(spec).__name__}")
+
     required = ["spec_id", "spec_version", "tier", "checks"]
     missing = [k for k in required if k not in spec]
     if missing:

@@ -2,10 +2,27 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Tuple
 
 from scripts.irb.evidence import CheckStatus, RunReport
+
+
+def _sanitize_paths(text: str, target: Path, builder_root: Path) -> str:
+    """Replace machine-local absolute paths with portable tokens.
+
+    Replacements applied in order (most-specific first):
+    - Full target repo path → $TARGET_ROOT
+    - Full builder repo path → $BUILDER_ROOT
+    - Any remaining /Users/<name>/ segment → /Users/<redacted>/
+    """
+    if not text:
+        return text
+    text = text.replace(str(target), "$TARGET_ROOT")
+    text = text.replace(str(builder_root), "$BUILDER_ROOT")
+    text = re.sub(r"/Users/[^/]+/", "/Users/<redacted>/", text)
+    return text
 
 
 def _parse_project_name_regex(toml_text: str) -> str | None:
@@ -107,7 +124,10 @@ def compute_report_filename(
     return f"{base}.md", f"{base}.json"
 
 
-def build_json_report(report: RunReport) -> dict:
+def build_json_report(report: RunReport, target: Path, builder_root: Path) -> dict:
+    def _s(text: str | None) -> str | None:
+        return _sanitize_paths(text, target, builder_root) if text else text
+
     return {
         "report_version": report.report_version,
         "spec_id": report.spec_id,
@@ -132,15 +152,15 @@ def build_json_report(report: RunReport) -> dict:
                 "status": r.status.value,
                 "blocking": r.blocking,
                 "evidence_collected": r.evidence_collected,
-                "evidence_summary": r.evidence_summary,
-                "failure_reason": r.failure_reason,
+                "evidence_summary": _s(r.evidence_summary),
+                "failure_reason": _s(r.failure_reason),
             }
             for r in report.checks
         ],
     }
 
 
-def build_md_report(report: RunReport, tier: int) -> str:
+def build_md_report(report: RunReport, tier: int, target: Path, builder_root: Path) -> str:
     lines = [
         f"# IRB Tier-{tier} Certification Report",
         "",
@@ -167,13 +187,16 @@ def build_md_report(report: RunReport, tier: int) -> str:
         "|----|------|--------|----------|----------|----------------|",
     ]
 
+    def _s(text: str) -> str:
+        return _sanitize_paths(text, target, builder_root)
+
     for r in report.checks:
         if r.status == CheckStatus.PASS:
             status_cell = r.status.value
         else:
             status_cell = f"**{r.status.value}**"
         ev_cell = "yes" if r.evidence_collected else "**NO**"
-        reason = (r.failure_reason or "")[:100]
+        reason = _s(r.failure_reason or "")[:100]
         lines.append(
             f"| {r.id} | {r.name} | {status_cell} | "
             f"{'yes' if r.blocking else 'no'} | {ev_cell} | {reason} |"
@@ -191,10 +214,10 @@ def build_md_report(report: RunReport, tier: int) -> str:
             f"- Status: {r.status.value}",
             f"- Blocking: {r.blocking}",
             f"- Evidence collected: {r.evidence_collected}",
-            f"- Evidence: {r.evidence_summary}",
+            f"- Evidence: {_s(r.evidence_summary)}",
         ]
         if r.failure_reason:
-            lines.append(f"- Failure: {r.failure_reason}")
+            lines.append(f"- Failure: {_s(r.failure_reason)}")
         lines.append("")
 
     return "\n".join(lines)

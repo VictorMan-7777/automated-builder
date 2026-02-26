@@ -2,9 +2,10 @@
   "report_version": "1.0.0",
   "spec_id": "irb-tier-1",
   "spec_version": "2.0.0",
-  "target_project": "devotional-generator-system-a",
+  "target_project": "devotional-generator",
   "target_git_sha": "3d0ac4f45b5e0ce909691141971446b9e7946d77",
-  "runner_timestamp": "2026-02-26T20:05:11Z",
+  "runner_timestamp": "2026-02-26T22:48:22Z",
+  "slug_source": "fallback_regex",
   "outcome": "CERTIFIED",
   "summary": {
     "total": 23,
@@ -101,7 +102,7 @@
       "status": "PASS",
       "blocking": false,
       "evidence_collected": true,
-      "evidence_summary": "python_exe=/Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a/.venv/bin/python3; python_version=3.9.6; pytest_available=True; pytest_version='pytest 9.0.2'",
+      "evidence_summary": "python_exe=$TARGET_ROOT/.venv/bin/python3; python_version=3.9.6; pytest_available=True; pytest_version='pytest 9.0.2'",
       "failure_reason": null
     },
     {
@@ -111,7 +112,7 @@
       "status": "PASS",
       "blocking": true,
       "evidence_collected": true,
-      "evidence_summary": "exit_code=0; stdout_lines=560; cmd=/Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a/.venv/bin/python3 -m pytest tests/...",
+      "evidence_summary": "exit_code=0; stdout_lines=560; cmd=$TARGET_ROOT/.venv/bin/python3 -m pytest tests/...",
       "failure_reason": null
     },
     {

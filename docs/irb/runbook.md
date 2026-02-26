@@ -26,7 +26,7 @@
 ```bash
 # From automated-builder root:
 scripts/irb/builder review --tier 1 \
-  --target /Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a
+  --target /path/to/devotional-generator-system-a
 ```
 
 `scripts/irb/builder` is a thin bash wrapper using `exec` to preserve exit codes.
@@ -37,7 +37,7 @@ scripts/irb/builder review --tier 1 \
 
 ```bash
 python3 scripts/irb/runner.py review --tier 1 \
-  --target /Users/tradingwithpython/dev/claude-projects/projects/devotional-generator-system-a
+  --target /path/to/devotional-generator-system-a
 ```
 
 ---
@@ -72,16 +72,20 @@ echo "Exit: $?"
 
 ## Expected Output Files
 
-```
+```text
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-1__<sha8>.md
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-1__<sha8>.json
 ```
 
 **Example for devotional-generator at HEAD 96656218:**
-```
+```text
 outputs/reviews/2026-02-26__devotional-generator__tier-1__96656218.md
 outputs/reviews/2026-02-26__devotional-generator__tier-1__96656218.json
 ```
+
+**Path redaction:** Report artifacts have machine-local absolute paths replaced with
+portable tokens (`$TARGET_ROOT`, `$BUILDER_ROOT`, `/Users/<redacted>/`). Reports are
+safe to commit to the repository.
 
 ---
 

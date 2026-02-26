@@ -15,7 +15,7 @@ from scripts.irb.evidence import CheckResult, CheckStatus, Outcome
 
 
 def _capture_git_status(target: Path) -> Optional[str]:
-    """Run git status --porcelain. Returns stdout string, or None on error."""
+    """Run git status --porcelain. Returns stdout string on success, or None on error."""
     try:
         proc = subprocess.run(
             ["git", "status", "--porcelain"],
@@ -24,6 +24,8 @@ def _capture_git_status(target: Path) -> Optional[str]:
             cwd=str(target),
             timeout=15,
         )
+        if proc.returncode != 0:
+            return None
         return proc.stdout
     except Exception:
         return None
