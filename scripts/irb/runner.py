@@ -40,7 +40,7 @@ def main() -> int:
 
     review_cmd = sub.add_parser("review", help="Run a certification tier review")
     review_cmd.add_argument(
-        "--tier", type=int, required=True, help="Tier number (e.g. 1)"
+        "--tier", type=str, required=True, help="Tier number (e.g. 1, 1.5)"
     )
     review_cmd.add_argument(
         "--target", required=True, help="Absolute path to the target repository"
@@ -116,7 +116,7 @@ def _run(
     target: Path,
     spec_path: Path,
     output_dir: Path,
-    tier: int,
+    tier: str,
     python_exe: str,
     pytest_extra_args: list[str],
 ) -> int:
