@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# scripts/irb/builder — IRB Builder CLI
+#
+# Thin wrapper around runner.py.  Preserves exit codes via exec.
+# Primary invocation path (R6):
+#   scripts/irb/builder review --tier 1 --target /path/to/repo
+#
+# Exit codes:
+#   0  CERTIFIED
+#   1  FAILED
+#   2  ERROR
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec python3 "$SCRIPT_DIR/runner.py" "$@"
