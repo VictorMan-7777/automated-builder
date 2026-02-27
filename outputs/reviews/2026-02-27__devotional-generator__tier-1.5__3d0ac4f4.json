@@ -1,0 +1,109 @@
+{
+  "report_version": "1.0.0",
+  "spec_id": "irb-tier-1.5",
+  "spec_version": "1.0.0",
+  "target_project": "devotional-generator",
+  "target_git_sha": "3d0ac4f45b5e0ce909691141971446b9e7946d77",
+  "runner_timestamp": "2026-02-27T00:19:16Z",
+  "slug_source": "fallback_regex",
+  "outcome": "CERTIFIED",
+  "summary": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "blocking_failed": 0
+  },
+  "checks": [
+    {
+      "id": "T15-HYG-001",
+      "name": "tracked_files_no_home_paths",
+      "category": "hygiene",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "tracked_files=129; file_list_hash=fdbd056282aa8a6c; forbidden_substrings_count=2; match_count=0; skipped_size=0; skipped_binary=3",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-HYG-002",
+      "name": "tracked_outputs_allowlist_only",
+      "category": "hygiene",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "outputs_tracked=0; allowed=0; disallowed=0; allow_globs=['outputs/reviews/.gitkeep', 'outputs/reviews/*.md', 'outputs/reviews/*.json']",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-HYG-003",
+      "name": "local_state_files_not_tracked",
+      "category": "hygiene",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "tracked_files=129; denylist={'exact': ['.claude/settings.local.json'], 'dir_components': ['.pytest_cache', '__pycache__', 'node_modules'], 'filenames': ['.DS_Store']}; offending_count=0",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-SEC-001",
+      "name": "tracked_files_no_private_key_markers",
+      "category": "security",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "tracked_files=129; file_list_hash=fdbd056282aa8a6c; markers_checked=6; match_count=0; skipped_size=0; skipped_binary=3",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-SEC-002",
+      "name": "tracked_files_no_secret_like_tokens",
+      "category": "security",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "tracked_files=129; file_list_hash=fdbd056282aa8a6c; patterns_checked=5; match_count=0; ignored_count=0; skipped_size=0; skipped_binary=3",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-QA-001",
+      "name": "irb_docs_md040_no_bare_fences",
+      "category": "quality",
+      "status": "PASS",
+      "blocking": false,
+      "evidence_collected": true,
+      "evidence_summary": "md_files_scanned=4; bare_fence_occurrences=0",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-QA-002",
+      "name": "irb_docs_no_absolute_target_examples",
+      "category": "quality",
+      "status": "PASS",
+      "blocking": false,
+      "evidence_collected": true,
+      "evidence_summary": "md_files_scanned=4; forbidden_count=2; occurrences=0",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-QA-003",
+      "name": "reports_redaction_assertion_present",
+      "category": "quality",
+      "status": "PASS",
+      "blocking": false,
+      "evidence_collected": true,
+      "evidence_summary": "required_tokens=['_sanitize_paths', 'build_md_report', 'build_json_report', 'builder_root']; missing=[]; reporter_size_bytes=8459",
+      "failure_reason": null
+    },
+    {
+      "id": "T15-GUARD-001",
+      "name": "repo_mutation_guard",
+      "category": "guard",
+      "status": "PASS",
+      "blocking": true,
+      "evidence_collected": true,
+      "evidence_summary": "no_delta=True; before=''; after=''",
+      "failure_reason": null
+    }
+  ]
+}

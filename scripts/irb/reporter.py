@@ -25,6 +25,31 @@ def _sanitize_paths(text: str, target: Path, builder_root: Path) -> str:
     return text
 
 
+def _table_reason(text: str) -> str:
+    """Return a short, table-safe failure reason (max 70 chars, pipes escaped).
+
+    Truncates cleanly — never ends mid-list — and appends "…" if clipped.
+    """
+    if not text:
+        return ""
+    one_line = text.replace("|", "\\|").replace("\n", " ").strip()
+    if len(one_line) <= 70:
+        return one_line
+    trunc = one_line[:67].rstrip("[,( ")
+    return trunc + "…"
+
+
+def _failure_detail_lines(text: str) -> list[str]:
+    """Format a failure reason for the Evidence Detail section.
+
+    Long failure reasons that contain list literals are wrapped in a fenced
+    ``text`` block so they render clearly instead of as a single long line.
+    """
+    if "[" in text and "]" in text and len(text) > 60:
+        return ["- Failure (full list):", "```text", text, "```"]
+    return [f"- Failure: {text}"]
+
+
 def _parse_project_name_regex(toml_text: str) -> str | None:
     """Tiny deterministic TOML parser: extract [project] name without tomllib.
 
@@ -196,7 +221,7 @@ def build_md_report(report: RunReport, tier: int, target: Path, builder_root: Pa
         else:
             status_cell = f"**{r.status.value}**"
         ev_cell = "yes" if r.evidence_collected else "**NO**"
-        reason = _s(r.failure_reason or "")[:100]
+        reason = _table_reason(_s(r.failure_reason or ""))
         lines.append(
             f"| {r.id} | {r.name} | {status_cell} | "
             f"{'yes' if r.blocking else 'no'} | {ev_cell} | {reason} |"
@@ -217,7 +242,7 @@ def build_md_report(report: RunReport, tier: int, target: Path, builder_root: Pa
             f"- Evidence: {_s(r.evidence_summary)}",
         ]
         if r.failure_reason:
-            lines.append(f"- Failure: {_s(r.failure_reason)}")
+            lines.extend(_failure_detail_lines(_s(r.failure_reason)))
         lines.append("")
 
     return "\n".join(lines)

@@ -1,8 +1,8 @@
-# IRB Tier-1 Runner — Operator Runbook
+# IRB Runner — Operator Runbook
 
-**Version:** 1.0.0 (spec v2.0.0)
+**Version:** 1.1.0 (Tier 1 spec v2.0.0 · Tier 1.5 spec v1.0.0)
 **Framework:** IRB v1 (Integration Review Board)
-**Tier:** 1
+**Tiers covered:** 1, 1.5
 
 ---
 
@@ -84,7 +84,7 @@ outputs/reviews/2026-02-26__devotional-generator__tier-1__96656218.json
 ```
 
 **Path redaction:** Report artifacts have machine-local absolute paths replaced with
-portable tokens (`$TARGET_ROOT`, `$BUILDER_ROOT`, `/Users/<redacted>/`). Reports are
+portable tokens (`$TARGET_ROOT`, `$BUILDER_ROOT`, `$HOME/<redacted>/`). Reports are
 safe to commit to the repository.
 
 ---
@@ -132,6 +132,75 @@ Given the target at Phase 013 CP1 (clean clone, no committed artifact JSON):
 → Investigate which files changed. The runner should not modify the target.
 → Likely cause: pytest created `__pycache__` in an unexpected location, or
   a test wrote to the repo (should not happen in a well-behaved test suite).
+
+---
+
+---
+
+## Tier 1.5 — Repo Hygiene & Competition Safety
+
+Tier 1.5 enforces hygiene and safety invariants on the **target repository's
+version-controlled content**. It does not run the test suite.
+
+### What Tier 1.5 checks
+
+| Category | Check | Blocking |
+|----------|-------|----------|
+| hygiene | No tracked file contains a machine-local home-directory path | yes |
+| hygiene | All tracked `outputs/` files match the allowlist | yes |
+| hygiene | No local-state files (`.DS_Store`, `__pycache__/`, etc.) are tracked | yes |
+| security | No tracked file contains a PEM private-key header | yes |
+| security | No tracked file contains a secret-like token (GitHub PAT, AWS key, etc.) | yes |
+| quality | No bare ` ``` ` fences in `docs/irb/*.md` (MD040) | advisory |
+| quality | No machine-local example paths in `docs/irb/*.md` | advisory |
+| quality | Reporter path-redaction wiring is present in `reporter.py` | advisory |
+| guard | Repo not modified during check run | yes |
+
+### Invocation
+
+```bash
+# From automated-builder root:
+scripts/irb/builder review --tier 1.5 \
+  --target /path/to/devotional-generator-system-a
+```
+
+The `--python` flag is not used by Tier 1.5 (no test suite is run).
+
+### Expected output files
+
+```text
+outputs/reviews/YYYY-MM-DD__<project-slug>__tier-1.5__<sha8>.md
+outputs/reviews/YYYY-MM-DD__<project-slug>__tier-1.5__<sha8>.json
+```
+
+### Expected outcome — devotional-generator-system-a (clean clone)
+
+| Check | Expected | Notes |
+|-------|----------|-------|
+| T15-HYG-001 | PASS | No home paths in tracked files |
+| T15-HYG-002 | PASS | outputs/ files match allowlist |
+| T15-HYG-003 | PASS | No local-state files tracked |
+| T15-SEC-001 | PASS | No private key markers |
+| T15-SEC-002 | PASS | No secret-like tokens |
+| T15-QA-001 | PASS | No bare fences in docs/irb/*.md |
+| T15-QA-002 | PASS | No machine-local paths in docs |
+| T15-QA-003 | PASS | Redaction wiring present in reporter.py |
+| T15-GUARD-001 | PASS | No repo mutation |
+| **Outcome** | **CERTIFIED** | blocking_failed = 0 |
+
+### Troubleshooting
+
+**T15-HYG-001 FAIL: home path in tracked file**
+→ Find matches in evidence_summary (samples show redacted path:line:snippet).
+→ Replace literal paths with `$TARGET_ROOT` or a relative path before committing.
+
+**T15-HYG-002 FAIL: disallowed outputs/ file tracked**
+→ Check which files under `outputs/` are not in the allowlist.
+→ Either add to allowlist (if intentional) or remove from git tracking.
+
+**T15-SEC-002 FAIL: secret-like token**
+→ Check evidence for which regex matched and which file.
+→ Remove or rotate the credential. Use `<redacted>` placeholders in docs.
 
 ---
 

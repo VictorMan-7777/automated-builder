@@ -20,7 +20,7 @@ are produced by a runner that leaves no room for judgment calls.
 
 ## Tier Progression Diagram
 
-```
+```text
                          ┌─────────────────────────────┐
                          │   Phase 0: External Surface  │
                          │   Review (e.g., CodeRabbit)  │
@@ -214,7 +214,7 @@ deployment or external release action.
 
 Each IRB run produces two report files:
 
-```
+```text
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-<N>__<git-sha-8>.md
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-<N>__<git-sha-8>.json
 ```

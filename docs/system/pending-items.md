@@ -277,6 +277,41 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
   - No ambiguity remains about where each run-* artifact should live.
 - Current Status: Implementation complete — awaiting archive [ambiguous — verify]
 
+### P-016 — System Certification & Independent Review Framework (Domain-Agnostic)
+- Source: Builder governance and quality gate expansion
+- Captured: 2026-02-26
+- Project: Automated-builder
+- Summary:
+  Design and implement a first-class, domain-agnostic System Certification &
+  Independent Review Framework in Builder. The framework must be reusable
+  across projects, support configurable review profiles, enforce structured
+  evidence-based outputs, and run as a mandatory stage in system design/build.
+- Objective:
+  Create a reusable review framework that standardizes independent review,
+  formalizes evidence capture, and enforces gate decisions before progression.
+- Scope:
+  - Define a generic review engine with configurable reviewer roles
+    (Architect, QA, Security, Spec Auditor, etc.).
+  - Define and enforce a structured output schema with:
+    Finding ID, Category, Severity, Spec Ref, Code Ref, Evidence, Risk,
+    Required Fix, Verification Step.
+  - Support configurable gating thresholds (for example, no Critical findings).
+  - Support configurable activation checkpoints across lifecycle stages.
+  - Implement review profiles:
+    - Default (Minimal Baseline)
+    - Competition
+    - Enterprise Production
+    - Research Prototype
+  - Integrate review into planning lifecycle as explicit phases/gates.
+  - Require PASS or explicit operator waiver before proceeding.
+- Acceptance Criteria:
+  - A documented review framework artifact exists.
+  - Builder planning includes review stages by default.
+  - Structured output schema is enforced.
+  - Gating rules are configurable.
+  - Review profiles are selectable at project creation.
+- Current Status: Awaiting proposal
+
 ### P-017 — Identify what is new in Claude Opus 4.6 and assess relevance to the builder
 - Source: Model and tooling evolution research
 - Captured: 2026-02-11
@@ -2475,4 +2510,100 @@ Dependency view + regeneration instructions live in `docs/system/pending.md` (ca
 - Notes:
   System-quality improvement focused on long-term architectural maturity, not a
   feature request.
+- Current Status: Awaiting proposal
+
+### P-104 — IRB v1 Tier 2 — Feature Integration Review (Certification Gate)
+- Source: IRB certification framework expansion request
+- Captured: 2026-02-26
+- Project: automated-builder
+- Objective:
+  Implement Tier 2 of the Independent Review Board (IRB) certification
+  framework as a deterministic, evidence-gated, single-runner certification
+  gate that verifies feature integration correctness across the target project
+  beyond Tier 1/Tier 1.5 architecture and hygiene checks.
+- Scope:
+  - Add Tier 2 spec artifacts:
+    - specs/irb/tier-2-spec.yaml (machine-readable)
+    - docs/irb/tier-2-spec.md (human-readable)
+    - docs/irb/process.md updates for Tier 2 trigger and halt semantics (if not already present)
+  - Implement Tier 2 runner support:
+    - scripts/irb/builder review --tier 2 --target ...
+    - deterministic filename policy aligned with existing tiers
+  - Implement Tier 2 deterministic offline checks:
+    - integration invariants (cross-module wiring and contract consistency)
+    - no-drift checks between docs/specs and code for key interfaces
+    - end-to-end local smoke test execution with evidence capture
+    - artifact lifecycle invariants at integration points (for example, stores invoked via pipeline)
+  - Implement evidence-gated report outputs:
+    - outputs/reviews/...md + ...json
+    - no artifact, no credit enforcement
+  - Enforce non-mutation guard:
+    - target repository must remain unchanged after run
+- Acceptance Criteria:
+  - Tier 2 executes through builder wrapper and exits with:
+    - 0 when all blocking Tier 2 checks pass
+    - 1 when any blocking Tier 2 check fails
+    - 2 on runner error
+  - Tier 2 emits deterministic MD and JSON reports with sanitized evidence
+    (no machine-local absolute paths).
+  - Tier 2 remains deterministic and offline (no network dependency).
+  - Mutation guard passes with target repo unchanged.
+  - Documentation clearly defines Tier 2 purpose, trigger conditions, and
+    certification boundaries.
+- Dependencies:
+  - IRB Tier 1 implemented and stable.
+  - IRB Tier 1.5 implemented and stable (repo hygiene and safety gate).
+  - Redaction/sanitization policy established for report artifacts.
+- Notes:
+  Tier 2 certifies feature integration correctness, not style/lint quality.
+  Keep deterministic single-runner behavior in v1 (no multi-agent orchestration).
+- Current Status: Awaiting proposal
+
+### P-105 — IRB v1 Tier 3 — Final Adversarial Competition Simulation (Certification Gate)
+- Source: IRB certification framework expansion request
+- Captured: 2026-02-26
+- Project: automated-builder
+- Objective:
+  Implement Tier 3 of the IRB framework as the final deterministic
+  certification gate that simulates adversarial competition conditions and
+  validates competition readiness under stress, including drift resistance,
+  invariant preservation, and evidence integrity.
+- Scope:
+  - Add Tier 3 spec artifacts:
+    - specs/irb/tier-3-spec.yaml (machine-readable)
+    - docs/irb/tier-3-spec.md (human-readable)
+    - docs/irb/process.md updates for Tier 3 trigger and halt semantics (if not already present)
+  - Implement Tier 3 runner support:
+    - scripts/irb/builder review --tier 3 --target ...
+    - deterministic filename policy aligned with existing tiers
+  - Implement Tier 3 deterministic offline checks:
+    - adversarial scenario suite (predefined and spec-driven)
+    - invariant regression suite (architecture, lifecycle, hygiene/security)
+    - tamper detection for specs/scoring harness inputs (hashes and integrity assertions)
+    - competition simulation runbook alignment checks (required pre-submission execution)
+    - evidence integrity checks (complete, sanitized, reproducible reports)
+  - Implement evidence-gated report outputs:
+    - outputs/reviews/...md + ...json
+    - no artifact, no credit enforcement
+  - Enforce non-mutation guard:
+    - target repository must remain unchanged after run
+- Acceptance Criteria:
+  - Tier 3 executes through builder wrapper and returns correct exit codes
+    (0/1/2).
+  - Tier 3 emits deterministic MD and JSON reports with sanitized evidence.
+  - Tier 3 spec/report includes explicit adversarial scenario list and PASS/FAIL
+    status with evidence per scenario.
+  - Tier 3 verifies integrity of critical competition specs/harness artifacts via
+    hashes and records them clearly in the report.
+  - Mutation guard passes with target repo unchanged.
+- Dependencies:
+  - IRB Tier 1 implemented and stable.
+  - IRB Tier 1.5 implemented and stable.
+  - IRB Tier 2 implemented and stable.
+  - Competition-critical spec locations and integrity rules defined (hashing
+    policy and evidence requirements).
+- Notes:
+  Tier 3 is the final pre-submission certification gate. Keep deterministic,
+  offline, and single-runner in v1; scenario suite should be spec-driven,
+  reviewable, and immutable.
 - Current Status: Awaiting proposal

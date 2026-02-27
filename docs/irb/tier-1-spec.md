@@ -123,7 +123,7 @@ The executor captures pre-run status before the check loop and post-run status i
 
 ## Report Filename Policy
 
-```
+```text
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-<N>__<git-sha-8>.md
 outputs/reviews/YYYY-MM-DD__<project-slug>__tier-<N>__<git-sha-8>.json
 ```
