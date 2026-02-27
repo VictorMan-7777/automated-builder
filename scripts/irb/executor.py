@@ -56,15 +56,12 @@ def _dispatch_check(check_def: dict, target: Path, cache: dict) -> CheckResult:
             from scripts.irb.checks.build import run_check
         elif category == "artifact":
             from scripts.irb.checks.artifact import run_check
-<<<<<<< HEAD
         elif category == "hygiene":
             from scripts.irb.checks.hygiene import run_check
         elif category == "security":
             from scripts.irb.checks.security import run_check
         elif category == "quality":
             from scripts.irb.checks.quality import run_check
-=======
->>>>>>> origin/deadline/builder-v1-trim
         else:
             raise ValueError(f"Unknown category: {category!r}")
         return run_check(check_def, target, cache)
