@@ -40,7 +40,7 @@ def main() -> int:
 
     review_cmd = sub.add_parser("review", help="Run a certification tier review")
     review_cmd.add_argument(
-        "--tier", type=str, required=True, help="Tier number (e.g. 1, 1.5)"
+        "--tier", type=int, required=True, help="Tier number (e.g. 1)"
     )
     review_cmd.add_argument(
         "--target", required=True, help="Absolute path to the target repository"
@@ -116,7 +116,7 @@ def _run(
     target: Path,
     spec_path: Path,
     output_dir: Path,
-    tier: str,
+    tier: int,
     python_exe: str,
     pytest_extra_args: list[str],
 ) -> int:
@@ -138,21 +138,6 @@ def _run(
         "pytest_extra_args": pytest_extra_args,
         "spec_config": spec_config,
     }
-
-    # Pre-populate git_sha so all tiers (including those without a REPO check)
-    # get a valid SHA in report filenames. T1-REPO-002 may overwrite this.
-    import subprocess as _sp
-    try:
-        _proc = _sp.run(
-            ["git", "log", "-1", "--format=%H"],
-            capture_output=True, text=True, cwd=str(target), timeout=10,
-        )
-        if _proc.returncode == 0:
-            sha = _proc.stdout.strip()
-            if len(sha) == 40:
-                cache["git_sha"] = sha
-    except Exception:
-        pass
 
     results = run_all_checks(spec, target, cache)
     outcome = determine_outcome(results)
