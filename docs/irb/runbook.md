@@ -84,7 +84,7 @@ outputs/reviews/2026-02-26__devotional-generator__tier-1__96656218.json
 ```
 
 **Path redaction:** Report artifacts have machine-local absolute paths replaced with
-portable tokens (`$TARGET_ROOT`, `$BUILDER_ROOT`, `/Users/<redacted>/`). Reports are
+portable tokens (`$TARGET_ROOT`, `$BUILDER_ROOT`, `$HOME/<redacted>/`). Reports are
 safe to commit to the repository.
 
 ---
@@ -146,7 +146,7 @@ version-controlled content**. It does not run the test suite.
 
 | Category | Check | Blocking |
 |----------|-------|----------|
-| hygiene | No tracked file contains `/Users/` or `C:\Users\` | yes |
+| hygiene | No tracked file contains a machine-local home-directory path | yes |
 | hygiene | All tracked `outputs/` files match the allowlist | yes |
 | hygiene | No local-state files (`.DS_Store`, `__pycache__/`, etc.) are tracked | yes |
 | security | No tracked file contains a PEM private-key header | yes |

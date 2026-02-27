@@ -55,7 +55,7 @@ evidence collection fails the check is FAIL with `evidence_collected: false`.
 **T15-HYG-001 scan rules:**
 - Files > 2 MB are skipped (counted in evidence).
 - Files with a NUL byte in the first 4 KB are treated as binary and skipped.
-- Matches are redacted in evidence: `/Users/<name>/` → `/Users/<redacted>/`.
+- Matches are redacted in evidence: home-directory paths are replaced with a portable `<redacted>` token.
 - Evidence includes: forbidden substrings list, total match_count, skipped_size, skipped_binary counts, up to 5 samples `path:line:snippet`.
 
 **T15-HYG-002 allowlist (from config):**
@@ -86,7 +86,7 @@ evidence collection fails the check is FAIL with `evidence_collected: false`.
 | ID | Name | Blocking | Evidence | Pass Condition |
 |----|------|----------|----------|----------------|
 | T15-QA-001 | irb_docs_md040_no_bare_fences | no | file scan | No bare ` ``` ` fence in `docs/irb/*.md` |
-| T15-QA-002 | irb_docs_no_absolute_target_examples | no | file scan | No `/Users/` or `C:\Users\` in `docs/irb/*.md` |
+| T15-QA-002 | irb_docs_no_absolute_target_examples | no | file scan | No machine-local home paths in `docs/irb/*.md` |
 | T15-QA-003 | reports_redaction_assertion_present | no | file content | `_sanitize_paths` present in reporter.py; build functions accept path args |
 
 T15-QA-003 `depends_on: T15-HYG-001` — only meaningful if home-path scan is available.
